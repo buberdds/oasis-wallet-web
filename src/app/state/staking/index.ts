@@ -1,6 +1,6 @@
 import { PayloadAction } from '@reduxjs/toolkit'
 import { createSlice } from 'utils/@reduxjs/toolkit'
-import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors'
+import { useInjectSaga } from 'utils/redux-injectors'
 
 import { stakingSaga } from './saga'
 import { DebondingDelegation, Delegation, StakingState, Validator, ValidatorDetails } from './types'
@@ -53,10 +53,11 @@ const slice = createSlice({
 export const { actions: stakingActions, reducer: stakingReducer } = slice
 
 export const useStakingSlice = () => {
-  useInjectReducer({ key: slice.name, reducer: slice.reducer })
   useInjectSaga({ key: slice.name, saga: stakingSaga })
   return { actions: slice.actions }
 }
+
+export default stakingReducer
 
 /**
  * Example Usage:

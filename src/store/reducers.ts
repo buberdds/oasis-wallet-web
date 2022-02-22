@@ -6,6 +6,8 @@ import { combineReducers } from '@reduxjs/toolkit'
 import { InjectedReducersType } from 'utils/types/injector-typings'
 import { createBrowserHistory } from 'history'
 import { connectRouter } from 'connected-react-router'
+import walletReducer from 'app/state/wallet'
+import stakingReducer from 'app/state/staking'
 
 export const history = createBrowserHistory()
 
@@ -16,6 +18,8 @@ export function createReducer(injectedReducers: InjectedReducersType = {}) {
   // Initially we don't have any injectedReducers, so returning identity function to avoid the error
   return combineReducers({
     ...injectedReducers,
+    wallet: walletReducer,
+    staking: stakingReducer,
     router: connectRouter(history),
   })
 }

@@ -15,7 +15,7 @@
     "start:oasisscan": "REACT_APP_BACKEND=oasisscan yarn start",
     "clean:ext": "rm -rf build-ext/ .parcel-cache",
     "start:ext": "node ./extension/internals/create-ext-manifest.js && parcel --host localhost --target ext-dev --dist-dir build-ext --config @parcel/config-webextension",
-    "build:ext": "yarn clean:ext && node ./extension/internals/create-ext-manifest.js && yarn clean && parcel build --target ext-prod --dist-dir build-ext --config @parcel/config-webextension",
+    "build:ext": "yarn clean:ext && node ./extension/internals/create-ext-manifest.js && yarn clean && parcel build --target ext-prod --dist-dir build-ext --config @parcel/config-webextension && node ./extension/internals/validate-ext-manifest.js",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "build": "yarn clean && node ./internals/prod-scripts.js",

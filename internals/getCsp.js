@@ -10,9 +10,8 @@ const cspEnhancement = `
   `
 
 // Keep synced with deployment
-const csp = ({ extension } = {}) => {
-  console.log(extension)
-  return `
+const csp = ({ extension } = {}) =>
+  `
     default-src 'none';
     script-src
       'self'
@@ -41,5 +40,5 @@ const csp = ({ extension } = {}) => {
     .split('\n')
     .map(line => line.trim())
     .join(' ')
-}
+
 module.exports = { csp }

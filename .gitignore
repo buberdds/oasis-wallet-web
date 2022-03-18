@@ -4,10 +4,12 @@
 cypress-coverage
 coverage
 build
+build-ext
 node_modules
 stats.json
 .pnp
 .pnp.js
+extension/src/manifest.json
 
 # misc
 .DS_Store

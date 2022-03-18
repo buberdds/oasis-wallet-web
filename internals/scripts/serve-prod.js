@@ -13,8 +13,8 @@ const server = http.createServer((request, response) => {
     rewrites: [
       {
         source: '**',
-        destination: '/index.html'
-      }
+        destination: '/index.html',
+      },
     ],
     // Disable etag so we don't need to clear cache if we only change CSP.
     etag: false,
@@ -24,14 +24,14 @@ const server = http.createServer((request, response) => {
         headers: [
           {
             key: 'Content-Security-Policy',
-            value: csp
-          }
-        ]
-      }
-    ]
+            value: csp(),
+          },
+        ],
+      },
+    ],
   })
 })
 
-server.listen(5000, () => {
+server.listen(5123, () => {
   console.log('Running at http://localhost:5000')
 })

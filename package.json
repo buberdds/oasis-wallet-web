@@ -14,8 +14,8 @@
     "start:oasismonitor": "REACT_APP_BACKEND=oasismonitor yarn start",
     "start:oasisscan": "REACT_APP_BACKEND=oasisscan yarn start",
     "clean:ext": "rm -rf build-ext/ .parcel-cache",
-    "start:ext": "node ./extension/internals/create-ext-manifest.js && parcel --host localhost --target ext-dev --dist-dir build-ext --config @parcel/config-webextension",
-    "build:ext": "yarn clean:ext && node ./extension/internals/create-ext-manifest.js && yarn clean && parcel build --target ext-prod --dist-dir build-ext --config @parcel/config-webextension && node ./extension/internals/validate-ext-manifest.js",
+    "start:ext": "EXTENSION_CSP=`yarn --silent print-extension-csp` parcel --host localhost --target ext-dev --dist-dir build-ext --config .parcelrc-ext",
+    "build:ext": "yarn clean:ext && yarn clean && EXTENSION_CSP=`yarn --silent print-extension-csp` parcel build --target ext-prod --dist-dir build-ext --config .parcelrc-ext && node ./extension/internals/validate-ext-manifest.js",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "build": "yarn clean && node ./internals/prod-scripts.js",
@@ -39,7 +39,8 @@
     "prettify": "prettier --write",
     "extract-messages": "i18next-scanner --config=internals/extractMessages/i18next-scanner.config.js",
     "semantic-release": "semantic-release",
-    "print-csp": "node ./internals/scripts/print-csp.js"
+    "print-csp": "node ./internals/scripts/print-csp.js",
+    "print-extension-csp": "node ./internals/scripts/print-extension-csp.js"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
@@ -96,6 +97,7 @@
     "husky": "7.0.4",
     "i18next": "20.6.1",
     "i18next-browser-languagedetector": "6.1.2",
+    "parcel-transformer-env-variables-injection": "0.1.0",
     "portable-fetch": "3.0.0",
     "prettier": "2.5.1",
     "qrcode.react": "1.0.1",

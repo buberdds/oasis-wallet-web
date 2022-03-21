@@ -27,7 +27,7 @@
     "default_popup": "./popup.html"
   },
   "permissions": ["storage", "notifications", "activeTab"],
-  "content_security_policy": "",
+  "content_security_policy": "{{{ EXTENSION_CSP }}}",
   "background": { "scripts": ["./background.ts"], "persistent": true },
   "web_accessible_resources": ["./oasis-xu-frame.html"]
 }

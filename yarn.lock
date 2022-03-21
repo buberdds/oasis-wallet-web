@@ -12019,6 +12019,11 @@ parcel-namer-rewrite@2.0.0-rc.2:
     "@parcel/types" "^2.0.0-rc.0"
     assert "^2.0.0"
 
+parcel-transformer-env-variables-injection@0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/parcel-transformer-env-variables-injection/-/parcel-transformer-env-variables-injection-0.1.0.tgz#34ffe1e2b51dcf801e625178252fdb66fb747b60"
+  integrity sha512-8z+eeeSa9VfqSwZJAjEsvJNi1LDirwtUVtYMZt6Ae/mWeCljT0IV5qRZCnPGAE6JeDmGMiuLMUP35iq5IwEOeA==
+
 parcel@2.3.2:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/parcel/-/parcel-2.3.2.tgz#d1cb475f27edae981edea7a7104e04d3a35a87ca"

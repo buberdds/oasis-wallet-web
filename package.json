@@ -7,6 +7,7 @@
     "url": "https://github.com/Esya/oasis-wallet.git"
   },
   "scripts": {
+    "e2e": "jest --projects internals/jest/jest.ext-e2e-config.js --detectOpenHandles",
     "clean": "rm -rf build/ .parcel-cache",
     "parcel": "parcel --port 3000 --target web --dist-dir build",
     "parcel:build": "parcel build --target web --dist-dir build",
@@ -100,6 +101,7 @@
     "parcel-transformer-env-variables-injection": "0.1.0",
     "portable-fetch": "3.0.0",
     "prettier": "2.5.1",
+    "puppeteer": "13.5.1",
     "qrcode.react": "1.0.1",
     "react": "17.0.2",
     "react-app-polyfill": "3.0.0",

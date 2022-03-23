@@ -13,20 +13,8 @@ import { BackendAPIs, backend } from 'vendors/backend'
 import { Transaction } from '..'
 import * as transactionTypes from 'app/state/transaction/types'
 import { NetworkType } from 'app/state/network/types'
-import type { UseTranslationResponse, Trans } from 'react-i18next'
 
 type TransType = typeof Trans
-jest.mock('react-i18next', () => ({
-  Trans: (({ i18nKey }) => <>{i18nKey}</>) as TransType,
-  useTranslation: () => {
-    return {
-      t: str => str,
-      i18n: {
-        changeLanguage: () => new Promise(() => {}),
-      },
-    } as UseTranslationResponse<'translation'>
-  },
-}))
 
 jest.mock('vendors/backend')
 jest.mock('react-redux', () => ({

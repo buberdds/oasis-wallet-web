@@ -4,20 +4,8 @@ import { stakingActions } from 'app/state/staking'
 import * as React from 'react'
 import { Provider } from 'react-redux'
 import { configureAppStore } from 'store/configureStore'
-import type { UseTranslationResponse } from 'react-i18next'
 
 import { ValidatorList } from '..'
-
-jest.mock('react-i18next', () => ({
-  useTranslation: () => {
-    return {
-      t: str => str,
-      i18n: {
-        changeLanguage: () => new Promise(() => {}),
-      },
-    } as UseTranslationResponse<'translation'>
-  },
-}))
 
 const renderComponent = (store: any) =>
   render(

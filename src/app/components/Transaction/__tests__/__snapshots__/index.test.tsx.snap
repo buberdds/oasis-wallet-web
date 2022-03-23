@@ -467,9 +467,7 @@ exports[`<Transaction  /> should handle unknown transaction types gracefully 1`]
       />
       <span
         class="c5"
-      >
-        account.otherTransaction.header
-      </span>
+      />
     </div>
   </header>
   <div
@@ -602,7 +600,7 @@ exports[`<Transaction  /> should handle unknown transaction types gracefully 1`]
     <span
       class="c14"
     >
-      4/10/2021, 1:30:55 AM
+      10/04/2021, 01:30:55
     </span>
     <div
       class="c15"
@@ -1102,9 +1100,7 @@ exports[`<Transaction  /> should match snapshot 1`] = `
       />
       <span
         class="c5"
-      >
-        account.transaction.transfer.received
-      </span>
+      />
     </div>
   </header>
   <div
@@ -1237,7 +1233,7 @@ exports[`<Transaction  /> should match snapshot 1`] = `
     <span
       class="c14"
     >
-      4/10/2021, 1:30:55 AM
+      10/04/2021, 01:30:55
     </span>
     <div
       class="c15"

@@ -467,7 +467,9 @@ exports[`<Transaction  /> should handle unknown transaction types gracefully 1`]
       />
       <span
         class="c5"
-      />
+      >
+        account.otherTransaction.header
+      </span>
     </div>
   </header>
   <div

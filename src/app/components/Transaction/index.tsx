@@ -68,14 +68,18 @@ export function Transaction(props: TransactionProps) {
   const unrecognizedTransaction: TransactionDictionary[transactionTypes.TransactionType][TransactionSide] = {
     designation: t('account.otherTransaction.designation', 'Other address'),
     icon: () => <New />,
-    header: () => (
-      <Trans
-        i18nKey="account.otherTransaction.header"
-        t={t}
-        values={{ method: transaction.type }}
-        defaults="Unrecognized transaction, method '{{method}}'"
-      />
-    ),
+    header: () =>
+      t('account.otherTransaction.header', {
+        method: transaction.type,
+      }),
+    // header: () => (
+    //   <Trans
+    //     i18nKey="account.otherTransaction.header"
+    //     t={t}
+    //     values={{ method: transaction.type }}
+    //     defaults="Unrecognized transaction, method '{{method}}'"
+    //   />
+    // ),
   }
 
   // @TODO: This could probably cleverly be moved outside of the component

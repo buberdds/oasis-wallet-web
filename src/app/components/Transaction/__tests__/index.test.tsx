@@ -14,8 +14,6 @@ import { Transaction } from '..'
 import * as transactionTypes from 'app/state/transaction/types'
 import { NetworkType } from 'app/state/network/types'
 
-type TransType = typeof Trans
-
 jest.mock('vendors/backend')
 jest.mock('react-redux', () => ({
   ...jest.requireActual('react-redux'),

@@ -1,3 +1,5 @@
+// https://github.com/i18next/react-i18next/blob/master/example/test-jest/src/__mocks__/react-i18next.js
+
 const React = require('react')
 const reactI18next = require('react-i18next')
 

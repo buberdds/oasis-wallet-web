@@ -3,7 +3,7 @@
 // - remove 'unsafe-inline' style by precomputing theme hash
 // - add report-uri to gather errors if anything was missed
 
-const cspEnhancement = `
+const extensionCsp = `
   frame-ancestors 
     'self' 
     https: http://localhost:* http://127.0.0.1:*;
@@ -34,7 +34,7 @@ const csp = ({ extension } = {}) =>
     prefetch-src 'self';
     base-uri 'self';
     manifest-src 'self';
-    ${extension ? cspEnhancement : ''}
+    ${extension ? extensionCsp : ''}
   `
     .trim()
     .split('\n')

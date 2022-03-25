@@ -6,7 +6,8 @@
 const extensionCsp = `
   frame-ancestors 
     'self' 
-    https: http://localhost:* http://127.0.0.1:*;
+    https: http://localhost:* http://127.0.0.1:*
+    ws://localhost:*;
   `
 
 // Keep synced with deployment
@@ -29,7 +30,8 @@ const csp = ({ extension } = {}) =>
       grpc.oasis.dev
       testnet.grpc.oasis.dev
       api.oasisscan.com
-      monitor.oasis.dev;
+      monitor.oasis.dev
+      ws://localhost:*;
     img-src 'self' data: https:;
     prefetch-src 'self';
     base-uri 'self';

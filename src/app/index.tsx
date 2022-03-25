@@ -36,21 +36,22 @@ export function App() {
   const size = useContext(ResponsiveContext)
   return (
     <ModalProvider>
-      <ConnectedRouter history={history}>
-        <Helmet
+      {/* <ConnectedRouter history={history}> */}
+      {/* <Helmet
           titleTemplate="%s - Oasis Wallet"
           defaultTitle="Oasis Wallet"
           htmlAttributes={{ lang: i18n.language }}
         >
           <meta name="description" content="A wallet for Oasis" />
-        </Helmet>
-        <Box direction="row-responsive" background="background-back" fill style={{ minHeight: '100vh' }}>
-          <Navigation />
-          <Box flex pad={{ top: size === 'small' ? '64px' : undefined }}>
-            <AppMain>
-              <FatalErrorHandler />
-              <Toolbar />
-              <TransitionGroup>
+        </Helmet> */}
+      <Box direction="row-responsive" background="background-back" fill style={{ minHeight: '100vh' }}>
+        {/* <Navigation /> */}
+        <Box flex pad={{ top: size === 'small' ? '64px' : undefined }}>
+          <AppMain>
+            <FatalErrorHandler />
+            <Toolbar />
+            <HomePage />
+            {/* <TransitionGroup>
                 <Switch>
                   <TransitionRoute exact path="/" component={HomePage} />
                   <TransitionRoute exact path="/create-wallet" component={CreateWalletPage} />
@@ -58,12 +59,12 @@ export function App() {
                   <TransitionRoute exact path="/account/:address/stake" component={AccountPage} />
                   <TransitionRoute path="/account/:address" component={AccountPage} />
                 </Switch>
-              </TransitionGroup>
-              <Footer />
-            </AppMain>
-          </Box>
+              </TransitionGroup> */}
+            <Footer />
+          </AppMain>
         </Box>
-      </ConnectedRouter>
+      </Box>
+      {/* </ConnectedRouter> */}
     </ModalProvider>
   )
 }

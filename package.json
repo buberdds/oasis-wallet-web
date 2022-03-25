@@ -14,7 +14,7 @@
     "start:oasismonitor": "REACT_APP_BACKEND=oasismonitor yarn start",
     "start:oasisscan": "REACT_APP_BACKEND=oasisscan yarn start",
     "clean:ext": "rm -rf build-ext/ .parcel-cache",
-    "start:ext": "EXTENSION_CSP=`yarn --silent print-extension-csp` parcel --host localhost --target ext-dev --dist-dir build-ext --config .parcelrc-ext extension/src/manifest.json",
+    "start:ext": "HMR_PORT=2222 EXTENSION_CSP=`yarn --silent print-extension-csp` parcel --host localhost --target ext-dev --dist-dir build-ext --config .parcelrc-ext extension/src/manifest.json",
     "build:ext": "yarn clean:ext && yarn clean && EXTENSION_CSP=`yarn --silent print-extension-csp` parcel build --target ext-prod --dist-dir build-ext --config .parcelrc-ext extension/src/manifest.json && node ./extension/internals/validate-ext-manifest.js",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
@@ -121,7 +121,8 @@
     "typed-redux-saga": "1.3.1",
     "typescript": "4.5.4",
     "valid-url": "1.0.9",
-    "web-vitals": "2.1.2"
+    "web-vitals": "2.1.2",
+    "webext-redux": "2.1.9"
   },
   "devDependencies": {
     "@cypress/code-coverage": "3.9.12",
@@ -205,6 +206,7 @@
       "distDir": "./build"
     },
     "ext-dev": {
+      "scopeHoist": false,
       "distDir": "./build-ext",
       "sourceMap": {
         "inline": true,

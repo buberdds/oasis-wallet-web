@@ -1,0 +1,17 @@
+module.exports = {
+  // "module": false, // controlled by Parcel
+  // compress: {
+  //   keep_classnames: true,
+  //   keep_fnames: true,
+  // },
+  // parse: {
+  //   ecma: 2020,
+  // },
+  // mangle: {
+  //   keep_classnames: true,
+  //   keep_fnames: true,
+  // },
+  // format: {
+  //   beautify: true,
+  // },
+}

@@ -1,11 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
-import { wrapStore, Store } from 'webext-redux'
+// import { Store } from 'webext-redux'
 import { App } from '../../../src/app/index'
-import { ThemeProvider } from '../../../src/styles/theme/ThemeProvider'
+import { ThemeProvider } from 'styles/theme/ThemeProvider'
 
-import { configureAppStore } from '../../../src/store/configureStore'
+import { configureAppStore } from 'store/configureStore'
 
 import '../../../src/locales/i18n'
 
@@ -18,17 +18,17 @@ chrome.runtime
 
 const MOUNT_NODE = document.getElementById('root') as HTMLElement
 
-// store.ready().then(() => {
 ReactDOM.render(
   <Provider store={store}>
     <ThemeProvider>
-      <App />
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
     </ThemeProvider>
   </Provider>,
   MOUNT_NODE,
 )
-// })
 
-ReactDOM.render(<App />, MOUNT_NODE)
+// ReactDOM.render(<App />, MOUNT_NODE)
 
 console.log('popup' as string)

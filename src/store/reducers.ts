@@ -16,6 +16,6 @@ export function createReducer(injectedReducers: InjectedReducersType = {}) {
   // Initially we don't have any injectedReducers, so returning identity function to avoid the error
   return combineReducers({
     ...injectedReducers,
-    router: connectRouter(history),
+    // router: connectRouter(history),
   })
 }

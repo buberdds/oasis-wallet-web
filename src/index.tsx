@@ -48,11 +48,9 @@ const MOUNT_NODE = document.getElementById('root') as HTMLElement
 ReactDOM.render(
   <Provider store={store}>
     <ThemeProvider>
-      <HelmetProvider>
-        <React.StrictMode>
-          <App />
-        </React.StrictMode>
-      </HelmetProvider>
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
     </ThemeProvider>
   </Provider>,
   MOUNT_NODE,

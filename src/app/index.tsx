@@ -35,23 +35,13 @@ export function App() {
   const { i18n } = useTranslation()
   const size = useContext(ResponsiveContext)
   return (
-    <ModalProvider>
-      {/* <ConnectedRouter history={history}> */}
-      {/* <Helmet
-          titleTemplate="%s - Oasis Wallet"
-          defaultTitle="Oasis Wallet"
-          htmlAttributes={{ lang: i18n.language }}
-        >
-          <meta name="description" content="A wallet for Oasis" />
-        </Helmet> */}
-      <Box direction="row-responsive" background="background-back" fill style={{ minHeight: '100vh' }}>
-        {/* <Navigation /> */}
-        <Box flex pad={{ top: size === 'small' ? '64px' : undefined }}>
-          <AppMain>
-            <FatalErrorHandler />
-            <Toolbar />
-            <HomePage />
-            {/* <TransitionGroup>
+    <Box direction="row-responsive" background="background-back" fill style={{ minHeight: '100vh' }}>
+      {/* <Navigation /> */}
+      <Box flex pad={{ top: size === 'small' ? '64px' : undefined }}>
+        {/* <FatalErrorHandler /> */}
+        {/* <Toolbar /> */}
+        <HomePage />
+        {/* <TransitionGroup>
                 <Switch>
                   <TransitionRoute exact path="/" component={HomePage} />
                   <TransitionRoute exact path="/create-wallet" component={CreateWalletPage} />
@@ -60,11 +50,8 @@ export function App() {
                   <TransitionRoute path="/account/:address" component={AccountPage} />
                 </Switch>
               </TransitionGroup> */}
-            <Footer />
-          </AppMain>
-        </Box>
+        <Footer />
       </Box>
-      {/* </ConnectedRouter> */}
-    </ModalProvider>
+    </Box>
   )
 }

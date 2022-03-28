@@ -11,7 +11,7 @@ import * as React from 'react'
 import { useContext } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
-import { Switch } from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom'
 import { TransitionGroup } from 'react-transition-group'
 import styled from 'styled-components'
 
@@ -35,23 +35,24 @@ export function App() {
   const { i18n } = useTranslation()
   const size = useContext(ResponsiveContext)
   return (
-    <Box direction="row-responsive" background="background-back" fill style={{ minHeight: '100vh' }}>
-      {/* <Navigation /> */}
-      <Box flex pad={{ top: size === 'small' ? '64px' : undefined }}>
-        {/* <FatalErrorHandler /> */}
-        {/* <Toolbar /> */}
-        <HomePage />
-        {/* <TransitionGroup>
-                <Switch>
-                  <TransitionRoute exact path="/" component={HomePage} />
-                  <TransitionRoute exact path="/create-wallet" component={CreateWalletPage} />
-                  <TransitionRoute path="/open-wallet" component={OpenWalletPage} />
-                  <TransitionRoute exact path="/account/:address/stake" component={AccountPage} />
-                  <TransitionRoute path="/account/:address" component={AccountPage} />
-                </Switch>
-              </TransitionGroup> */}
-        <Footer />
+    <ConnectedRouter history={history}>
+      <Box direction="row-responsive" background="background-back" fill style={{ minHeight: '100vh' }}>
+        <Navigation />
+        <Box flex pad={{ top: size === 'small' ? '64px' : undefined }}>
+          <FatalErrorHandler />
+          <Toolbar />
+          <TransitionGroup>
+            <Switch>
+              <TransitionRoute exact path="/" component={HomePage} />
+              <TransitionRoute exact path="/create-wallet" component={CreateWalletPage} />
+              <TransitionRoute path="/open-wallet" component={OpenWalletPage} />
+              <TransitionRoute exact path="/account/:address/stake" component={AccountPage} />
+              <TransitionRoute path="/account/:address" component={AccountPage} />
+            </Switch>
+          </TransitionGroup>
+          <Footer />
+        </Box>
       </Box>
-    </Box>
+    </ConnectedRouter>
   )
 }

@@ -9,6 +9,9 @@ import { configureAppStore } from 'store/configureStore'
 
 import '../../../src/locales/i18n'
 
+import 'sanitize.css/sanitize.css'
+import 'styles/main.css'
+
 const store = configureAppStore()
 // const store = new Store()
 console.log(store)

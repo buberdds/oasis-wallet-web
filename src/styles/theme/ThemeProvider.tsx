@@ -4,7 +4,7 @@ import * as React from 'react'
 import { createTheme, IDataTableStyles, ITheme } from 'react-data-table-component'
 import { useSelector } from 'react-redux'
 
-import { useThemeSlice } from './slice'
+// import { useThemeSlice } from './slice'
 import { selectTheme } from './slice/selectors'
 
 /**
@@ -128,7 +128,7 @@ const customTheme: ThemeType = {
   },
 }
 export const ThemeProvider = (props: { children: React.ReactChild }) => {
-  useThemeSlice()
+  // useThemeSlice()
 
   const theme = deepMerge(grommet, customTheme)
   const mode = useSelector(selectTheme)

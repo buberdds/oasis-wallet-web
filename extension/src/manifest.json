@@ -24,7 +24,7 @@
       "512": "./images/oasis.png"
     },
     "default_title": "Oasis Wallet",
-    "default_popup": "./popup.html"
+    "default_popup": "./index.html"
   },
   "permissions": ["storage", "notifications", "activeTab"],
   "background": { "scripts": ["./background.ts"], "persistent": true },

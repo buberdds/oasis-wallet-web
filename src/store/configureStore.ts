@@ -3,7 +3,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import { createInjectorsEnhancer } from 'redux-injectors'
 import createSagaMiddleware from 'redux-saga'
 
-import { createReducer, history } from './reducers'
+import createReducer, { history } from './reducers'
 import { RootState } from 'types'
 import { fatalErrorActions } from 'app/state/fatalerror'
 

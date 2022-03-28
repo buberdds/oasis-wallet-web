@@ -1,7 +1,7 @@
 import { wrapStore } from 'webext-redux'
 // import { persistStore } from 'redux-persist'
 // import { configureAppStore } from '../../src/store/configureStore'
-import { configureAppStore } from './configureStore'
+import { configureAppStore } from 'store/configureStore'
 const initialState = {}
 const store = configureAppStore(initialState)
 

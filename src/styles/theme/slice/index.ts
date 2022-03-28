@@ -20,9 +20,12 @@ const slice = createSlice({
   },
 })
 
-export const { actions: themeActions, reducer } = slice
+// export const { actions: themeActions, reducer } = slice
 
-export const useThemeSlice = () => {
-  useInjectReducer({ key: slice.name, reducer: slice.reducer })
-  return { actions: slice.actions }
-}
+// export const useThemeSlice = () => {
+//   useInjectReducer({ key: slice.name, reducer: slice.reducer })
+//   return { actions: slice.actions }
+// }
+console.log(slice)
+export const actions = slice.actions
+export default slice.reducer

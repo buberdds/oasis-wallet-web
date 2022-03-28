@@ -2,7 +2,7 @@ import { Box, Button, Grid, Heading, Paragraph, ResponsiveContext } from 'gromme
 import { Add, Unlock } from 'grommet-icons/icons'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
-// import { NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 export function HomePage() {
   const size = useContext(ResponsiveContext)
@@ -19,7 +19,7 @@ export function HomePage() {
           <Heading size="1">{t('home.existing.header')}</Heading>
           <Paragraph>{t('home.existing.description')}</Paragraph>
           <Box direction="row" justify="between" margin={{ top: 'medium' }}>
-            {/* <NavLink to="/open-wallet">
+            <NavLink to="/open-wallet">
               <Button
                 type="submit"
                 label={t('home.existing.button')}
@@ -27,7 +27,7 @@ export function HomePage() {
                 primary
                 icon={<Unlock />}
               />
-            </NavLink> */}
+            </NavLink>
           </Box>
         </Box>
         <Box
@@ -39,7 +39,7 @@ export function HomePage() {
           <Heading size="1">{t('home.create.header')}</Heading>
           <Paragraph>{t('home.create.description')}</Paragraph>
           <Box direction="row" justify="between" margin={{ top: 'medium' }}>
-            {/* <NavLink to="/create-wallet">
+            <NavLink to="/create-wallet">
               <Button
                 type="submit"
                 label={t('home.create.button')}
@@ -47,7 +47,7 @@ export function HomePage() {
                 primary
                 icon={<Add />}
               />
-            </NavLink> */}
+            </NavLink>
           </Box>
         </Box>
       </Grid>

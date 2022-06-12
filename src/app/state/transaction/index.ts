@@ -8,6 +8,7 @@ import {
   TransactionState,
   TransactionStep,
   TransactionPayload,
+  ToParatimePayload,
   ReclaimEscrowPayload,
 } from './types'
 

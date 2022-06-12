@@ -90,6 +90,8 @@ export function parseAccount(account: AccountsRow): Account {
     delegations: null,
     debonding: null,
     total: null,
+    liquid_balance: parseStringValueToInt(account.available),
+    allowances: account.allowances,
   }
 }
 

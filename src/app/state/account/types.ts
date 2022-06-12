@@ -9,8 +9,20 @@ export interface BalanceDetails {
   total: StringifiedBigInt | null
 }
 
+export interface Allowance {
+  address: string
+  amount: number
+}
+
 export interface Account extends BalanceDetails {
   address: string
+}
+
+export interface Allowance {
+  address: string
+  amount: number
+  liquid_balance: number
+  allowances: Allowance[]
 }
 
 /* --- STATE --- */

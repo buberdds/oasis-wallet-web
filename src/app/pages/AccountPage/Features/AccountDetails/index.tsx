@@ -7,6 +7,7 @@ import { Box } from 'grommet'
 import React, { memo } from 'react'
 import { useSelector } from 'react-redux'
 import { SendTransaction } from '../SendTransaction'
+import { SendParatimeTransaction } from '../SendParatimeTransaction'
 import { TransactionHistory } from '../TransactionHistory'
 import { selectIsAddressInWallet } from 'app/state/selectIsAddressInWallet'
 
@@ -20,6 +21,7 @@ export const AccountDetails = memo((props: Props) => {
       {isAddressInWallet && (
         <Box flex basis="1/4" width={{ min: '300px' }}>
           <SendTransaction isAddressInWallet={isAddressInWallet} />
+          <SendParatimeTransaction />
         </Box>
       )}
       <Box flex basis="3/4">

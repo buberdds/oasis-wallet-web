@@ -1,6 +1,4 @@
-import { wrapStore } from 'webext-redux'
-import { configureAppStore } from 'store/configureStore'
-
-const store = configureAppStore()
-
-wrapStore(store)
+import('./backgroundImportHelper').then(({ configureAppStore, wrapStore }) => {
+  const store = configureAppStore()
+  wrapStore(store)
+})

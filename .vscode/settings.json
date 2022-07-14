@@ -19,7 +19,7 @@
   "jest.showCoverageOnLoad": true,
   "typescriptHero.imports.insertSemicolons": false,
   "files.exclude": {
-    "**/__snapshots__/": true,
+    "**/__snapshots__/": false,
     ".nyc_output/": true,
     "cypress-coverage/": true,
     "coverage/": true,

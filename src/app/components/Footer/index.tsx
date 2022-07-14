@@ -36,6 +36,7 @@ export const Footer = memo(() => {
         bottom: isMobile && isAccountOpen ? '4rem' : 'none',
       }}
       margin={{ bottom: 'large' }}
+      data-testid="footer"
     >
       <Text size={size} textAlign="center" margin={{ bottom: isMobile ? 'small' : 'none' }}>
         <Trans

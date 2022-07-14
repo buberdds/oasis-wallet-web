@@ -1,12 +1,17 @@
-import { Anchor, Box, Text } from 'grommet'
+import { Anchor, Box, ResponsiveContext, Text } from 'grommet'
 import React, { memo } from 'react'
+import { useSelector } from 'react-redux'
 import { Trans, useTranslation } from 'react-i18next'
+import { selectIsOpen } from 'app/state/wallet/selectors'
 import { dateFormat } from '../DateFormatter'
 import { backend, BackendAPIs } from 'vendors/backend'
+import { MobileFooterNavigation } from '../MobileFooterNavigation'
 
 const githubLink = 'https://github.com/oasisprotocol/oasis-wallet-web/'
 
 export const Footer = memo(() => {
+  const isAccountOpen = useSelector(selectIsOpen)
+  const isMobile = React.useContext(ResponsiveContext) === 'small'
   const { t } = useTranslation()
 
   const backendToLabel = {
@@ -17,6 +22,7 @@ export const Footer = memo(() => {
     [BackendAPIs.OasisScan]: t('footer.poweredBy.oasisscan', 'Powered by Oasis Scan API & Oasis gRPC'),
   }
   const poweredByLabel = backendToLabel[backend()]
+  const size = isMobile ? 'small' : 'medium'
 
   return (
     <Box
@@ -24,11 +30,14 @@ export const Footer = memo(() => {
       justify="center"
       align="center"
       round="5px"
-      // border={{ color: 'brand' }}
-      pad={{ right: 'small', top: 'medium' }}
+      pad={{
+        horizontal: 'medium',
+        top: isMobile ? '1rem' : 'medium',
+        bottom: isMobile && isAccountOpen ? '4rem' : 'none',
+      }}
       margin={{ bottom: 'large' }}
     >
-      <Text>
+      <Text size={size} textAlign="center" margin={{ bottom: isMobile ? 'small' : 'none' }}>
         <Trans
           i18nKey="footer.github"
           t={t}
@@ -36,7 +45,7 @@ export const Footer = memo(() => {
           defaults="Oasis Wallet is fully <0>open source</0> - Feedback and issues are appreciated!"
         />
       </Text>
-      <Text>
+      <Text size={size} textAlign="center" margin={{ bottom: size }}>
         <Trans
           i18nKey="footer.terms"
           t={t}
@@ -45,7 +54,7 @@ export const Footer = memo(() => {
         />
       </Text>
       {process.env.REACT_APP_BUILD_DATETIME && process.env.REACT_APP_BUILD_SHA && (
-        <Text size="small" margin={{ top: 'medium' }}>
+        <Text size="small" textAlign="center">
           <Trans
             i18nKey="footer.version"
             t={t}
@@ -63,6 +72,8 @@ export const Footer = memo(() => {
           {poweredByLabel && <Box align="center">{poweredByLabel}</Box>}
         </Text>
       )}
+
+      <MobileFooterNavigation isAccountOpen={isAccountOpen} isMobile={isMobile} />
     </Box>
   )
 })

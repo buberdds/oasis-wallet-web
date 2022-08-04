@@ -17,7 +17,7 @@ import * as React from 'react'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { NavLink, Switch, useParams } from 'react-router-dom'
+import { NavLink, Switch, useParams, useLocation } from 'react-router-dom'
 import { TransitionGroup } from 'react-transition-group'
 import styled from 'styled-components'
 import { normalizeColor } from 'grommet/utils'
@@ -35,6 +35,7 @@ import { ActiveDelegationList } from '../StakingPage/Features/DelegationList/Act
 import { DebondingDelegationList } from '../StakingPage/Features/DelegationList/DebondingDelegationList'
 import { mobileHeaderZIndex } from '../../components/Sidebar'
 import { ValidatorList } from '../StakingPage/Features/ValidatorList'
+import { Paratimes } from '../ParaTimesPage'
 import { AccountDetails } from './Features/AccountDetails'
 import { AccountSummary } from './Features/AccountSummary'
 
@@ -92,6 +93,8 @@ export function AccountPage(props: Props) {
   const { t } = useTranslation()
   const isMobile = React.useContext(ResponsiveContext) === 'small'
   const { address } = useParams<AccountPageParams>()
+  const location = useLocation()
+  const paratimesRoutes = location.pathname.includes('/paratimes/')
   const dispatch = useDispatch()
 
   const account = useSelector(selectAccount)
@@ -177,35 +180,46 @@ export function AccountPage(props: Props) {
             gap="none"
             wrap
           >
-            <NavItem
-              label={t('account.subnavigation.transactions', 'Transactions')}
-              route={`/account/${address}`}
-            />
+            {paratimesRoutes && (
+              <>
+                <NavItem label="Emerald" route={`/account/${address}/paratimes/emerald`} />
+                <NavItem label="Cipher" route={`/account/${address}/paratimes/cipher`} />
+              </>
+            )}
+            {!paratimesRoutes && (
+              <>
+                <NavItem
+                  label={t('account.subnavigation.transactions', 'Transactions')}
+                  route={`/account/${address}`}
+                />
 
-            <NavItem
-              counter={stake.delegations?.length}
-              label={
-                isMobile
-                  ? t('account.subnavigation.mobileActiveDelegations', 'Delegations')
-                  : t('account.subnavigation.activeDelegations', 'Active delegations')
-              }
-              route={`/account/${address}/active-delegations`}
-            />
+                <NavItem
+                  counter={stake.delegations?.length}
+                  label={
+                    isMobile
+                      ? t('account.subnavigation.mobileActiveDelegations', 'Delegations')
+                      : t('account.subnavigation.activeDelegations', 'Active delegations')
+                  }
+                  route={`/account/${address}/active-delegations`}
+                />
 
-            <NavItem
-              counter={stake.debondingDelegations?.length}
-              label={
-                isMobile
-                  ? t('account.subnavigation.mobileDebondingDelegations', 'Debonding')
-                  : t('account.subnavigation.debondingDelegations', 'Debonding delegations')
-              }
-              route={`/account/${address}/debonding-delegations`}
-            />
+                <NavItem
+                  counter={stake.debondingDelegations?.length}
+                  label={
+                    isMobile
+                      ? t('account.subnavigation.mobileDebondingDelegations', 'Debonding')
+                      : t('account.subnavigation.debondingDelegations', 'Debonding delegations')
+                  }
+                  route={`/account/${address}/debonding-delegations`}
+                />
+              </>
+            )}
           </Nav>
           <TransitionGroup>
             <Switch>
               <TransitionRoute exact path="/account/:address" component={AccountDetails} />
               <TransitionRoute exact path="/account/:address/stake" component={ValidatorList} />
+              <TransitionRoute exact path="/account/:address/paratimes/:paratime" component={Paratimes} />
               <TransitionRoute
                 exact
                 path="/account/:address/active-delegations"

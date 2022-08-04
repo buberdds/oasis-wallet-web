@@ -55,6 +55,7 @@ export function App() {
                 <TransitionRoute exact path="/create-wallet" component={CreateWalletPage} />
                 <TransitionRoute path="/open-wallet" component={OpenWalletPage} />
                 <TransitionRoute exact path="/account/:address/stake" component={AccountPage} />
+                <TransitionRoute exact path="/account/:address/paratimes/:paratime" component={AccountPage} />
                 <TransitionRoute path="/account/:address" component={AccountPage} />
               </Switch>
             </TransitionGroup>

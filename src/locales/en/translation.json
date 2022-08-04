@@ -181,6 +181,7 @@
   "menu": {
     "closeWallet": "Close wallet",
     "home": "Home",
+    "paratime": "ParaTime",
     "stake": "Stake",
     "wallet": "Wallet"
   },

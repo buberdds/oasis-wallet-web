@@ -57,3 +57,79 @@ export const config: BackendConfig = {
     },
   },
 }
+
+type ParaTimeNetwork = {
+  runtimeId: string
+}
+
+type ParaTimeLayer = {
+  mainnet: ParaTimeNetwork
+  testnet: ParaTimeNetwork
+  local: ParaTimeNetwork
+  decimals: number
+  type: RuntimeTypes
+}
+
+export enum RuntimeTypes {
+  Evm = 'evm',
+  Oasis = 'oasis',
+}
+
+const emeraldConfig: ParaTimeLayer = {
+  mainnet: {
+    runtimeId: '000000000000000000000000000000000000000000000000e2eaa99fc008f87f',
+  },
+  testnet: {
+    runtimeId: '00000000000000000000000000000000000000000000000072c8215e60d5bca7',
+  },
+  local: {
+    runtimeId: '',
+  },
+  decimals: 18,
+  type: RuntimeTypes.Evm,
+}
+
+const cipherConfig: ParaTimeLayer = {
+  mainnet: {
+    runtimeId: '000000000000000000000000000000000000000000000000e199119c992377cb',
+  },
+  testnet: {
+    runtimeId: '0000000000000000000000000000000000000000000000000000000000000000',
+  },
+  local: {
+    runtimeId: '',
+  },
+  decimals: 9,
+  type: RuntimeTypes.Oasis,
+}
+
+const sapphireConfig: ParaTimeLayer = {
+  mainnet: {
+    runtimeId: '',
+  },
+  testnet: {
+    runtimeId: '000000000000000000000000000000000000000000000000a6d1e3ebf60dff6c',
+  },
+  local: {
+    runtimeId: '',
+  },
+
+  decimals: 18,
+  type: RuntimeTypes.Evm,
+}
+
+export enum ParaTimes {
+  Cipher = 'cipher',
+  Emerald = 'emerald',
+  Sapphire = 'sapphire',
+}
+
+type ParaTimeConfig = {
+  [key in ParaTimes]: ParaTimeLayer
+}
+
+export const paraTimesConfig: ParaTimeConfig = {
+  [ParaTimes.Cipher]: { ...cipherConfig },
+  [ParaTimes.Emerald]: { ...emeraldConfig },
+  [ParaTimes.Sapphire]: { ...sapphireConfig },
+}

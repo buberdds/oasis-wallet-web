@@ -51,7 +51,7 @@ export interface TransactionState {
   preview?: TransactionPreview
 }
 
-export type NewTransactionType = 'transfer' | 'toParatime' | 'addEscrow' | 'reclaimEscrow'
+export type NewTransactionType = 'transfer' | 'toParatime' | 'addEscrow' | 'reclaimEscrow' | 'stakingAllow'
 export type TransactionPayload = TransferPayload | ToParatimePayload | AddEscrowPayload | ReclaimEscrowPayload
 
 export interface TransactionPreview {
@@ -80,6 +80,16 @@ export interface TransferPayload {
   /* Token amount */
   amount: StringifiedBigInt
 }
+
+// export interface TransferPayload {
+//   type: 'transfer'
+
+//   /* bech32 Address */
+//   to: string
+
+//   /* Token amount */
+//   amount: StringifiedBigInt
+// }
 
 export interface ToParatimePayload {
   type: 'toParatime'

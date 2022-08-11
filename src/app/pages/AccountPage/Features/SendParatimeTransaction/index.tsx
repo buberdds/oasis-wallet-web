@@ -1,6 +1,6 @@
 import { TransactionStatus } from 'app/components/TransactionStatus'
 import { useModal } from 'app/components/Modal'
-import { useTransactionSlice } from 'app/state/transaction'
+import { transactionActions } from 'app/state/transaction'
 import { selectTransaction } from 'app/state/transaction/selectors'
 import { selectValidators } from 'app/state/staking/selectors'
 import { Box, Button, Form, FormField, TextInput } from 'grommet'
@@ -14,12 +14,11 @@ export function SendParatimeTransaction() {
   const { t } = useTranslation()
   const dispatch = useDispatch()
   const { launchModal } = useModal()
-  const transactionActions = useTransactionSlice().actions
   const { error, success } = useSelector(selectTransaction)
   const validators = useSelector(selectValidators)
   const address = useSelector(selectAccountAddress)
-  const [recipient, setRecipient] = useState('')
-  const [amount, setAmount] = useState('')
+  const [recipient, setRecipient] = useState('0x705b2433b76c383C20AE0d60803334f0AD13b6e8')
+  const [amount, setAmount] = useState('1')
   const sendTransaction = () =>
     dispatch(
       transactionActions.sendTransaction({

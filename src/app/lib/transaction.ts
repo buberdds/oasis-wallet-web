@@ -1,7 +1,7 @@
 import * as oasis from '@oasisprotocol/client'
 import { ContextSigner, Signer } from '@oasisprotocol/client/dist/signature'
 import * as oasisRT from '@oasisprotocol/client-rt'
-import BigNumber from "bignumber.js"
+import BigNumber from 'bignumber.js'
 import { WalletError, WalletErrors } from 'types/errors'
 
 import { addressToPublicKey, shortPublicKey } from './helpers'
@@ -99,6 +99,30 @@ export class OasisTransaction {
     return tw
   }
 
+  public static async buildStakingAllowTransfer(
+    nic: OasisClient,
+    signer: Signer,
+    to: string,
+    amount: bigint,
+  ): Promise<TW<oasis.types.StakingTransfer>> {
+    const tw = oasis.staking.allowWrapper()
+    const nonce = await OasisTransaction.getNonce(nic, signer)
+    const beneficiary = await addressToPublicKey(to)
+
+    tw.setNonce(nonce)
+    tw.setFeeAmount(oasis.quantity.fromBigInt(0n))
+    tw.setBody({
+      beneficiary,
+      negative: false,
+      amount_change: oasis.quantity.fromBigInt(BigInt(amount)),
+    })
+
+    const gas = await tw.estimateGas(nic, signer.public())
+    tw.setFeeGas(gas)
+
+    return tw
+  }
+
   public static async buildToParatime(
     nic: OasisClient,
     signer: Signer,
@@ -106,7 +130,7 @@ export class OasisTransaction {
     fromAddress: string,
     amountArg: bigint,
   ) /*: Promise<TW<oasis.types.StakingTransfer>> */ {
-    const runtimeId = '00000000000000000000000000000000000000000000000072c8215e60d5bca7'
+    const runtimeId = '000000000000000000000000000000000000000000000000e2eaa99fc008f87f'
 
     const CONSENSUS_RT_ID = oasis.misc.fromHex(runtimeId)
     const consensusWrapper = new oasisRT.consensusAccounts.Wrapper(CONSENSUS_RT_ID)
@@ -133,11 +157,11 @@ export class OasisTransaction {
       .setFeeGas(feeGas)
       .setFeeConsensusMessages(1)
 
-    const signerInfo = ({
-        address_spec: {signature: {ed25519: signer.public()}},
-        nonce,
-    });
-    txWrapper.setSignerInfo([signerInfo]);
+    const signerInfo = {
+      address_spec: { signature: { ed25519: signer.public() } },
+      nonce,
+    }
+    txWrapper.setSignerInfo([signerInfo])
 
     return txWrapper
   }
@@ -154,8 +178,11 @@ export class OasisTransaction {
   }
 
   public static async sign<T>(chainContext: string, signer: Signer, tw: TW<T>): Promise<void> {
-    const theSigner = new oasis.signature.BlindContextSigner(signer)
-    return tw.sign([theSigner], chainContext)
+    return tw.sign(new oasis.signature.BlindContextSigner(signer), chainContext)
+  }
+
+  public static async signParaTime<T>(chainContext: string, signer: Signer, tw: TW<T>): Promise<void> {
+    return tw.sign([new oasis.signature.BlindContextSigner(signer)], chainContext)
   }
 
   public static async submit<T>(nic: OasisClient, tw: TW<T>): Promise<void> {

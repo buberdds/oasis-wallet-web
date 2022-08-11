@@ -47,6 +47,11 @@ const slice = createSlice({
       state.success = false
       state.active = true
     },
+    sendFooTransaction(state, action: PayloadAction<TransferPayload>) {
+      state.error = undefined
+      state.success = false
+      state.active = false
+    },
     updateTransactionPreview(state, action: PayloadAction<TransactionPreview>) {
       state.preview = Object.assign({}, action.payload)
     },

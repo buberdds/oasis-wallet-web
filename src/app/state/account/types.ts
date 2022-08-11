@@ -9,8 +9,15 @@ export interface BalanceDetails {
   total: StringifiedBigInt | null
 }
 
+// TODO validate types
+export interface Allowance {
+  address: string
+  amount: string
+}
+
 export interface Account extends BalanceDetails {
   address: string
+  allowances?: Allowance[]
 }
 
 /* --- STATE --- */

@@ -3,6 +3,7 @@ import { PayloadAction } from '@reduxjs/toolkit'
 import * as oasis from '@oasisprotocol/client'
 import { accounts, token } from '@oasisprotocol/client-rt'
 import { getEvmBech32Address, privateToEthAddress } from 'app/lib/eth-helpers'
+import { submitParaTimeTransaction } from 'app/state/transaction/saga'
 import { WalletError, WalletErrors } from 'types/errors'
 import { paraTimesActions } from '.'
 import { EvmcBalancePayload, OasisAddressBalancePayload } from './types'
@@ -66,7 +67,17 @@ export function* fetchBalanceUsingOasisAddress({
   yield* call(fetchBalance, address, paraTime)
 }
 
+export function* submitTransaction() {
+  try {
+    yield* call(submitParaTimeTransaction)
+    yield* put(paraTimesActions.transactionSubmitted())
+  } catch (error) {
+    console.log('error', error)
+  }
+}
+
 export function* paraTimesSaga() {
+  yield* takeLatest(paraTimesActions.submitTransaction, submitTransaction)
   yield* takeLatest(paraTimesActions.fetchBalanceUsingOasisAddress, fetchBalanceUsingOasisAddress)
   yield* takeLatest(paraTimesActions.fetchBalanceUsingEthPrivateKey, fetchBalanceUsingEthPrivateKey)
 }

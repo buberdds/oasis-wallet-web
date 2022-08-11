@@ -5,14 +5,16 @@ import { LedgerSigner } from 'app/lib/ledger'
 import { OasisTransaction, signerFromPrivateKey, TW } from 'app/lib/transaction'
 import { call, put, race, select, take, takeEvery } from 'typed-redux-saga'
 import { ErrorPayload, ExhaustedTypeError, WalletError, WalletErrors } from 'types/errors'
-
 import { transactionActions } from '.'
 import { sign } from '../ledger/saga'
 import { getOasisNic } from '../network/saga'
-import { selectChainContext } from '../network/selectors'
+import { selectAccountAddress } from '../account/selectors'
+import { selectChainContext, selectSelectedNetwork } from '../network/selectors'
 import { selectActiveWallet } from '../wallet/selectors'
 import { Wallet, WalletType } from '../wallet/types'
+import { selectParaTimes } from '../paratimes/selectors'
 import { TransactionPayload, TransactionStep } from './types'
+import { paraTimesConfig } from '../../../config'
 
 export function* transactionSaga() {
   yield* takeEvery(transactionActions.sendTransaction, doTransaction)
@@ -74,6 +76,30 @@ function* prepareTransfer(signer: Signer, amount: bigint, to: string) {
   yield* call(assertRecipientNotSelf, to)
 
   return yield* call(OasisTransaction.buildTransfer, nic, signer as Signer, to, amount)
+}
+
+export function* prepareParatimeTransfer(signer: Signer, amount: string, to: string, from: string) {
+  const nic = yield* call(getOasisNic)
+  const selectedNetwork = yield* select(selectSelectedNetwork)
+  const { transactionForm } = yield* select(selectParaTimes)
+  const paraTimeConfig = paraTimesConfig[transactionForm.paraTime!]
+  const runtimeId = paraTimeConfig[selectedNetwork].runtimeId
+  const runtimeDecimals = paraTimeConfig.decimals
+
+  yield* call(assertWalletIsOpen)
+  yield* call(assertSufficientBalance, BigInt(transactionForm.amount))
+  yield* call(assertRecipientNotSelf, to)
+
+  return yield* call(
+    OasisTransaction.buildParatimeTransfer,
+    nic,
+    signer,
+    to,
+    from,
+    amount,
+    runtimeId,
+    runtimeDecimals,
+  )
 }
 
 function* prepareAddEscrow(signer: Signer, amount: bigint, validator: string) {
@@ -178,6 +204,29 @@ export function* doTransaction(action: PayloadAction<TransactionPayload>) {
     }
 
     yield* put(transactionActions.transactionFailed(payload))
+  }
+}
+
+export function* submitParaTimeTransaction() {
+  const accountAddress = yield* select(selectAccountAddress)
+  const { transactionForm } = yield* select(selectParaTimes)
+  const nic = yield* call(getOasisNic)
+  const chainContext = yield* select(selectChainContext)
+
+  try {
+    const signer = yield* getSigner()
+    const tw = yield* call(
+      prepareParatimeTransfer,
+      signer as Signer,
+      transactionForm.amount,
+      transactionForm.recipient,
+      accountAddress,
+    )
+
+    yield* call(OasisTransaction.signParaTime, chainContext, signer as Signer, tw)
+    yield* call(OasisTransaction.submit, nic, tw)
+  } catch (error) {
+    console.log('error', error)
   }
 }
 

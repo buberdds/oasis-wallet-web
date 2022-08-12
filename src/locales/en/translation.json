@@ -275,6 +275,7 @@
       "deposit": "Deposit to ParaTime",
       "depositDisabled": "You don't have any {{ticker}} tokens to transfer",
       "description": "Use the \"Deposit\" option to transfer your {{ticker}} tokens from Consensus to a ParaTime of your choosing or \"Withdraw\" option to transfer your {{ticker}} tokens from a ParaTime back to Consensus.",
+      "header": "ParaTimes Transfers",
       "withdraw": "Withdraw from ParaTime"
     },
     "validation": {

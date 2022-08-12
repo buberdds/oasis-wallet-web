@@ -32,6 +32,7 @@ export type ParaTimesHook = {
   paraTimeName: string
   resetTransactionForm: () => void
   setTransactionForm: (formValues: TransactionForm) => void
+  submitTransaction: () => void
   ticker: string
   transactionForm: TransactionForm
   usesOasisAddress: boolean
@@ -40,6 +41,9 @@ export type ParaTimesHook = {
 export const useParaTimes = (): ParaTimesHook => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
+  const submitTransaction = useCallback(() => {
+    dispatch(paraTimesActions.submitTransaction())
+  }, [dispatch])
   const resetTransactionForm = useCallback(() => {
     dispatch(paraTimesActions.resetTransactionForm())
   }, [dispatch])
@@ -79,6 +83,7 @@ export const useParaTimes = (): ParaTimesHook => {
     paraTimeName,
     resetTransactionForm,
     setTransactionForm,
+    submitTransaction,
     ticker,
     transactionForm,
     usesOasisAddress: !needsEthAddress,

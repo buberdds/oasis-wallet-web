@@ -82,6 +82,30 @@ export class OasisTransaction {
     return tw
   }
 
+  public static async buildStakingAllowTransfer(
+    nic: OasisClient,
+    signer: Signer,
+    to: string,
+    amount: bigint,
+  ): Promise<TW<oasis.types.StakingAllow>> {
+    const tw = oasis.staking.allowWrapper()
+    const nonce = await OasisTransaction.getNonce(nic, signer)
+    const beneficiary = await addressToPublicKey(to)
+
+    tw.setNonce(nonce)
+    tw.setFeeAmount(oasis.quantity.fromBigInt(0n))
+    tw.setBody({
+      beneficiary,
+      negative: false,
+      amount_change: oasis.quantity.fromBigInt(BigInt(amount)),
+    })
+
+    const gas = await tw.estimateGas(nic, signer.public())
+    tw.setFeeGas(gas)
+
+    return tw
+  }
+
   public static async buildParatimeTransfer(
     nic: OasisClient,
     signer: Signer,
@@ -97,27 +121,27 @@ export class OasisTransaction {
     const accountsWrapper = new oasisRT.accounts.Wrapper(consensusRuntimeId)
     const bech32Address = await oasis.staking.addressFromBech32(fromAddress)
     const nonce = await accountsWrapper.queryNonce().setArgs({ address: bech32Address }).query(nic)
-
     const decimal = new BigNumber(10).pow(runtimeDecimals)
     const depositAmount = [
       oasis.quantity.fromBigInt(BigInt(new BigNumber(amount).multipliedBy(decimal).toFixed())),
       oasisRT.token.NATIVE_DENOMINATION,
     ]
-
     const uint8ArrayAddress = await oasis.staking.addressFromBech32(
       isValidEthAddress(targetAddress) ? await getEvmBech32Address(targetAddress) : targetAddress,
     )
+
     txWrapper.setBody({
       amount: depositAmount,
       to: uint8ArrayAddress,
     })
+
     const feeAmount = 0n
     const feeGas = BigInt(15000)
+
     txWrapper
       .setFeeAmount([oasis.quantity.fromBigInt(feeAmount), oasisRT.token.NATIVE_DENOMINATION])
       .setFeeGas(feeGas)
       .setFeeConsensusMessages(1)
-
     const signerInfo = {
       address_spec: { signature: { ed25519: signer.public() } },
       nonce,

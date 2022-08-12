@@ -59,6 +59,7 @@ const slice = createSlice({
       state.error = action.payload
       state.active = false
     },
+    stakingAllowTransactionSent(state, action: PayloadAction<TransactionPayload>) {},
   },
 })
 

@@ -1,5 +1,5 @@
 import { bech32 } from 'bech32'
-import { quantity, staking, types } from '@oasisprotocol/client'
+import { quantity, misc, staking, types } from '@oasisprotocol/client'
 import { WalletBalance } from 'app/state/wallet/types'
 import { decode as base64decode } from 'base64-arraybuffer'
 import BigNumber from 'bignumber.js'
@@ -111,4 +111,9 @@ export function parseRpcBalance(account: types.StakingAccount): WalletBalance {
 
 export function formatCommissionPercent(commission: number): string {
   return new BigNumber(commission).times(100).toFormat()
+}
+
+export async function getRuntimeAddress(runtimeId: string) {
+  const address = await staking.addressFromRuntimeID(misc.fromHex(runtimeId))
+  return staking.addressToBech32(address).toLowerCase()
 }

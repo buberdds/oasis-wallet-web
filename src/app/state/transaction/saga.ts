@@ -1,4 +1,6 @@
 import { Signer } from '@oasisprotocol/client/dist/signature'
+import BigNumber from 'bignumber.js'
+import * as oasis from '@oasisprotocol/client'
 import { PayloadAction } from '@reduxjs/toolkit'
 import { hex2uint, isValidAddress, uint2bigintString } from 'app/lib/helpers'
 import { LedgerSigner } from 'app/lib/ledger'
@@ -9,12 +11,15 @@ import { transactionActions } from '.'
 import { sign } from '../ledger/saga'
 import { getOasisNic } from '../network/saga'
 import { selectAccountAddress } from '../account/selectors'
+import { Allowance } from '../account/types'
+import { selectAccountAllowances } from '../account/selectors'
 import { selectChainContext, selectSelectedNetwork } from '../network/selectors'
 import { selectActiveWallet } from '../wallet/selectors'
 import { Wallet, WalletType } from '../wallet/types'
 import { selectParaTimes } from '../paratimes/selectors'
 import { TransactionPayload, TransactionStep } from './types'
 import { paraTimesConfig } from '../../../config'
+import { getRuntimeAddress } from 'app/lib/helpers'
 
 export function* transactionSaga() {
   yield* takeEvery(transactionActions.sendTransaction, doTransaction)
@@ -78,7 +83,18 @@ function* prepareTransfer(signer: Signer, amount: bigint, to: string) {
   return yield* call(OasisTransaction.buildTransfer, nic, signer as Signer, to, amount)
 }
 
-export function* prepareParatimeTransfer(signer: Signer, amount: string, to: string, from: string) {
+function* prepareStakingAllowTransfer(signer: Signer, amount: bigint, to: string) {
+  const nic = yield* call(getOasisNic)
+
+  yield* call(assertWalletIsOpen)
+  yield* call(assertValidAddress, to)
+  yield* call(assertSufficientBalance, amount)
+  yield* call(assertRecipientNotSelf, to)
+
+  return yield* call(OasisTransaction.buildStakingAllowTransfer, nic, signer as Signer, to, amount)
+}
+
+function* prepareParatimeTransfer(signer: Signer, amount: string, to: string, from: string) {
   const nic = yield* call(getOasisNic)
   const selectedNetwork = yield* select(selectSelectedNetwork)
   const { transactionForm } = yield* select(selectParaTimes)
@@ -207,27 +223,44 @@ export function* doTransaction(action: PayloadAction<TransactionPayload>) {
   }
 }
 
+function* getAllowanceDifference(amount: string, runtimeAddress: string) {
+  const allowances = yield* select(selectAccountAllowances)
+  const allowance = allowances.find((item: Allowance) => item.address === runtimeAddress)?.amount || 0
+  return new BigNumber(amount).minus(Math.ceil(Number(allowance)).toString())
+}
+
 export function* submitParaTimeTransaction() {
   const accountAddress = yield* select(selectAccountAddress)
   const { transactionForm } = yield* select(selectParaTimes)
   const nic = yield* call(getOasisNic)
   const chainContext = yield* select(selectChainContext)
+  const signer = yield* getSigner()
+  const runtimeId = '000000000000000000000000000000000000000000000000e2eaa99fc008f87f'
+  const runtimeAddress = yield* call(getRuntimeAddress, runtimeId)
+  const allowanceDifference = yield* call(getAllowanceDifference, transactionForm.amount, runtimeAddress)
+  console.log('allowanceDifference', allowanceDifference)
 
-  try {
-    const signer = yield* getSigner()
+  if (new BigNumber(allowanceDifference).gte(0)) {
     const tw = yield* call(
-      prepareParatimeTransfer,
+      prepareStakingAllowTransfer,
       signer as Signer,
-      transactionForm.amount,
-      transactionForm.recipient,
-      accountAddress,
+      BigInt(allowanceDifference),
+      runtimeAddress,
     )
-
-    yield* call(OasisTransaction.signParaTime, chainContext, signer as Signer, tw)
+    yield* call(OasisTransaction.sign, chainContext, signer as Signer, tw)
     yield* call(OasisTransaction.submit, nic, tw)
-  } catch (error) {
-    console.log('error', error)
   }
+
+  const tw = yield* call(
+    prepareParatimeTransfer,
+    signer as Signer,
+    transactionForm.amount,
+    transactionForm.recipient,
+    accountAddress,
+  )
+
+  yield* call(OasisTransaction.signParaTime, chainContext, signer as Signer, tw)
+  yield* call(OasisTransaction.submit, nic, tw)
 }
 
 function* assertWalletIsOpen() {

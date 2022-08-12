@@ -7,6 +7,7 @@ import { submitParaTimeTransaction } from 'app/state/transaction/saga'
 import { WalletError, WalletErrors } from 'types/errors'
 import { paraTimesActions } from '.'
 import { EvmcBalancePayload, OasisAddressBalancePayload } from './types'
+
 import { selectSelectedNetwork } from '../network/selectors'
 import { getOasisNic } from '../network/saga'
 import { paraTimesConfig, ParaTime } from '../../../config'
@@ -71,8 +72,8 @@ export function* submitTransaction() {
   try {
     yield* call(submitParaTimeTransaction)
     yield* put(paraTimesActions.transactionSubmitted())
-  } catch (error) {
-    console.log('error', error)
+  } catch (error: any) {
+    throw new WalletError(WalletErrors.ParaTimesUnknownError, error)
   }
 }
 

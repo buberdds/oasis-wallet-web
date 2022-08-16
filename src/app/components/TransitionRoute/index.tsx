@@ -35,13 +35,13 @@ const Transition = styled.div`
   }
 }`
 
-interface Props {
+export interface TransitionRouteProps {
   exact?: boolean
   path: string
   component: React.ComponentType<RouteComponentProps<any>> | React.ComponentType<any>
 }
 
-export function TransitionRoute(props: Props) {
+export function TransitionRoute(props: TransitionRouteProps) {
   const fullPath = props.path
   const Component = props.component as any
   const nodeRef = useRef(null)

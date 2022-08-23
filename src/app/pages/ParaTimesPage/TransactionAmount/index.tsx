@@ -11,12 +11,13 @@ import {
 } from 'app/lib/helpers'
 import { paraTimesActions } from 'app/state/paratimes'
 import { AlertBox } from 'app/components/AlertBox'
+import { ParaTime } from '../../../../config'
 import { AmountFormatter } from '../../../components/AmountFormatter'
 import { ParaTimeContent } from '../ParaTimeContent'
 import { ParaTimeFormFooter } from '../ParaTimeFormFooter'
 import { useParaTimes } from '../useParaTimes'
 import { useParaTimesNavigation } from '../useParaTimesNavigation'
-import { ParaTime } from '../../../../config'
+import { FeesSection } from './FeesSection'
 
 export const TransactionAmount = () => {
   const { t } = useTranslation()
@@ -140,7 +141,11 @@ export const TransactionAmount = () => {
               </Text>
             </Box>
           </Box>
-
+          <FeesSection
+            feeAmount={transactionForm.feeAmount}
+            feeGas={transactionForm.feeGas}
+            ticker={ticker}
+          />
           <ParaTimeFormFooter
             disabled={disabled}
             secondaryAction={navigateToRecipient}

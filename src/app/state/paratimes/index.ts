@@ -19,6 +19,8 @@ export const initialState: ParaTimesState = {
     confirmTransfer: false,
     confirmTransferToValidator: false,
     confirmTransferToForeignAccount: false,
+    feeAmount: '',
+    feeGas: '',
     paraTime: undefined,
     privateKey: '',
     recipient: '',

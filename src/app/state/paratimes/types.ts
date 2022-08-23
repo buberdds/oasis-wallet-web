@@ -22,6 +22,8 @@ export interface TransactionForm {
   confirmTransfer: boolean
   confirmTransferToValidator: boolean
   confirmTransferToForeignAccount: boolean
+  feeAmount: string
+  feeGas: string
   paraTime?: ParaTime
   privateKey: string
   recipient: string

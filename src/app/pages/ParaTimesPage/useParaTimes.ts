@@ -8,6 +8,8 @@ import { selectAccountAvailableBalance, selectAccountIsLoading } from 'app/state
 import { selectAddress } from 'app/state/wallet/selectors'
 import { selectParaTimes } from 'app/state/paratimes/selectors'
 import { StringifiedBigInt } from 'types/StringifiedBigInt'
+import { ExhaustedTypeError } from 'types/errors'
+
 import { paraTimesConfig, RuntimeTypes, ParaTime } from '../../../config'
 
 type AvailableParaTimesForNetwork = {
@@ -47,7 +49,10 @@ const getParaTimeName = (t: TFunction, paraTime: ParaTime) => {
     case ParaTime.Sapphire:
       return t('paraTimes.common.sapphire', 'Sapphire')
     default:
-      return ''
+      throw new ExhaustedTypeError(
+        t('paraTimes.validation.unsupportedParaTime', 'Unsupported ParaTime'),
+        paraTime,
+      )
   }
 }
 
@@ -72,7 +77,7 @@ export const useParaTimes = (): ParaTimesHook => {
   const isEvmcParaTime = evmcParaTimes.includes(transactionForm.paraTime!)
   const needsEthAddress = isDepositing && isEvmcParaTime
   const balanceInBaseUnit = isDepositing || (!isDepositing && !isEvmcParaTime)
-  const paraTimeName = getParaTimeName(t, transactionForm.paraTime!)
+  const paraTimeName = transactionForm.paraTime ? getParaTimeName(t, transactionForm.paraTime) : ''
   const availableParaTimesForSelectedNetwork: AvailableParaTimesForNetwork[] = (
     Object.keys(paraTimesConfig) as ParaTime[]
   )

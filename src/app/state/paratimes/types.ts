@@ -21,7 +21,7 @@ export interface TransactionForm {
   paraTime?: ParaTime
   privateKey: string
   recipient: string
-  type?: TransactionTypes
+  type: TransactionTypes | undefined
 }
 
 export interface ParaTimesState {
@@ -46,3 +46,5 @@ export type Runtime = {
   id: string
   decimals: number
 }
+
+export type ParaTimeTransaction = Pick<TransactionForm, 'amount' | 'recipient' | 'type'>

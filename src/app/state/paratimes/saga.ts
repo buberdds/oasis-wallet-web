@@ -3,7 +3,6 @@ import { PayloadAction } from '@reduxjs/toolkit'
 import * as oasis from '@oasisprotocol/client'
 import { accounts, token } from '@oasisprotocol/client-rt'
 import { getEvmBech32Address, privateToEthAddress } from 'app/lib/eth-helpers'
-import { getRuntimeAddress } from 'app/lib/helpers'
 import { submitParaTimeTransaction } from 'app/state/transaction/saga'
 import { WalletError, WalletErrors } from 'types/errors'
 import { paraTimesActions } from '.'
@@ -74,10 +73,9 @@ export function* submitTransaction() {
     const selectedNetwork = yield* select(selectSelectedNetwork)
     const { transactionForm } = yield* select(selectParaTimes)
     const paraTimeConfig = paraTimesConfig[transactionForm.paraTime!]
-    const id = paraTimeConfig[selectedNetwork].runtimeId!
     const runtime: Runtime = {
-      address: yield* call(getRuntimeAddress, id),
-      id,
+      address: paraTimeConfig[selectedNetwork].address!,
+      id: paraTimeConfig[selectedNetwork].runtimeId!,
       decimals: paraTimeConfig.decimals,
     }
 

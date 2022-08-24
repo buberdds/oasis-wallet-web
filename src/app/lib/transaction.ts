@@ -123,7 +123,7 @@ export class OasisTransaction {
       .setArgs({ address: await oasis.staking.addressFromBech32(fromAddress) })
       .query(nic)
     const feeAmount = 0n
-    const feeGas = BigInt(15000)
+    const feeGas = 15000n
     const signerInfo = {
       address_spec: { signature: { ed25519: signer.public() } },
       nonce,

@@ -111,7 +111,7 @@ export class OasisTransaction {
     signer: Signer,
     targetAddress: string,
     fromAddress: string,
-    amount: string,
+    amount: string, // other methods use bigint
     runtimeId: string,
     runtimeDecimals: number,
   ): Promise<TW<oasisRT.types.ConsensusDeposit>> {

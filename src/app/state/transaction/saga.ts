@@ -102,7 +102,7 @@ function* prepareParatimeTransfer(
   runtime: Runtime,
 ) {
   yield* call(assertWalletIsOpen)
-  yield* call(assertSufficientBalance, BigInt(parseRoseStringToBigNumber(amount).toString()))
+  yield* call(assertSufficientBalance, BigInt(parseRoseStringToBigNumber(amount).toFixed(0).toString()))
 
   return yield* call(
     OasisTransaction.buildParatimeTransfer,

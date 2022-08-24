@@ -79,7 +79,12 @@ export function* submitTransaction() {
       decimals: paraTimeConfig.decimals,
     }
 
-    yield* call(submitParaTimeTransaction, runtime, transactionForm.amount, transactionForm.recipient)
+    yield* call(submitParaTimeTransaction, runtime, {
+      amount: transactionForm.amount,
+      recipient: transactionForm.recipient,
+      type: transactionForm.type,
+    })
+
     yield* put(paraTimesActions.transactionSubmitted())
   } catch (error: any) {
     throw new WalletError(WalletErrors.ParaTimesUnknownError, error)

@@ -5,6 +5,7 @@ import { ContextSigner, Signer } from '@oasisprotocol/client/dist/signature'
 import { WalletError, WalletErrors } from 'types/errors'
 import { getEvmBech32Address } from 'app/lib/eth-helpers'
 import { isValidEthAddress } from 'app/lib/eth-helpers'
+import { ParaTimeTransaction, TransactionTypes } from 'app/state/paratimes/types'
 import { addressToPublicKey, shortPublicKey } from './helpers'
 
 type OasisClient = oasis.client.NodeInternal
@@ -109,20 +110,22 @@ export class OasisTransaction {
   public static async buildParatimeTransfer(
     nic: OasisClient,
     signer: Signer,
-    targetAddress: string,
+    transaction: ParaTimeTransaction, // for amount other methods use bigint
     fromAddress: string,
-    amount: string, // other methods use bigint
     runtimeId: string,
     runtimeDecimals: number,
   ): Promise<TW<oasisRT.types.ConsensusDeposit>> {
+    const { amount, recipient: targetAddress, type } = transaction
     const consensusRuntimeId = oasis.misc.fromHex(runtimeId)
-    const txWrapper = new oasisRT.consensusAccounts.Wrapper(consensusRuntimeId).callDeposit()
+    const txWrapper = new oasisRT.consensusAccounts.Wrapper(consensusRuntimeId)[
+      type === TransactionTypes.Deposit ? 'callDeposit' : 'callWithdraw'
+    ]()
     const accountsWrapper = new oasisRT.accounts.Wrapper(consensusRuntimeId)
     const nonce = await accountsWrapper
       .queryNonce()
       .setArgs({ address: await oasis.staking.addressFromBech32(fromAddress) })
       .query(nic)
-    const feeAmount = 0n
+    const feeAmount = 1500000n
     const feeGas = 15000n
     const signerInfo = {
       address_spec: { signature: { ed25519: signer.public() } },

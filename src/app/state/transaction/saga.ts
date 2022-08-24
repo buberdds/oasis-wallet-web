@@ -5,7 +5,7 @@ import { PayloadAction } from '@reduxjs/toolkit'
 import { hex2uint, isValidAddress, uint2bigintString, parseRoseStringToBigNumber } from 'app/lib/helpers'
 import { LedgerSigner } from 'app/lib/ledger'
 import { OasisTransaction, signerFromPrivateKey, TW } from 'app/lib/transaction'
-import { call, put, race, select, take, takeEvery } from 'typed-redux-saga'
+import { call, delay, put, race, select, take, takeEvery } from 'typed-redux-saga'
 import { ErrorPayload, ExhaustedTypeError, WalletError, WalletErrors } from 'types/errors'
 import { transactionActions } from '.'
 import { sign } from '../importaccounts/saga'
@@ -17,7 +17,7 @@ import { selectChainContext } from '../network/selectors'
 import { selectActiveWallet } from '../wallet/selectors'
 import { Wallet, WalletType } from '../wallet/types'
 import { TransactionPayload, TransactionStep } from './types'
-import { Runtime } from '../paratimes/types'
+import { Runtime, ParaTimeTransaction } from '../paratimes/types'
 import { consensusDecimals } from '../../../config'
 
 export function* transactionSaga() {
@@ -96,21 +96,22 @@ function* prepareStakingAllowTransfer(signer: Signer, amount: bigint, to: string
 function* prepareParatimeTransfer(
   nic: client.NodeInternal,
   signer: Signer,
-  amount: string,
-  to: string,
+  transaction: ParaTimeTransaction,
   from: string,
   runtime: Runtime,
 ) {
   yield* call(assertWalletIsOpen)
-  yield* call(assertSufficientBalance, BigInt(parseRoseStringToBigNumber(amount).toFixed(0).toString()))
+  yield* call(
+    assertSufficientBalance,
+    BigInt(parseRoseStringToBigNumber(transaction.amount).toFixed(0).toString()),
+  )
 
   return yield* call(
     OasisTransaction.buildParatimeTransfer,
     nic,
     signer,
-    to,
+    transaction,
     from,
-    amount,
     runtime.id,
     runtime.decimals,
   )
@@ -227,12 +228,14 @@ function* getAllowanceDifference(amount: string, runtimeAddress: string) {
   return new BigNumber(amount).minus(allowance)
 }
 
-export function* submitParaTimeTransaction(runtime: Runtime, amount: string, recipient: string) {
+const transactionSentDelay = 500 // to get updated account data from BE
+
+export function* submitParaTimeTransaction(runtime: Runtime, transaction: ParaTimeTransaction) {
   const accountAddress = yield* select(selectAccountAddress)
   const nic = yield* call(getOasisNic)
   const chainContext = yield* select(selectChainContext)
   const signer = yield* getSigner()
-  const allowanceDifference = yield* call(getAllowanceDifference, amount, runtime.address)
+  const allowanceDifference = yield* call(getAllowanceDifference, transaction.amount, runtime.address)
 
   if (allowanceDifference.gte(0)) {
     const tw = yield* call(
@@ -245,23 +248,16 @@ export function* submitParaTimeTransaction(runtime: Runtime, amount: string, rec
     yield* call(OasisTransaction.submit, nic, tw)
   }
 
-  const tw = yield* call(
-    prepareParatimeTransfer,
-    nic,
-    signer as Signer,
-    amount,
-    recipient,
-    accountAddress,
-    runtime,
-  )
+  const tw = yield* call(prepareParatimeTransfer, nic, signer as Signer, transaction, accountAddress, runtime)
 
   yield* call(OasisTransaction.signParaTime, chainContext, signer as Signer, tw)
   yield* call(OasisTransaction.submit, nic, tw)
+  yield* delay(transactionSentDelay)
   yield* put(
     transactionActions.transactionSent({
       type: 'transfer',
-      amount,
-      to: recipient,
+      amount: transaction.amount,
+      to: transaction.recipient,
     }),
   )
 }

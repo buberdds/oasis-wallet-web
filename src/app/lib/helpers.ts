@@ -112,8 +112,3 @@ export function parseRpcBalance(account: types.StakingAccount): WalletBalance {
 export function formatCommissionPercent(commission: number): string {
   return new BigNumber(commission).times(100).toFormat()
 }
-
-export async function getRuntimeAddress(runtimeId: string) {
-  const address = await staking.addressFromRuntimeID(misc.fromHex(runtimeId))
-  return staking.addressToBech32(address).toLowerCase()
-}

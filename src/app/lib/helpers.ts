@@ -1,5 +1,5 @@
 import { bech32 } from 'bech32'
-import { quantity, misc, staking, types } from '@oasisprotocol/client'
+import { quantity, staking, types } from '@oasisprotocol/client'
 import { WalletBalance } from 'app/state/wallet/types'
 import { decode as base64decode } from 'base64-arraybuffer'
 import BigNumber from 'bignumber.js'

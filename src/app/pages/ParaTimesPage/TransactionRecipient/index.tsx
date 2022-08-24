@@ -48,7 +48,7 @@ export const TransactionRecipient = () => {
         style={{ width: isMobile ? '100%' : '465px' }}
       >
         <Box margin={{ bottom: 'medium' }}>
-          {isEvmcParaTime && !isDepositing ? (
+          {isEvmcParaTime && !isDepositing && (
             <FormField
               name="privateKey"
               required
@@ -79,25 +79,23 @@ export const TransactionRecipient = () => {
                 value={transactionForm.privateKey}
               />
             </FormField>
-          ) : (
-            <FormField
-              name="recipient"
-              required
-              validate={(recipient: string) =>
-                addressValidator(recipient)
-                  ? undefined
-                  : { message: t('errors.invalidAddress', 'Invalid address'), status: 'error' }
-              }
-            >
-              <TextInput
-                name="recipient"
-                placeholder={
-                  usesOasisAddress ? accountAddress : t('paraTimes.recipient.placeholder', '0x...')
-                }
-                value={transactionForm.recipient}
-              />
-            </FormField>
           )}
+
+          <FormField
+            name="recipient"
+            required
+            validate={(recipient: string) =>
+              addressValidator(recipient)
+                ? undefined
+                : { message: t('errors.invalidAddress', 'Invalid address'), status: 'error' }
+            }
+          >
+            <TextInput
+              name="recipient"
+              placeholder={usesOasisAddress ? accountAddress : t('paraTimes.recipient.placeholder', '0x...')}
+              value={transactionForm.recipient}
+            />
+          </FormField>
         </Box>
         <ParaTimeFormFooter
           secondaryAction={isDepositing ? navigateToDeposit : navigateToWithdraw}

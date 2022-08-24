@@ -257,6 +257,13 @@ export function* submitParaTimeTransaction(runtime: Runtime, amount: string, rec
 
   yield* call(OasisTransaction.signParaTime, chainContext, signer as Signer, tw)
   yield* call(OasisTransaction.submit, nic, tw)
+  yield* put(
+    transactionActions.transactionSent({
+      type: 'transfer',
+      amount,
+      to: recipient,
+    }),
+  )
 }
 
 function* assertWalletIsOpen() {

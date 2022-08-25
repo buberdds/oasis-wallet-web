@@ -10,24 +10,35 @@ import { ParaTimeFormFooter } from '../ParaTimeFormFooter'
 import { useParaTimes } from '../useParaTimes'
 import { useParaTimesNavigation } from '../useParaTimesNavigation'
 
-type TransactionConfirmationAlertSectionProps = {
+type ConfirmationChekboxProps = {
+  checked: boolean
   description: string
+  label: string
+  name: string
   warning?: boolean
 }
 
-export const TransactionConfirmationAlertSection = ({
+export const ConfirmationChekbox = ({
+  checked,
   description,
-  warning = false,
-}: TransactionConfirmationAlertSectionProps) => {
+  label,
+  name,
+  warning,
+}: ConfirmationChekboxProps) => {
   const isMobile = useContext(ResponsiveContext) === 'small'
 
   return (
     <Box margin={{ bottom: 'medium' }} style={{ maxWidth: '450px' }}>
-      <AlertBox color={warning ? 'status-warning' : 'status-error'}>
-        <Text textAlign="center" size={isMobile ? '16px' : 'medium'}>
-          {description}
-        </Text>
-      </AlertBox>
+      <Box margin={{ bottom: 'small' }} responsive={false}>
+        <AlertBox color={warning ? 'status-warning' : 'status-error'}>
+          <Text textAlign="center" size={isMobile ? '16px' : 'medium'}>
+            {description}
+          </Text>
+        </AlertBox>
+      </Box>
+      <FormField name={name} required>
+        <CheckBox checked={checked} label={label} name={name} />
+      </FormField>
     </Box>
   )
 }
@@ -73,64 +84,69 @@ export const TransactionConfirmation = () => {
       }
       isLoading={isLoading}
     >
-      {confirmTransferToValidator && (
-        <TransactionConfirmationAlertSection
-          description={t(
-            'paraTimes.confirmation.transferToValidator',
-            'This is a validator wallet address. Transfers to this address do not stake your funds with the validator.',
-          )}
-        />
-      )}
-
-      {confirmTransferToForeignAccount && (
-        <TransactionConfirmationAlertSection
-          description={
-            isDepositing
-              ? t(
-                  'paraTimes.confirmation.depositToForeignAccount',
-                  'Destination account is not in your wallet! We recommend you always deposit into your own ParaTime account, then transfer from there.',
-                )
-              : t(
-                  'paraTimes.confirmation.withdrawToForeignAccount',
-                  'Destination account is not in your wallet! Some automated systems, e.g., those used for tracking exchange deposits, may be unable to accept funds through ParaTime withdrawals. For better compatibility, cancel, withdraw into your own account, and transfer from there.',
-                )
-          }
-        />
-      )}
-
-      <TransactionConfirmationAlertSection
-        description={
-          isDepositing
-            ? t(
-                'paraTimes.confirmation.deposit',
-                'Please confirm the transferring amount and the receiving wallet\'s address are correct and then click "Deposit" to make the transfer.',
-              )
-            : t(
-                'paraTimes.confirmation.withdraw',
-                'Please confirm the withdrawing amount and the withdrawing wallet\'s address are correct and then click "Withdraw" to make the transfer.',
-              )
-        }
-        warning={true}
-      />
-
       <Form
         messages={{ required: t('paraTimes.validation.required', 'Field is required') }}
         onChange={nextValue => setTransactionForm(nextValue)}
         onSubmit={() => submitTransaction()}
         value={transactionForm}
       >
-        <Box margin={{ bottom: 'small' }} responsive={false}>
-          <FormField name="confirmation" required>
-            <CheckBox
-              checked={transactionForm.confirmation}
-              label={t(
-                'paraTimes.confirmation.checkboxLabel',
-                'I confirm the amount and the address are correct',
-              )}
-              name="confirmation"
-            />
-          </FormField>
-        </Box>
+        {confirmTransferToValidator && (
+          <ConfirmationChekbox
+            checked={transactionForm.confirmTransferToValidator}
+            description={t(
+              'paraTimes.confirmation.confirmTransferToValidatorDescription',
+              'This is a validator wallet address. Transfers to this address do not stake your funds with the validator.',
+            )}
+            label={t(
+              'paraTimes.confirmation.confirmTransferToValidatorLabel',
+              'I confirm I want to transfer tokens to a validator address',
+            )}
+            name="confirmTransferToValidator"
+          />
+        )}
+
+        {confirmTransferToForeignAccount && (
+          <ConfirmationChekbox
+            checked={transactionForm.confirmTransferToForeignAccount}
+            description={
+              isDepositing
+                ? t(
+                    'paraTimes.confirmation.confirmDepositToForeignAccountDescription',
+                    'Destination account is not in your wallet! We recommend you always deposit into your own ParaTime account, then transfer from there.',
+                  )
+                : t(
+                    'paraTimes.confirmation.confirmWithdrawToForeignAccountDescription',
+                    'Destination account is not in your wallet! Some automated systems, e.g., those used for tracking exchange deposits, may be unable to accept funds through ParaTime withdrawals. For better compatibility, cancel, withdraw into your own account, and transfer from there.',
+                  )
+            }
+            label={t(
+              'paraTimes.confirmation.confirmTransferToForeignAccount',
+              'I confirm I want to transfer tokens to a foreign account',
+            )}
+            name="confirmTransferToForeignAccount"
+          />
+        )}
+
+        <ConfirmationChekbox
+          checked={transactionForm.confirmTransfer}
+          description={
+            isDepositing
+              ? t(
+                  'paraTimes.confirmation.confirmDepositDescription',
+                  'Please confirm the transferring amount and the receiving wallet\'s address are correct and then click "Deposit" to make the transfer.',
+                )
+              : t(
+                  'paraTimes.confirmation.confirmWithdrawDescription',
+                  'Please confirm the withdrawing amount and the withdrawing wallet\'s address are correct and then click "Withdraw" to make the transfer.',
+                )
+          }
+          label={t(
+            'paraTimes.confirmation.confirmTransferLabel',
+            'I confirm the amount and the address are correct',
+          )}
+          name="confirmTransfer"
+          warning={true}
+        />
 
         <ParaTimeFormFooter
           primaryLabel={

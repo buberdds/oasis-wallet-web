@@ -87,7 +87,12 @@ export function* submitTransaction() {
 
     yield* put(paraTimesActions.transactionSubmitted())
   } catch (error: any) {
-    throw new WalletError(WalletErrors.ParaTimesUnknownError, error)
+    yield* put(
+      paraTimesActions.transactionError({
+        code: error instanceof WalletError ? error.type : WalletErrors.ParaTimesUnknownError,
+        message: error.message,
+      }),
+    )
   }
 }
 

@@ -245,6 +245,9 @@
       "withdrawLabel": "Withdraw",
       "withdrawing": "from the withdrawing"
     },
+    "error": {
+      "description": "Transaction failed. We were not able to transfer <strong>{{value}} {{ticker}}</strong> tokens {{preposition}} the following wallet on the <strong>{{paraTime}}</strong> {{paratimeType}} ParaTime: <strong>{{address}}</strong>"
+    },
     "footer": {
       "next": "Next",
       "notice": "* EVMc - Ethereum Virtual Machine compatible",

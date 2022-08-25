@@ -100,7 +100,7 @@ export const TransactionRecipient = () => {
         <ParaTimeFormFooter
           secondaryAction={isDepositing ? navigateToDeposit : navigateToWithdraw}
           submitButton
-          withNotice
+          withNotice={isEvmcParaTime}
         />
       </Form>
     </ParaTimeContent>

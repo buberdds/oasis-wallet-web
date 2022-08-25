@@ -28,16 +28,6 @@ export const TransactionConfirmationAlertSection = ({
           {description}
         </Text>
       </AlertBox>
-      <FormField name="confirmation" required>
-        <CheckBox
-          checked={transactionForm.confirmation}
-          label={t(
-            'paraTimes.confirmation.checkboxLabel',
-            'I confirm the amount and the address are correct',
-          )}
-          name="confirmation"
-        />
-      </FormField>
     </Box>
   )
 }
@@ -150,7 +140,7 @@ export const TransactionConfirmation = () => {
           }
           secondaryAction={navigateToAmount}
           submitButton
-          withNotice
+          withNotice={isEvmcParaTime}
         />
       </Form>
     </ParaTimeContent>

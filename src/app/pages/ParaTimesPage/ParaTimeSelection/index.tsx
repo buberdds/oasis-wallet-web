@@ -26,6 +26,7 @@ export const ParaTimeSelection = () => {
   const {
     availableParaTimesForSelectedNetwork,
     isDepositing,
+    isEvmcParaTime,
     resetTransactionForm,
     setTransactionForm,
     ticker,

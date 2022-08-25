@@ -56,7 +56,7 @@ export const TransactionError = () => {
         primaryLabel={t('paraTimes.summary.navigate', 'Navigate to ParaTimes Transfers')}
         primaryAction={resetTransactionForm}
         secondaryAction={navigateToConfirmation}
-        withNotice
+        withNotice={isEvmcParaTime}
       />
     </ParaTimeContent>
   )

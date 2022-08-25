@@ -228,7 +228,7 @@ function* getAllowanceDifference(amount: string, runtimeAddress: string) {
   return new BigNumber(amount).minus(allowance)
 }
 
-const transactionSentDelay = 500 // to get updated account data from BE
+const transactionSentDelay = 500 // to increase a chance to get updated account data from BE
 
 export function* submitParaTimeTransaction(runtime: Runtime, transaction: ParaTimeTransaction) {
   const accountAddress = yield* select(selectAccountAddress)
@@ -248,18 +248,19 @@ export function* submitParaTimeTransaction(runtime: Runtime, transaction: ParaTi
     yield* call(OasisTransaction.submit, nic, tw)
   }
 
-  const tw = yield* call(prepareParatimeTransfer, nic, signer as Signer, transaction, accountAddress, runtime)
-
-  yield* call(OasisTransaction.signParaTime, chainContext, signer as Signer, tw)
-  yield* call(OasisTransaction.submit, nic, tw)
-  yield* delay(transactionSentDelay)
-  yield* put(
-    transactionActions.transactionSent({
-      type: 'transfer',
-      amount: transaction.amount,
-      to: transaction.recipient,
-    }),
+  const rtw = yield* call(
+    prepareParatimeTransfer,
+    nic,
+    signer as Signer,
+    transaction,
+    accountAddress,
+    runtime,
   )
+
+  yield* call(OasisTransaction.signParaTime, chainContext, signer as Signer, rtw)
+  yield* call(OasisTransaction.submit, nic, rtw)
+  yield* delay(transactionSentDelay)
+  yield* put(transactionActions.paraTimeTransactionSent(transaction.recipient))
 }
 
 function* assertWalletIsOpen() {

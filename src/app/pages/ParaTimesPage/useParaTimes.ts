@@ -47,7 +47,7 @@ export const useParaTimes = () => {
   }, [dispatch])
   const setTransactionForm = (formValues: TransactionForm) =>
     dispatch(paraTimesActions.setTransactionForm(formValues))
-  const { balance, isLoading, transactionForm } = useSelector(selectParaTimes)
+  const { balance, isLoading, transactionError, transactionForm } = useSelector(selectParaTimes)
   const accountBalance = useSelector(selectAccountAvailableBalance)
   const accountIsLoading = useSelector(selectAccountIsLoading)
   const accountAddress = useSelector(selectAddress)
@@ -81,6 +81,7 @@ export const useParaTimes = () => {
     paraTimeName,
     resetTransactionForm,
     ticker,
+    transactionError,
     transactionForm,
     setTransactionForm,
     submitTransaction,

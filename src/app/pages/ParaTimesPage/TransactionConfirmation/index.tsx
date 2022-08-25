@@ -87,7 +87,7 @@ export const TransactionConfirmation = () => {
       <Form
         messages={{ required: t('paraTimes.validation.required', 'Field is required') }}
         onChange={nextValue => setTransactionForm(nextValue)}
-        onSubmit={() => submitTransaction()}
+        onSubmit={submitTransaction}
         value={transactionForm}
       >
         {confirmTransferToValidator && (

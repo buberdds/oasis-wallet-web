@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import { Box, CheckBox, Form, FormField, ResponsiveContext, Text } from 'grommet'
 import { Trans, useTranslation } from 'react-i18next'
+import { AlertBox } from 'app/components/AlertBox'
 import { ParaTimeContent } from '../ParaTimeContent'
 import { ParaTimeFormFooter } from '../ParaTimeFormFooter'
 import { useParaTimes } from '../useParaTimes'
@@ -43,17 +44,19 @@ export const TransactionConfirmation = () => {
       isLoading={isLoading}
     >
       <Box margin={{ bottom: 'medium' }} style={{ maxWidth: '450px' }}>
-        <Text textAlign="center" size={isMobile ? '16px' : 'medium'}>
-          {isDepositing
-            ? t(
-                'paraTimes.confirmation.deposit',
-                'Please confirm the transferring amount and the receiving wallet\'s address are correct and then click "Deposit" to make the transfer.',
-              )
-            : t(
-                'paraTimes.confirmation.withdraw',
-                'Please confirm the withdrawing amount and the withdrawing wallet\'s address are correct and then click "Withdraw" to make the transfer.',
-              )}
-        </Text>
+        <AlertBox color="status-warning">
+          <Text textAlign="center" size={isMobile ? '16px' : 'medium'}>
+            {isDepositing
+              ? t(
+                  'paraTimes.confirmation.deposit',
+                  'Please confirm the transferring amount and the receiving wallet\'s address are correct and then click "Deposit" to make the transfer.',
+                )
+              : t(
+                  'paraTimes.confirmation.withdraw',
+                  'Please confirm the withdrawing amount and the withdrawing wallet\'s address are correct and then click "Withdraw" to make the transfer.',
+                )}
+          </Text>
+        </AlertBox>
       </Box>
 
       <Form

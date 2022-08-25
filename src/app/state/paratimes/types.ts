@@ -1,4 +1,5 @@
 import { StringifiedBigInt } from 'types/StringifiedBigInt'
+import { ErrorPayload } from 'types/errors'
 import { ParaTime } from '../../../config'
 
 export enum TransactionFormSteps {
@@ -8,6 +9,7 @@ export enum TransactionFormSteps {
   TransactionAmount,
   TransactionConfirmation,
   TransactionSummary,
+  TransactionError,
 }
 
 export enum TransactionTypes {
@@ -27,6 +29,7 @@ export interface TransactionForm {
 export interface ParaTimesState {
   balance: StringifiedBigInt
   isLoading: boolean
+  transactionError?: ErrorPayload
   transactionForm: TransactionForm
   transactionFormStep: TransactionFormSteps
 }

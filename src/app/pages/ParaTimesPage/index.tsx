@@ -11,6 +11,7 @@ import { TransactionRecipient } from './TransactionRecipient'
 import { TransactionAmount } from './TransactionAmount'
 import { TransactionConfirmation } from './TransactionConfirmation'
 import { TransactionSummary } from './TransactionSummary'
+import { TransactionError } from './TransactionError'
 import { useParaTimes } from './useParaTimes'
 
 const getActiveFormStepComponent = (step: number) => {
@@ -25,6 +26,8 @@ const getActiveFormStepComponent = (step: number) => {
       return <TransactionConfirmation />
     case TransactionFormSteps.TransactionSummary:
       return <TransactionSummary />
+    case TransactionFormSteps.TransactionError:
+      return <TransactionError />
     default:
       return <ParaTimeTransferType />
   }

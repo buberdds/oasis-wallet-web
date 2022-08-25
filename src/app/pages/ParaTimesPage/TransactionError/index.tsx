@@ -1,14 +1,13 @@
 import React from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { StatusCritical } from 'grommet-icons/icons'
-import { Box, Text } from 'grommet'
+import { Box } from 'grommet'
 import { AlertBox } from 'app/components/AlertBox'
 import { ErrorFormatter } from 'app/components/ErrorFormatter'
 import { ParaTimeContent } from '../ParaTimeContent'
 import { ParaTimeFormFooter } from '../ParaTimeFormFooter'
 import { useParaTimes } from '../useParaTimes'
 import { useParaTimesNavigation } from '../useParaTimesNavigation'
-import { WalletErrors } from 'types/errors'
 
 export const TransactionError = () => {
   const { t } = useTranslation()

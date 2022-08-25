@@ -38,7 +38,7 @@ export const TransactionSummary = () => {
       <ParaTimeFormFooter
         primaryLabel={t('paraTimes.summary.navigate', 'Navigate to ParaTimes Transfers')}
         primaryAction={resetTransactionForm}
-        withNotice
+        withNotice={isEvmcParaTime}
       />
     </ParaTimeContent>
   )

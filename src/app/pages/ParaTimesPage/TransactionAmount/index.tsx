@@ -145,7 +145,7 @@ export const TransactionAmount = () => {
             disabled={disabled}
             secondaryAction={navigateToRecipient}
             submitButton
-            withNotice
+            withNotice={isEvmcParaTime}
           />
         </Form>
       </Box>

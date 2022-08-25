@@ -17,6 +17,9 @@ export const signerFromPrivateKey = (privateKey: Uint8Array) => {
 /** Transaction Wrapper */
 export type TW<T> = oasis.consensus.TransactionWrapper<T>
 
+/** Runtime Transaction Wrapper */
+type RTW<T> = oasisRT.wrapper.TransactionWrapper<T, void>
+
 export class OasisTransaction {
   protected static genesis?: oasis.types.GenesisDocument
 
@@ -114,18 +117,19 @@ export class OasisTransaction {
     fromAddress: string,
     runtimeId: string,
     runtimeDecimals: number,
-  ): Promise<TW<oasisRT.types.ConsensusDeposit>> {
+  ): Promise<RTW<oasisRT.types.ConsensusDeposit | oasisRT.types.ConsensusWithdraw>> {
     const { amount, recipient: targetAddress, type } = transaction
+    const isDepositing = type === TransactionTypes.Deposit
     const consensusRuntimeId = oasis.misc.fromHex(runtimeId)
     const txWrapper = new oasisRT.consensusAccounts.Wrapper(consensusRuntimeId)[
-      type === TransactionTypes.Deposit ? 'callDeposit' : 'callWithdraw'
+      isDepositing ? 'callDeposit' : 'callWithdraw'
     ]()
     const accountsWrapper = new oasisRT.accounts.Wrapper(consensusRuntimeId)
     const nonce = await accountsWrapper
       .queryNonce()
       .setArgs({ address: await oasis.staking.addressFromBech32(fromAddress) })
       .query(nic)
-    const feeAmount = 1500000n
+    const feeAmount = isDepositing ? 0n : 1500000n
     const feeGas = 15000n
     const signerInfo = {
       address_spec: { signature: { ed25519: signer.public() } },
@@ -140,7 +144,7 @@ export class OasisTransaction {
           ),
           oasisRT.token.NATIVE_DENOMINATION,
         ],
-        to: await oasis.staking.addressFromBech32(
+        to: oasis.staking.addressFromBech32(
           isValidEthAddress(targetAddress) ? await getEvmBech32Address(targetAddress) : targetAddress,
         ),
       })
@@ -167,11 +171,11 @@ export class OasisTransaction {
     return tw.sign(new oasis.signature.BlindContextSigner(signer), chainContext)
   }
 
-  public static async signParaTime<T>(chainContext: string, signer: Signer, tw: TW<T>): Promise<void> {
+  public static async signParaTime<T>(chainContext: string, signer: Signer, tw: RTW<T>): Promise<void> {
     return tw.sign([new oasis.signature.BlindContextSigner(signer)], chainContext)
   }
 
-  public static async submit<T>(nic: OasisClient, tw: TW<T>): Promise<void> {
+  public static async submit<T>(nic: OasisClient, tw: TW<T> | RTW<T>): Promise<void> {
     try {
       await tw.submit(nic)
     } catch (e: any) {

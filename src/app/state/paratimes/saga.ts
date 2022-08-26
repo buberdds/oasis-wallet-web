@@ -83,6 +83,8 @@ export function* submitTransaction() {
 
     yield* call(submitParaTimeTransaction, runtime, {
       amount: transactionForm.amount,
+      feeAmount: transactionForm.feeAmount,
+      feeGas: transactionForm.feeGas,
       recipient: transactionForm.recipient,
       type: transactionForm.type,
     })

@@ -16,29 +16,41 @@ export const FeesSection = ({ feeAmount, feeGas, ticker }: FeesSectionProps) => 
     <Box pad={{ vertical: 'medium' }}>
       <Box align="start">
         <Button
+          label={t('paraTimes.amount.advanced', 'Advanced')}
           margin={{ bottom: 'medium' }}
+          onClick={() => setOpen(!open)}
           secondary
           size="small"
-          onClick={() => setOpen(!open)}
-          label={t('paraTimes.amount.advanced', 'Advanced')}
         />
       </Box>
       <Collapsible open={open}>
-        <FormField name="feeAmount">
+        <FormField
+          name="feeAmount"
+          validate={{
+            regexp: /^(\s*|[0-9][0-9]*)$/,
+            message: t('paraTimes.validation.invalidFee', 'Value must be integer greater than or equal to 0'),
+          }}
+        >
           <TextInput
             name="feeAmount"
-            type="text"
             placeholder={t('paraTimes.amount.feeAmountPlaceholder', 'Fee Amount (nano {{ticker}})', {
               ticker,
             })}
+            type="number"
             value={feeAmount}
           />
         </FormField>
-        <FormField name="feeGas">
+        <FormField
+          name="feeGas"
+          validate={{
+            regexp: /^(\s*|[0-9][0-9]*)$/,
+            message: t('paraTimes.validation.invalidFee', 'Value must be integer greater than or equal to 0'),
+          }}
+        >
           <TextInput
             name="feeGas"
-            type="text"
-            placeholder={t('paraTimes.amount.feeGasPlaceholder', 'Fee gas')}
+            placeholder={t('paraTimes.amount.feeGasPlaceholder', 'Fee gas)')}
+            type="number"
             value={feeGas}
           />
         </FormField>

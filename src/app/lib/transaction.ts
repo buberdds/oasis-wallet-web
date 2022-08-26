@@ -7,6 +7,7 @@ import { getEvmBech32Address } from 'app/lib/eth-helpers'
 import { isValidEthAddress } from 'app/lib/eth-helpers'
 import { ParaTimeTransaction, TransactionTypes } from 'app/state/paratimes/types'
 import { addressToPublicKey, shortPublicKey } from './helpers'
+import { consensusDecimals } from '../../config'
 
 type OasisClient = oasis.client.NodeInternal
 
@@ -129,8 +130,18 @@ export class OasisTransaction {
       .queryNonce()
       .setArgs({ address: await oasis.staking.addressFromBech32(fromAddress) })
       .query(nic)
-    const feeAmount = isDepositing ? 0n : 1500000n
-    const feeGas = 15000n
+    const feeAmountDecimal = new BigNumber(10).pow(consensusDecimals)
+    const feeAmount = transaction.feeAmount
+      ? BigInt(
+          new BigNumber(transaction.feeAmount)
+            .multipliedBy(runtimeDecimals)
+            .dividedBy(feeAmountDecimal)
+            .toFixed(),
+        )
+      : isDepositing
+      ? 0n
+      : 1500000n
+    const feeGas = transaction.feeGas ? BigInt(transaction.feeGas) : 15000n
     const signerInfo = {
       address_spec: { signature: { ed25519: signer.public() } },
       nonce,

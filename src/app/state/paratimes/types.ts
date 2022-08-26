@@ -53,4 +53,7 @@ export type Runtime = {
   decimals: number
 }
 
-export type ParaTimeTransaction = Pick<TransactionForm, 'amount' | 'recipient' | 'type'>
+export type ParaTimeTransaction = Pick<
+  TransactionForm,
+  'amount' | 'feeAmount' | 'feeGas' | 'recipient' | 'type'
+>

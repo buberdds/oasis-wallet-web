@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { Box } from 'grommet'
+import { selectSelectedNetwork } from 'app/state/network/selectors'
 import { selectParaTimes } from 'app/state/paratimes/selectors'
 import { selectIsAddressInWallet } from 'app/state/selectIsAddressInWallet'
 import { TransactionFormSteps } from 'app/state/paratimes/types'
@@ -34,6 +35,7 @@ const getActiveFormStepComponent = (step: number) => {
 }
 
 export const ParaTimes = () => {
+  const selectedNetwork = useSelector(selectSelectedNetwork)
   const { transactionFormStep } = useSelector(selectParaTimes)
   const isAddressInWallet = useSelector(selectIsAddressInWallet)
   const { resetTransactionForm } = useParaTimes()
@@ -43,6 +45,10 @@ export const ParaTimes = () => {
       resetTransactionForm()
     }
   }, [resetTransactionForm])
+
+  useEffect(() => {
+    resetTransactionForm()
+  }, [resetTransactionForm, selectedNetwork])
 
   return (
     <Box pad="medium" background="background-front" align="center">

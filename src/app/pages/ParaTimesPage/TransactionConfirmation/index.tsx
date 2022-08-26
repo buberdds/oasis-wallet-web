@@ -56,12 +56,13 @@ export const TransactionConfirmation = () => {
     submitTransaction,
     ticker,
     transactionForm,
+    usesOasisAddress,
   } = useParaTimes()
   const { navigateToAmount } = useParaTimesNavigation()
   const confirmTransferToValidator =
-    !isEvmcParaTime && validators.some(validator => validator.address === transactionForm.recipient)
+    usesOasisAddress && validators.some(validator => validator.address === transactionForm.recipient)
   const confirmTransferToForeignAccount =
-    !confirmTransferToValidator && !isEvmcParaTime && !walletsAddresses.includes(transactionForm.recipient)
+    !confirmTransferToValidator && usesOasisAddress && !walletsAddresses.includes(transactionForm.recipient)
 
   return (
     <ParaTimeContent

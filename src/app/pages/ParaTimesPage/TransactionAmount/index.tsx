@@ -51,7 +51,6 @@ export const TransactionAmount = () => {
             paraTime: transactionForm.paraTime as ParaTime,
           })
         : paraTimesActions.fetchBalanceUsingOasisAddress({
-            address: transactionForm.recipient,
             paraTime: transactionForm.paraTime as ParaTime,
           }),
     )

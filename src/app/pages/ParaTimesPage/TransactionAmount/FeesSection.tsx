@@ -49,7 +49,7 @@ export const FeesSection = ({ feeAmount, feeGas, ticker }: FeesSectionProps) => 
         >
           <TextInput
             name="feeGas"
-            placeholder={t('paraTimes.amount.feeGasPlaceholder', 'Fee gas)')}
+            placeholder={t('paraTimes.amount.feeGasPlaceholder', 'Fee Gas')}
             type="number"
             value={feeGas}
           />

@@ -61,7 +61,7 @@ export const TransactionConfirmation = () => {
   const confirmTransferToValidator =
     !isEvmcParaTime && validators.some(validator => validator.address === transactionForm.recipient)
   const confirmTransferToForeignAccount =
-    !isEvmcParaTime && !walletsAddresses.includes(transactionForm.recipient)
+    !confirmTransferToValidator && !isEvmcParaTime && !walletsAddresses.includes(transactionForm.recipient)
 
   return (
     <ParaTimeContent

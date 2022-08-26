@@ -4,12 +4,13 @@ import * as oasis from '@oasisprotocol/client'
 import { accounts, token } from '@oasisprotocol/client-rt'
 import { getEvmBech32Address, privateToEthAddress } from 'app/lib/eth-helpers'
 import { submitParaTimeTransaction } from 'app/state/transaction/saga'
+import { getOasisNic } from 'app/state/network/saga'
+import { selectSelectedNetwork } from 'app/state/network/selectors'
+import { selectAddress } from 'app/state/wallet/selectors'
 import { WalletError, WalletErrors } from 'types/errors'
 import { paraTimesActions } from '.'
 import { EvmcBalancePayload, OasisAddressBalancePayload, Runtime } from './types'
-import { selectParaTimes } from '../paratimes/selectors'
-import { selectSelectedNetwork } from '../network/selectors'
-import { getOasisNic } from '../network/saga'
+import { selectParaTimes } from './selectors'
 import { paraTimesConfig, ParaTime } from '../../../config'
 
 export async function getRuntimeBalance(address: string, runtimeId: string, nic: oasis.client.NodeInternal) {
@@ -63,8 +64,9 @@ export function* fetchBalanceUsingEthPrivateKey({
 }
 
 export function* fetchBalanceUsingOasisAddress({
-  payload: { address, paraTime },
+  payload: { paraTime },
 }: PayloadAction<OasisAddressBalancePayload>) {
+  const address = yield* select(selectAddress)
   yield* call(fetchBalance, address, paraTime)
 }
 

@@ -39,7 +39,6 @@ export interface ParaTimesState {
 }
 
 export type OasisAddressBalancePayload = {
-  address: string
   paraTime: ParaTime
 }
 

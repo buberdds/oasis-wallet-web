@@ -2,6 +2,7 @@ import { hex2uint, uint2hex } from './helpers'
 import { OasisTransaction, signerFromPrivateKey } from './transaction'
 import { NodeInternal } from '@oasisprotocol/client/dist/client'
 import { RpcError, StatusCode } from 'grpc-web'
+import { TransactionTypes } from 'app/state/paratimes/types'
 
 function wrapRpcError(method: string, grpcMessage: string) {
   const e = new RpcError(StatusCode.FAILED_PRECONDITION, 'RpcError: ..', {
@@ -62,17 +63,18 @@ describe('OasisTransaction', () => {
     expect((tw.transaction.body as any).amount).toEqual(new Uint8Array([4, 226])) // 1250
   })
 
-  it('Should build transfer transactions', async () => {
-    const tw = await OasisTransaction.buildTransfer(
+  it('Should build staking allow transfer transactions', async () => {
+    const tw = await OasisTransaction.buildStakingAllowTransfer(
       nic,
       testSigner,
       'oasis1qq5t7f2gecsjsdxmp5zxtwgck6pzpjmkvc657z6l',
       BigInt(1250),
     )
 
-    expect(tw.transaction.method).toEqual('staking.Transfer')
-    expect(tw.transaction.body).toHaveProperty('amount')
-    expect((tw.transaction.body as any).amount).toEqual(new Uint8Array([4, 226])) // 1250
+    expect(tw.transaction.method).toEqual('staking.Allow')
+    expect(tw.transaction.body).toHaveProperty('beneficiary')
+    expect((tw.transaction.body as any).negative).toEqual(false)
+    expect((tw.transaction.body as any).amount_change).toEqual(new Uint8Array([4, 226])) // 1250
   })
 
   it('Should sign transactions', async () => {

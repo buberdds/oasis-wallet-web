@@ -131,16 +131,12 @@ export class OasisTransaction {
       .setArgs({ address: await oasis.staking.addressFromBech32(fromAddress) })
       .query(nic)
     const feeAmountDecimal = new BigNumber(10).pow(consensusDecimals)
-    const feeAmount = transaction.feeAmount
-      ? BigInt(
-          new BigNumber(transaction.feeAmount)
-            .multipliedBy(runtimeDecimals)
-            .dividedBy(feeAmountDecimal)
-            .toFixed(),
-        )
-      : isDepositing
-      ? 0n
-      : 1500000n
+    const feeAmount = BigInt(
+      new BigNumber(transaction.feeAmount ? transaction.feeAmount : isDepositing ? '0' : '1500000')
+        .shiftedBy(runtimeDecimals)
+        .dividedBy(feeAmountDecimal)
+        .toFixed(),
+    )
     const feeGas = transaction.feeGas ? BigInt(transaction.feeGas) : 15000n
     const signerInfo = {
       address_spec: { signature: { ed25519: signer.public() } },

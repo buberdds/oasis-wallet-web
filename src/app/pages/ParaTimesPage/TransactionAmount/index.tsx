@@ -25,6 +25,7 @@ export const TransactionAmount = () => {
   const {
     balance,
     balanceInBaseUnit,
+    decimals,
     isDepositing,
     isEvmcParaTime,
     isLoading,
@@ -36,7 +37,7 @@ export const TransactionAmount = () => {
   } = useParaTimes()
   const { navigateToRecipient, navigateToConfirmation } = useParaTimesNavigation()
   const formatter = balanceInBaseUnit ? formatBaseUnitsAsRose : formatWeiAsWrose
-  const validator = balanceInBaseUnit ? isAmountGreaterThan : isEvmcAmountGreaterThan
+  const balanceValidator = balanceInBaseUnit ? isAmountGreaterThan : isEvmcAmountGreaterThan
   const disabled = !isLoading && isWalletEmpty
 
   useEffect(() => {
@@ -101,14 +102,22 @@ export const TransactionAmount = () => {
                 name="amount"
                 style={{ width: '100%' }}
                 required
-                validate={amount =>
-                  validator(amount, balance!)
-                    ? {
-                        message: t('errors.insufficientBalance', 'Insufficient balance'),
-                        status: 'error',
-                      }
-                    : undefined
-                }
+                validate={[
+                  (amount: string) =>
+                    !new RegExp(`^\\d*(?:[.][0-9]{0,${decimals}})?$`).test(amount)
+                      ? {
+                          message: t('paraTimes.validation.invalidDecimalValue', 'Incorrect decimal value'),
+                          status: 'error',
+                        }
+                      : undefined,
+                  (amount: string) =>
+                    balanceValidator(amount, balance!)
+                      ? {
+                          message: t('errors.insufficientBalance', 'Insufficient balance'),
+                          status: 'error',
+                        }
+                      : undefined,
+                ]}
               >
                 <TextInput disabled={disabled} name="amount" placeholder="0" value={transactionForm.amount} />
               </FormField>
@@ -124,7 +133,9 @@ export const TransactionAmount = () => {
                   }}
                   plain
                   label="MAX"
-                  onClick={() => setTransactionForm({ ...transactionForm, amount: formatter(balance) })}
+                  onClick={() =>
+                    setTransactionForm({ ...transactionForm, amount: formatter(balance).replaceAll(',', '') })
+                  }
                 />
               )}
             </Box>

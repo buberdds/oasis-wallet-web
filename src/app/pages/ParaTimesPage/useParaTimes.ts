@@ -9,7 +9,7 @@ import { selectAddress } from 'app/state/wallet/selectors'
 import { selectParaTimes } from 'app/state/paratimes/selectors'
 import { StringifiedBigInt } from 'types/StringifiedBigInt'
 import { ErrorPayload, ExhaustedTypeError } from 'types/errors'
-import { paraTimesConfig, RuntimeTypes, ParaTime } from '../../../config'
+import { consensusDecimals, paraTimesConfig, RuntimeTypes, ParaTime } from '../../../config'
 
 type AvailableParaTimesForNetwork = {
   isEvm: boolean
@@ -26,6 +26,7 @@ export type ParaTimesHook = {
   availableParaTimesForSelectedNetwork: AvailableParaTimesForNetwork[]
   balance: StringifiedBigInt | null
   balanceInBaseUnit: boolean
+  decimals: number
   isDepositing: boolean
   isEvmcParaTime: boolean
   isLoading: boolean
@@ -77,14 +78,15 @@ export const useParaTimes = (): ParaTimesHook => {
   const isEvmcParaTime = evmcParaTimes.includes(transactionForm.paraTime!)
   const needsEthAddress = isDepositing && isEvmcParaTime
   const balanceInBaseUnit = isDepositing || (!isDepositing && !isEvmcParaTime)
+  const decimals = balanceInBaseUnit ? consensusDecimals : paraTimesConfig[transactionForm.paraTime!].decimals
   const paraTimeName = transactionForm.paraTime ? getParaTimeName(t, transactionForm.paraTime) : ''
   const availableParaTimesForSelectedNetwork: AvailableParaTimesForNetwork[] = (
     Object.keys(paraTimesConfig) as ParaTime[]
   )
-    .filter(paratimeKey => paraTimesConfig[paratimeKey][selectedNetwork].runtimeId)
-    .map(paratimeKey => ({
-      isEvm: paraTimesConfig[paratimeKey].type === RuntimeTypes.Evm,
-      value: paratimeKey,
+    .filter(paraTimeKey => paraTimesConfig[paraTimeKey][selectedNetwork].runtimeId)
+    .map(paraTimeKey => ({
+      isEvm: paraTimesConfig[paraTimeKey].type === RuntimeTypes.Evm,
+      value: paraTimeKey,
     }))
   const walletBalance = !isDepositing ? balance : accountBalance
 
@@ -94,6 +96,7 @@ export const useParaTimes = (): ParaTimesHook => {
     availableParaTimesForSelectedNetwork,
     balance: walletBalance,
     balanceInBaseUnit,
+    decimals,
     isDepositing,
     isEvmcParaTime,
     isLoading,

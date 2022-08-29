@@ -290,6 +290,7 @@
       "withdraw": "Withdraw from ParaTime"
     },
     "validation": {
+      "invalidDecimalValue": "Incorrect decimal value",
       "invalidEthPrivateKey": "Private key is invalid",
       "invalidEthPrivateKeyLength": "Private key should be 64 characters long",
       "invalidFee": "Value must be integer greater than or equal to 0",

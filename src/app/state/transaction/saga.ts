@@ -222,7 +222,7 @@ export function* doTransaction(action: PayloadAction<TransactionPayload>) {
   }
 }
 
-function* getAllowanceDifference(amount: string, runtimeAddress: string) {
+export function* getAllowanceDifference(amount: string, runtimeAddress: string) {
   const allowances = yield* select(selectAccountAllowances)
   const allowance = allowances.find((item: Allowance) => item.address === runtimeAddress)?.amount || 0
   return new BigNumber(amount).minus(allowance)

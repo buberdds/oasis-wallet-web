@@ -2,7 +2,6 @@ import { hex2uint, uint2hex } from './helpers'
 import { OasisTransaction, signerFromPrivateKey } from './transaction'
 import { NodeInternal } from '@oasisprotocol/client/dist/client'
 import { RpcError, StatusCode } from 'grpc-web'
-import { TransactionTypes } from 'app/state/paratimes/types'
 
 function wrapRpcError(method: string, grpcMessage: string) {
   const e = new RpcError(StatusCode.FAILED_PRECONDITION, 'RpcError: ..', {

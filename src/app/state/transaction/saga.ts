@@ -5,6 +5,7 @@ import { PayloadAction } from '@reduxjs/toolkit'
 import { hex2uint, isValidAddress, uint2bigintString, parseRoseStringToBigNumber } from 'app/lib/helpers'
 import { LedgerSigner } from 'app/lib/ledger'
 import { OasisTransaction, signerFromPrivateKey, TW } from 'app/lib/transaction'
+import { getEvmBech32Address, privateToEthAddress } from 'app/lib/eth-helpers'
 import { call, delay, put, race, select, take, takeEvery } from 'typed-redux-saga'
 import { ErrorPayload, ExhaustedTypeError, WalletError, WalletErrors } from 'types/errors'
 import { transactionActions } from '.'
@@ -231,7 +232,9 @@ export function* getAllowanceDifference(amount: string, runtimeAddress: string) 
 const transactionSentDelay = 500 // to increase a chance to get updated account data from BE
 
 export function* submitParaTimeTransaction(runtime: Runtime, transaction: ParaTimeTransaction) {
-  const accountAddress = yield* select(selectAccountAddress)
+  const fromAddress = transaction.privateKey
+    ? yield* call(getEvmBech32Address, privateToEthAddress(transaction.privateKey))
+    : yield* select(selectAccountAddress)
   const nic = yield* call(getOasisNic)
   const chainContext = yield* select(selectChainContext)
   const signer = yield* getSigner()
@@ -248,14 +251,7 @@ export function* submitParaTimeTransaction(runtime: Runtime, transaction: ParaTi
     yield* call(OasisTransaction.submit, nic, tw)
   }
 
-  const rtw = yield* call(
-    prepareParatimeTransfer,
-    nic,
-    signer as Signer,
-    transaction,
-    accountAddress,
-    runtime,
-  )
+  const rtw = yield* call(prepareParatimeTransfer, nic, signer as Signer, transaction, fromAddress, runtime)
 
   yield* call(OasisTransaction.signParaTime, chainContext, signer as Signer, rtw)
   yield* call(OasisTransaction.submit, nic, rtw)

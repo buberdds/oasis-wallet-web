@@ -85,6 +85,7 @@ export function* submitTransaction() {
       amount: transactionForm.amount,
       feeAmount: transactionForm.feeAmount,
       feeGas: transactionForm.feeGas,
+      privateKey: transactionForm.privateKey,
       recipient: transactionForm.recipient,
       type: transactionForm.type,
     })

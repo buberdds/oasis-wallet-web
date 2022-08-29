@@ -55,5 +55,5 @@ export type Runtime = {
 
 export type ParaTimeTransaction = Pick<
   TransactionForm,
-  'amount' | 'feeAmount' | 'feeGas' | 'recipient' | 'type'
+  'amount' | 'feeAmount' | 'feeGas' | 'privateKey' | 'recipient' | 'type'
 >

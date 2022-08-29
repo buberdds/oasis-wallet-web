@@ -89,6 +89,7 @@ describe('Transaction Sagas', () => {
           amount: '10',
           feeAmount: '',
           feeGas: '',
+          privateKey: '',
           recipient: 'oasis1qz0k5q8vjqvu4s4nwxyj406ylnflkc4vrcjghuwk',
           type: TransactionTypes.Deposit,
         },

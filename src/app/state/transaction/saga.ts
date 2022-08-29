@@ -18,7 +18,7 @@ import { selectChainContext } from '../network/selectors'
 import { selectActiveWallet } from '../wallet/selectors'
 import { Wallet, WalletType } from '../wallet/types'
 import { TransactionPayload, TransactionStep } from './types'
-import { Runtime, ParaTimeTransaction } from '../paratimes/types'
+import { Runtime, ParaTimeTransaction, TransactionTypes } from '../paratimes/types'
 import { consensusDecimals } from '../../../config'
 
 export function* transactionSaga() {
@@ -102,10 +102,12 @@ function* prepareParatimeTransfer(
   runtime: Runtime,
 ) {
   yield* call(assertWalletIsOpen)
-  yield* call(
-    assertSufficientBalance,
-    BigInt(parseRoseStringToBigNumber(transaction.amount).toFixed(0).toString()),
-  )
+  if (transaction.type === TransactionTypes.Deposit) {
+    yield* call(
+      assertSufficientBalance,
+      BigInt(parseRoseStringToBigNumber(transaction.amount).toFixed(0).toString()),
+    )
+  }
 
   return yield* call(
     OasisTransaction.buildParatimeTransfer,

@@ -15,6 +15,10 @@ export const signerFromPrivateKey = (privateKey: Uint8Array) => {
   return oasis.signature.NaclSigner.fromSecret(privateKey, 'this key is not important')
 }
 
+export const signerFromEthPrivateKey = (privateKey: Uint8Array) => {
+  return oasisRT.signatureSecp256k1.EllipticSigner.fromPrivate(privateKey, 'this key is not important')
+}
+
 /** Transaction Wrapper */
 export type TW<T> = oasis.consensus.TransactionWrapper<T>
 
@@ -139,7 +143,7 @@ export class OasisTransaction {
     )
     const feeGas = transaction.feeGas ? BigInt(transaction.feeGas) : 15000n
     const signerInfo = {
-      address_spec: { signature: { ed25519: signer.public() } },
+      address_spec: { signature: { [transaction.privateKey ? 'secp256k1eth' : 'ed25519']: signer.public() } },
       nonce,
     }
 

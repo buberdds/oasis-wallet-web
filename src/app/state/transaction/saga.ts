@@ -1,10 +1,10 @@
-import { client } from '@oasisprotocol/client'
+import { client, misc } from '@oasisprotocol/client'
 import { Signer } from '@oasisprotocol/client/dist/signature'
 import BigNumber from 'bignumber.js'
 import { PayloadAction } from '@reduxjs/toolkit'
 import { hex2uint, isValidAddress, uint2bigintString, parseRoseStringToBigNumber } from 'app/lib/helpers'
 import { LedgerSigner } from 'app/lib/ledger'
-import { OasisTransaction, signerFromPrivateKey, TW } from 'app/lib/transaction'
+import { OasisTransaction, signerFromPrivateKey, signerFromEthPrivateKey, TW } from 'app/lib/transaction'
 import { getEvmBech32Address, privateToEthAddress } from 'app/lib/eth-helpers'
 import { call, delay, put, race, select, take, takeEvery } from 'typed-redux-saga'
 import { ErrorPayload, ExhaustedTypeError, WalletError, WalletErrors } from 'types/errors'
@@ -231,6 +231,27 @@ export function* getAllowanceDifference(amount: string, runtimeAddress: string) 
   return new BigNumber(amount).minus(allowance)
 }
 
+function* validateAllowance(
+  nic: client.NodeInternal,
+  chainContext: string,
+  amount: string,
+  runtimeAddress: string,
+) {
+  const allowanceDifference = yield* call(getAllowanceDifference, amount, runtimeAddress)
+
+  if (allowanceDifference.gte(0)) {
+    const signer = yield* getSigner()
+    const tw = yield* call(
+      prepareStakingAllowTransfer,
+      signer as Signer,
+      BigInt(allowanceDifference.shiftedBy(consensusDecimals).toString()),
+      runtimeAddress,
+    )
+    yield* call(OasisTransaction.sign, chainContext, signer as Signer, tw)
+    yield* call(OasisTransaction.submit, nic, tw)
+  }
+}
+
 const transactionSentDelay = 500 // to increase a chance to get updated account data from BE
 
 export function* submitParaTimeTransaction(runtime: Runtime, transaction: ParaTimeTransaction) {
@@ -239,23 +260,22 @@ export function* submitParaTimeTransaction(runtime: Runtime, transaction: ParaTi
     : yield* select(selectAccountAddress)
   const nic = yield* call(getOasisNic)
   const chainContext = yield* select(selectChainContext)
-  const signer = yield* getSigner()
-  const allowanceDifference = yield* call(getAllowanceDifference, transaction.amount, runtime.address)
+  const paraTimeTransactionSigner = transaction.privateKey
+    ? yield* call(signerFromEthPrivateKey, misc.fromHex(transaction.privateKey))
+    : yield* getSigner()
 
-  if (allowanceDifference.gte(0)) {
-    const tw = yield* call(
-      prepareStakingAllowTransfer,
-      signer as Signer,
-      BigInt(allowanceDifference.shiftedBy(consensusDecimals).toString()),
-      runtime.address,
-    )
-    yield* call(OasisTransaction.sign, chainContext, signer as Signer, tw)
-    yield* call(OasisTransaction.submit, nic, tw)
-  }
+  yield* validateAllowance(nic, chainContext, transaction.amount, runtime.address)
 
-  const rtw = yield* call(prepareParatimeTransfer, nic, signer as Signer, transaction, fromAddress, runtime)
+  const rtw = yield* call(
+    prepareParatimeTransfer,
+    nic,
+    paraTimeTransactionSigner as Signer,
+    transaction,
+    fromAddress,
+    runtime,
+  )
 
-  yield* call(OasisTransaction.signParaTime, chainContext, signer as Signer, rtw)
+  yield* call(OasisTransaction.signParaTime, chainContext, paraTimeTransactionSigner as Signer, rtw)
   yield* call(OasisTransaction.submit, nic, rtw)
   yield* delay(transactionSentDelay)
   yield* put(transactionActions.paraTimeTransactionSent(transaction.recipient))

@@ -106,7 +106,11 @@ export const TransactionAmount = () => {
                   (amount: string) =>
                     !new RegExp(`^\\d*(?:[.][0-9]{0,${decimals}})?$`).test(amount)
                       ? {
-                          message: t('paraTimes.validation.invalidDecimalValue', 'Incorrect decimal value'),
+                          message: t(
+                            'paraTimes.validation.invalidDecimalValue',
+                            'Maximum of {{token}} decimal places is allowed',
+                            { token: decimals },
+                          ),
                           status: 'error',
                         }
                       : undefined,

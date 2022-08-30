@@ -252,7 +252,7 @@ function* validateAllowance(
   }
 }
 
-const transactionSentDelay = 500 // to increase a chance to get updated account data from BE
+const transactionSentDelay = 1000 // to increase a chance to get updated account data from BE
 
 export function* submitParaTimeTransaction(runtime: Runtime, transaction: ParaTimeTransaction) {
   const fromAddress = transaction.privateKey

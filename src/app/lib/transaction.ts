@@ -15,8 +15,8 @@ export const signerFromPrivateKey = (privateKey: Uint8Array) => {
   return oasis.signature.NaclSigner.fromSecret(privateKey, 'this key is not important')
 }
 
-export const signerFromEthPrivateKey = (privateKey: Uint8Array) => {
-  return oasisRT.signatureSecp256k1.EllipticSigner.fromPrivate(privateKey, 'this key is not important')
+export const signerFromEthPrivateKey = (ethPrivateKey: Uint8Array) => {
+  return oasisRT.signatureSecp256k1.EllipticSigner.fromPrivate(ethPrivateKey, 'this key is not important')
 }
 
 /** Transaction Wrapper */
@@ -24,6 +24,11 @@ export type TW<T> = oasis.consensus.TransactionWrapper<T>
 
 /** Runtime Transaction Wrapper */
 type RTW<T> = oasisRT.wrapper.TransactionWrapper<T, void>
+
+// A wild guess: the minimum gas price on Emerald (100 nano ROSE) times the default loose
+// overestimate of the gas (15k).
+const defaultWithdrawFeeAmount = '1500000'
+const defaultDepositFeeAmount = '0'
 
 export class OasisTransaction {
   protected static genesis?: oasis.types.GenesisDocument
@@ -115,10 +120,15 @@ export class OasisTransaction {
     return tw
   }
 
-  public static async buildParatimeTransfer(
+  /**
+   * Note: uses raw user input amounts in ROSE as parameter instead of
+   * normalized bigint base units, because it needs to convert to base units
+   * dependent on paratime decimals.
+   */
+  public static async buildParaTimeTransfer(
     nic: OasisClient,
     signer: Signer,
-    transaction: ParaTimeTransaction, // for amount other methods use bigint
+    transaction: ParaTimeTransaction,
     fromAddress: string,
     runtimeId: string,
     runtimeDecimals: number,
@@ -132,18 +142,25 @@ export class OasisTransaction {
     const accountsWrapper = new oasisRT.accounts.Wrapper(consensusRuntimeId)
     const nonce = await accountsWrapper
       .queryNonce()
-      .setArgs({ address: await oasis.staking.addressFromBech32(fromAddress) })
+      .setArgs({ address: oasis.staking.addressFromBech32(fromAddress) })
       .query(nic)
-    const feeAmountDecimal = new BigNumber(10).pow(consensusDecimals)
     const feeAmount = BigInt(
-      new BigNumber(transaction.feeAmount ? transaction.feeAmount : isDepositing ? '0' : '1500000')
+      new BigNumber(
+        transaction.feeAmount
+          ? transaction.feeAmount
+          : isDepositing
+          ? defaultDepositFeeAmount
+          : defaultWithdrawFeeAmount,
+      )
         .shiftedBy(runtimeDecimals)
-        .dividedBy(feeAmountDecimal)
-        .toFixed(),
+        .shiftedBy(-consensusDecimals)
+        .toFixed(0),
     )
     const feeGas = transaction.feeGas ? BigInt(transaction.feeGas) : 15000n
     const signerInfo = {
-      address_spec: { signature: { [transaction.privateKey ? 'secp256k1eth' : 'ed25519']: signer.public() } },
+      address_spec: {
+        signature: { [transaction.ethPrivateKey ? 'secp256k1eth' : 'ed25519']: signer.public() },
+      },
       nonce,
     }
 

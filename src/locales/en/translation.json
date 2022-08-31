@@ -289,9 +289,10 @@
       "header": "ParaTimes Transfers",
       "withdraw": "Withdraw from ParaTime"
     },
+    "unsupportedFormStep": "Unsupported form step",
     "validation": {
       "invalidDecimalValue": "Maximum of {{token}} decimal places is allowed",
-      "invalidEthPrivateKey": "Private key is invalid",
+      "invalidEthPrivateKey": "Ethereum-compatible private key is invalid",
       "invalidEthPrivateKeyLength": "Private key should be 64 characters long",
       "invalidFee": "Value must be integer greater than or equal to 0",
       "required": "Field is required",

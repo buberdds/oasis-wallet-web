@@ -52,10 +52,10 @@ export function* fetchBalance(oasisAddress: string, paraTime: ParaTime) {
 }
 
 export function* fetchBalanceUsingEthPrivateKey({
-  payload: { privateKey, paraTime },
+  payload: { ethPrivateKey, paraTime },
 }: PayloadAction<EvmcBalancePayload>) {
   try {
-    const address = privateToEthAddress(privateKey)
+    const address = privateToEthAddress(ethPrivateKey)
     const oasisAddress = yield* call(getEvmBech32Address, address)
     yield* call(fetchBalance, oasisAddress, paraTime)
   } catch (error: any) {
@@ -83,9 +83,9 @@ export function* submitTransaction() {
 
     yield* call(submitParaTimeTransaction, runtime, {
       amount: transactionForm.amount,
+      ethPrivateKey: transactionForm.ethPrivateKey,
       feeAmount: transactionForm.feeAmount,
       feeGas: transactionForm.feeGas,
-      privateKey: transactionForm.privateKey,
       recipient: transactionForm.recipient,
       type: transactionForm.type,
     })

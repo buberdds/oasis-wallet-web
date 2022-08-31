@@ -3,13 +3,13 @@ import { ErrorPayload } from 'types/errors'
 import { ParaTime } from '../../../config'
 
 export enum TransactionFormSteps {
-  TransferType,
-  ParaTimeSelection,
-  TransactionRecipient,
-  TransactionAmount,
-  TransactionConfirmation,
-  TransactionSummary,
-  TransactionError,
+  TransferType = 'transferType',
+  ParaTimeSelection = 'paraTimeSelection',
+  TransactionRecipient = 'transactionRecipient',
+  TransactionAmount = 'transactionAmount',
+  TransactionConfirmation = 'transactionConfirmation',
+  TransactionSummary = 'transactionSummary',
+  TransactionError = 'transactionError',
 }
 
 export enum TransactionTypes {
@@ -22,10 +22,10 @@ export interface TransactionForm {
   confirmTransfer: boolean
   confirmTransferToValidator: boolean
   confirmTransferToForeignAccount: boolean
+  ethPrivateKey: string
   feeAmount: string
   feeGas: string
   paraTime?: ParaTime
-  privateKey: string
   recipient: string
   type: TransactionTypes | undefined
 }
@@ -43,7 +43,7 @@ export type OasisAddressBalancePayload = {
 }
 
 export type EvmcBalancePayload = {
-  privateKey: string
+  ethPrivateKey: string
   paraTime: ParaTime
 }
 
@@ -55,5 +55,5 @@ export type Runtime = {
 
 export type ParaTimeTransaction = Pick<
   TransactionForm,
-  'amount' | 'feeAmount' | 'feeGas' | 'privateKey' | 'recipient' | 'type'
+  'amount' | 'ethPrivateKey' | 'feeAmount' | 'feeGas' | 'recipient' | 'type'
 >

@@ -11,7 +11,7 @@ export interface BalanceDetails {
 
 export interface Allowance {
   address: string
-  amount: string
+  amount: StringifiedBigInt
 }
 
 export interface Account extends BalanceDetails {

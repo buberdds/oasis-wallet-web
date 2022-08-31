@@ -48,7 +48,7 @@ export const TransactionAmount = () => {
     dispatch(
       isEvmcParaTime
         ? paraTimesActions.fetchBalanceUsingEthPrivateKey({
-            privateKey: transactionForm.privateKey,
+            ethPrivateKey: transactionForm.ethPrivateKey,
             paraTime: transactionForm.paraTime as ParaTime,
           })
         : paraTimesActions.fetchBalanceUsingOasisAddress({
@@ -61,7 +61,7 @@ export const TransactionAmount = () => {
     isEvmcParaTime,
     transactionForm.paraTime,
     transactionForm.recipient,
-    transactionForm.privateKey,
+    transactionForm.ethPrivateKey,
   ])
 
   return (

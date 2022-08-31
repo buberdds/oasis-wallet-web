@@ -88,8 +88,6 @@ export enum RuntimeTypes {
 
 const emeraldConfig: ParaTimeConfig = {
   mainnet: {
-    // const address = await staking.addressFromRuntimeID(misc.fromHex(runtimeId))
-    // staking.addressToBech32(address).toLowerCase()
     address: 'oasis1qzvlg0grjxwgjj58tx2xvmv26era6t2csqn22pte',
     runtimeId: '000000000000000000000000000000000000000000000000e2eaa99fc008f87f',
   },

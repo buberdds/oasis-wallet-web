@@ -2,7 +2,13 @@ import { client, misc } from '@oasisprotocol/client'
 import { Signer } from '@oasisprotocol/client/dist/signature'
 import BigNumber from 'bignumber.js'
 import { PayloadAction } from '@reduxjs/toolkit'
-import { hex2uint, isValidAddress, uint2bigintString, parseRoseStringToBigNumber } from 'app/lib/helpers'
+import {
+  parseRoseStringToBigNumber,
+  hex2uint,
+  isValidAddress,
+  uint2bigintString,
+  parseRoseStringToBaseUnitString,
+} from 'app/lib/helpers'
 import { LedgerSigner } from 'app/lib/ledger'
 import { OasisTransaction, signerFromPrivateKey, signerFromEthPrivateKey, TW } from 'app/lib/transaction'
 import { getEvmBech32Address, privateToEthAddress } from 'app/lib/eth-helpers'
@@ -19,7 +25,6 @@ import { selectActiveWallet } from '../wallet/selectors'
 import { Wallet, WalletType } from '../wallet/types'
 import { TransactionPayload, TransactionStep } from './types'
 import { Runtime, ParaTimeTransaction, TransactionTypes } from '../paratimes/types'
-import { consensusDecimals } from '../../../config'
 
 export function* transactionSaga() {
   yield* takeEvery(transactionActions.sendTransaction, doTransaction)
@@ -103,14 +108,11 @@ function* prepareParatimeTransfer(
 ) {
   yield* call(assertWalletIsOpen)
   if (transaction.type === TransactionTypes.Deposit) {
-    yield* call(
-      assertSufficientBalance,
-      BigInt(parseRoseStringToBigNumber(transaction.amount).toFixed(0).toString()),
-    )
+    yield* call(assertSufficientBalance, BigInt(parseRoseStringToBaseUnitString(transaction.amount)))
   }
 
   return yield* call(
-    OasisTransaction.buildParatimeTransfer,
+    OasisTransaction.buildParaTimeTransfer,
     nic,
     signer,
     transaction,
@@ -227,11 +229,13 @@ export function* doTransaction(action: PayloadAction<TransactionPayload>) {
 
 export function* getAllowanceDifference(amount: string, runtimeAddress: string) {
   const allowances = yield* select(selectAccountAllowances)
-  const allowance = allowances.find((item: Allowance) => item.address === runtimeAddress)?.amount || 0
-  return new BigNumber(amount).minus(allowance)
+  const allowance =
+    (allowances?.length && allowances.find((item: Allowance) => item.address === runtimeAddress)?.amount) || 0
+
+  return parseRoseStringToBigNumber(amount).minus(new BigNumber(allowance))
 }
 
-function* validateAllowance(
+function* setAllowance(
   nic: client.NodeInternal,
   chainContext: string,
   amount: string,
@@ -244,7 +248,7 @@ function* validateAllowance(
     const tw = yield* call(
       prepareStakingAllowTransfer,
       signer as Signer,
-      BigInt(allowanceDifference.shiftedBy(consensusDecimals).toString()),
+      BigInt(allowanceDifference.toString()),
       runtimeAddress,
     )
     yield* call(OasisTransaction.sign, chainContext, signer as Signer, tw)
@@ -255,16 +259,16 @@ function* validateAllowance(
 const transactionSentDelay = 1000 // to increase a chance to get updated account data from BE
 
 export function* submitParaTimeTransaction(runtime: Runtime, transaction: ParaTimeTransaction) {
-  const fromAddress = transaction.privateKey
-    ? yield* call(getEvmBech32Address, privateToEthAddress(transaction.privateKey))
+  const fromAddress = transaction.ethPrivateKey
+    ? yield* call(getEvmBech32Address, privateToEthAddress(transaction.ethPrivateKey))
     : yield* select(selectAccountAddress)
   const nic = yield* call(getOasisNic)
   const chainContext = yield* select(selectChainContext)
-  const paraTimeTransactionSigner = transaction.privateKey
-    ? yield* call(signerFromEthPrivateKey, misc.fromHex(transaction.privateKey))
+  const paraTimeTransactionSigner = transaction.ethPrivateKey
+    ? yield* call(signerFromEthPrivateKey, misc.fromHex(transaction.ethPrivateKey))
     : yield* getSigner()
 
-  yield* validateAllowance(nic, chainContext, transaction.amount, runtime.address)
+  yield* setAllowance(nic, chainContext, transaction.amount, runtime.address)
 
   const rtw = yield* call(
     prepareParatimeTransfer,

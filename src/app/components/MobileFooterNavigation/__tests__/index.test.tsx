@@ -24,7 +24,7 @@ describe('<MobileFooterNavigation />', () => {
     canAccessParaTimesRoute: false,
     getParaTimesRoutePath: (address: string) => address,
     paraTimesRouteLabel: 'MockParaTimesLabel',
-  } as any
+  } as ReturnType<typeof useParaTimesNavigation>
 
   beforeEach(() => {
     jest.mocked(useParaTimesNavigation).mockReturnValue(mockUseParaTimesNavigationResult)

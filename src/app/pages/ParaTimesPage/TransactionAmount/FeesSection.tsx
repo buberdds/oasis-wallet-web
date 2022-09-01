@@ -32,10 +32,12 @@ export const FeesSection = ({ feeAmount, feeGas, ticker }: FeesSectionProps) => 
           }}
         >
           <TextInput
+            min="0"
             name="feeAmount"
             placeholder={t('paraTimes.amount.feeAmountPlaceholder', 'Fee Amount (nano {{ticker}})', {
               ticker,
             })}
+            step="1"
             type="number"
             value={feeAmount}
           />
@@ -48,8 +50,10 @@ export const FeesSection = ({ feeAmount, feeGas, ticker }: FeesSectionProps) => 
           }}
         >
           <TextInput
+            min="0"
             name="feeGas"
             placeholder={t('paraTimes.amount.feeGasPlaceholder', 'Fee Gas')}
+            step="1"
             type="number"
             value={feeGas}
           />

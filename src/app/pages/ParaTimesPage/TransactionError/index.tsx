@@ -12,10 +12,10 @@ import { useParaTimesNavigation } from '../useParaTimesNavigation'
 export const TransactionError = () => {
   const { t } = useTranslation()
   const {
+    clearTransactionForm,
     isDepositing,
     isEvmcParaTime,
     paraTimeName,
-    resetTransactionForm,
     ticker,
     transactionError,
     transactionForm,
@@ -53,7 +53,7 @@ export const TransactionError = () => {
 
       <ParaTimeFormFooter
         primaryLabel={t('paraTimes.summary.navigate', 'Navigate to ParaTimes Transfers')}
-        primaryAction={resetTransactionForm}
+        primaryAction={clearTransactionForm}
         secondaryAction={navigateToConfirmation}
         withNotice={isEvmcParaTime}
       />

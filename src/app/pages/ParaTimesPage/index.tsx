@@ -43,17 +43,17 @@ export const ParaTimes = () => {
   const selectedNetwork = useSelector(selectSelectedNetwork)
   const { transactionFormStep } = useSelector(selectParaTimes)
   const isAddressInWallet = useSelector(selectIsAddressInWallet)
-  const { resetTransactionForm } = useParaTimes()
+  const { clearTransactionForm } = useParaTimes()
 
   useEffect(() => {
     return () => {
-      resetTransactionForm()
+      clearTransactionForm()
     }
-  }, [resetTransactionForm])
+  }, [clearTransactionForm])
 
   useEffect(() => {
-    resetTransactionForm()
-  }, [resetTransactionForm, selectedNetwork])
+    clearTransactionForm()
+  }, [clearTransactionForm, selectedNetwork])
 
   return (
     <Box pad="medium" background="background-front" align="center">

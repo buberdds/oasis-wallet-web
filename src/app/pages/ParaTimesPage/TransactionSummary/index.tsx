@@ -8,7 +8,7 @@ import { useParaTimes } from '../useParaTimes'
 
 export const TransactionSummary = () => {
   const { t } = useTranslation()
-  const { isDepositing, isEvmcParaTime, paraTimeName, resetTransactionForm, ticker, transactionForm } =
+  const { clearTransactionForm, isDepositing, isEvmcParaTime, paraTimeName, ticker, transactionForm } =
     useParaTimes()
 
   return (
@@ -37,7 +37,7 @@ export const TransactionSummary = () => {
 
       <ParaTimeFormFooter
         primaryLabel={t('paraTimes.summary.navigate', 'Navigate to ParaTimes Transfers')}
-        primaryAction={resetTransactionForm}
+        primaryAction={clearTransactionForm}
         withNotice={isEvmcParaTime}
       />
     </ParaTimeContent>

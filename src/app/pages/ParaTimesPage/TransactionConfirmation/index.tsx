@@ -80,7 +80,7 @@ export const TransactionConfirmation = () => {
             ticker,
             value: transactionForm.amount,
           }}
-          defaults="You are about to transfer <strong>{{value}} {{ticker}}</strong> tokens {{actionType}} wallet on the <strong>{{paraTime}}</strong> {{paratimeType}} ParaTime: <strong>{{address}}</strong>"
+          defaults="You are about to transfer <strong>{{value}} {{ticker}}</strong> tokens {{actionType}} wallet on the <strong>{{paraTime}}</strong> {{paratimeType}} ParaTime to: <strong>{{address}}</strong>"
         />
       }
       isLoading={isLoading}

@@ -92,6 +92,7 @@ export const TransactionAmount = () => {
       <Box margin={{ bottom: 'medium' }}>
         <Form
           messages={{ required: t('paraTimes.validation.required', 'Field is required') }}
+          noValidate
           onChange={nextValue => setTransactionForm(nextValue)}
           onSubmit={navigateToConfirmation}
           value={transactionForm}
@@ -123,7 +124,13 @@ export const TransactionAmount = () => {
                       : undefined,
                 ]}
               >
-                <TextInput disabled={disabled} name="amount" placeholder="0" value={transactionForm.amount} />
+                <TextInput
+                  disabled={disabled}
+                  inputMode="decimal"
+                  name="amount"
+                  placeholder="0"
+                  value={transactionForm.amount}
+                />
               </FormField>
               {balance && (
                 <Button

@@ -261,7 +261,7 @@
       "confirmWithdrawDescription": "Please confirm the withdrawing amount and the withdrawing wallet's address are correct and then click \"Withdraw\" to make the transfer.",
       "confirmWithdrawToForeignAccountDescription": "Destination account is not in your wallet! Some automated systems, e.g., those used for tracking exchange deposits, may be unable to accept funds through ParaTime withdrawals. For better compatibility, cancel, withdraw into your own account, and transfer from there.",
       "depositLabel": "Deposit",
-      "description": "You are about to transfer <strong>{{value}} {{ticker}}</strong> tokens {{actionType}} wallet on the <strong>{{paraTime}}</strong> {{paratimeType}} ParaTime: <strong>{{address}}</strong>",
+      "description": "You are about to transfer <strong>{{value}} {{ticker}}</strong> tokens {{actionType}} wallet on the <strong>{{paraTime}}</strong> {{paratimeType}} ParaTime to: <strong>{{address}}</strong>",
       "receiving": "into the receiving",
       "withdrawLabel": "Withdraw",
       "withdrawing": "from the withdrawing"

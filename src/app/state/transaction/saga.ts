@@ -229,10 +229,11 @@ export function* doTransaction(action: PayloadAction<TransactionPayload>) {
 
 export function* getAllowanceDifference(amount: string, runtimeAddress: string) {
   const allowances = yield* select(selectAccountAllowances)
-  const allowance =
-    (allowances?.length && allowances.find((item: Allowance) => item.address === runtimeAddress)?.amount) || 0
+  const allowance = allowances
+    ? allowances.find(item => item.address === runtimeAddress)?.amount ?? 0 // No allowance set yet
+    : 0 // Allowance info is missing
 
-  return parseRoseStringToBigNumber(amount).minus(new BigNumber(allowance))
+  return BigInt(parseRoseStringToBaseUnitString(amount)) - BigInt(allowance)
 }
 
 function* setAllowance(
@@ -242,15 +243,9 @@ function* setAllowance(
   runtimeAddress: string,
 ) {
   const allowanceDifference = yield* call(getAllowanceDifference, amount, runtimeAddress)
-
-  if (allowanceDifference.gte(0)) {
+  if (allowanceDifference > 0n) {
     const signer = yield* getSigner()
-    const tw = yield* call(
-      prepareStakingAllowTransfer,
-      signer as Signer,
-      BigInt(allowanceDifference.toString()),
-      runtimeAddress,
-    )
+    const tw = yield* call(prepareStakingAllowTransfer, signer as Signer, allowanceDifference, runtimeAddress)
     yield* call(OasisTransaction.sign, chainContext, signer as Signer, tw)
     yield* call(OasisTransaction.submit, nic, tw)
   }

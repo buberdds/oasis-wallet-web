@@ -26,7 +26,7 @@ describe('<TransactionError />', () => {
     },
     usesOasisAddress: true,
   } as any
-  const mockUseParaTimesNavigationResult = {} as any
+  const mockUseParaTimesNavigationResult = {} as ReturnType<typeof useParaTimesNavigation>
 
   beforeEach(() => {
     jest.mocked(useParaTimes).mockReturnValue(mockUseParaTimesResult)
@@ -52,16 +52,16 @@ describe('<TransactionError />', () => {
   })
 
   it('should reset transaction form', () => {
-    const resetTransactionForm = jest.fn()
+    const clearTransactionForm = jest.fn()
     jest.mocked(useParaTimes).mockReturnValue({
       ...mockUseParaTimesResult,
-      resetTransactionForm,
+      clearTransactionForm,
     })
     render(<TransactionError />)
 
     userEvent.click(screen.getByRole('button', { name: 'Navigate to ParaTimes Transfers' }))
 
-    expect(resetTransactionForm).toHaveBeenCalled()
+    expect(clearTransactionForm).toHaveBeenCalled()
   })
 
   it('should navigate back to confirmation step', () => {

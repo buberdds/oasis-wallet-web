@@ -54,12 +54,12 @@ export function concat(...parts: Uint8Array[]) {
 export function parseRoseStringToBigNumber(value: string, decimals = 9): BigNumber {
   const baseUnitBN = new BigNumber(value).shiftedBy(decimals) // * 10 ** decimals
   if (baseUnitBN.isNaN()) {
-    throw new Error(`not a number in parseRoseStringToBaseUnitString(${value})`)
+    throw new Error(`not a number in parseRoseStringToBigNumber(${value})`)
   }
   if (baseUnitBN.decimalPlaces() > 0) {
-    console.error('lost precision in parseRoseStringToBaseUnitString(', value)
+    console.error('lost precision in parseRoseStringToBigNumber(', value)
   }
-  return baseUnitBN
+  return baseUnitBN.decimalPlaces(0)
 }
 
 export function parseRoseStringToBaseUnitString(value: string): StringifiedBigInt {

@@ -4,7 +4,10 @@ import { MemoryRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { configureAppStore } from 'store/configureStore'
 import { Wallet } from 'app/state/wallet/types'
-import { useParaTimesNavigation } from '../../../pages/ParaTimesPage/useParaTimesNavigation'
+import {
+  useParaTimesNavigation,
+  ParaTimesNavigationHook,
+} from '../../../pages/ParaTimesPage/useParaTimesNavigation'
 import { MobileFooterNavigation, MobileFooterNavigationProps } from '..'
 
 jest.mock('../../../pages/ParaTimesPage/useParaTimesNavigation')
@@ -24,7 +27,7 @@ describe('<MobileFooterNavigation />', () => {
     canAccessParaTimesRoute: false,
     getParaTimesRoutePath: (address: string) => address,
     paraTimesRouteLabel: 'MockParaTimesLabel',
-  } as ReturnType<typeof useParaTimesNavigation>
+  } as ParaTimesNavigationHook
 
   beforeEach(() => {
     jest.mocked(useParaTimesNavigation).mockReturnValue(mockUseParaTimesNavigationResult)

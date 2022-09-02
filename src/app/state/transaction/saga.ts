@@ -1,14 +1,7 @@
 import { client, misc } from '@oasisprotocol/client'
 import { Signer } from '@oasisprotocol/client/dist/signature'
-import BigNumber from 'bignumber.js'
 import { PayloadAction } from '@reduxjs/toolkit'
-import {
-  parseRoseStringToBigNumber,
-  hex2uint,
-  isValidAddress,
-  uint2bigintString,
-  parseRoseStringToBaseUnitString,
-} from 'app/lib/helpers'
+import { hex2uint, isValidAddress, uint2bigintString, parseRoseStringToBaseUnitString } from 'app/lib/helpers'
 import { LedgerSigner } from 'app/lib/ledger'
 import { OasisTransaction, signerFromPrivateKey, signerFromEthPrivateKey, TW } from 'app/lib/transaction'
 import { getEvmBech32Address, privateToEthAddress } from 'app/lib/eth-helpers'
@@ -18,7 +11,6 @@ import { transactionActions } from '.'
 import { sign } from '../importaccounts/saga'
 import { getOasisNic } from '../network/saga'
 import { selectAccountAddress } from '../account/selectors'
-import { Allowance } from '../account/types'
 import { selectAccountAllowances } from '../account/selectors'
 import { selectChainContext } from '../network/selectors'
 import { selectActiveWallet } from '../wallet/selectors'

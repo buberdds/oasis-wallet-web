@@ -11,7 +11,6 @@ import {
 } from 'app/lib/helpers'
 import { paraTimesActions } from 'app/state/paratimes'
 import { AlertBox } from 'app/components/AlertBox'
-import { ParaTime } from '../../../../config'
 import { AmountFormatter } from '../../../components/AmountFormatter'
 import { ParaTimeContent } from '../ParaTimeContent'
 import { ParaTimeFormFooter } from '../ParaTimeFormFooter'
@@ -47,13 +46,8 @@ export const TransactionAmount = () => {
 
     dispatch(
       isEvmcParaTime
-        ? paraTimesActions.fetchBalanceUsingEthPrivateKey({
-            ethPrivateKey: transactionForm.ethPrivateKey,
-            paraTime: transactionForm.paraTime as ParaTime,
-          })
-        : paraTimesActions.fetchBalanceUsingOasisAddress({
-            paraTime: transactionForm.paraTime as ParaTime,
-          }),
+        ? paraTimesActions.fetchBalanceUsingEthPrivateKey()
+        : paraTimesActions.fetchBalanceUsingOasisAddress(),
     )
   }, [
     dispatch,

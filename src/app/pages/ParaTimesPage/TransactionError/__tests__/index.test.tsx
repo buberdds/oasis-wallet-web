@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { WalletErrors } from 'types/errors'
 import { useParaTimes } from '../../useParaTimes'
-import { useParaTimesNavigation } from '../../useParaTimesNavigation'
+import { useParaTimesNavigation, ParaTimesNavigationHook } from '../../useParaTimesNavigation'
 import { TransactionError } from '..'
 
 jest.unmock('react-i18next')
@@ -26,7 +26,7 @@ describe('<TransactionError />', () => {
     },
     usesOasisAddress: true,
   } as any
-  const mockUseParaTimesNavigationResult = {} as ReturnType<typeof useParaTimesNavigation>
+  const mockUseParaTimesNavigationResult = {} as ParaTimesNavigationHook
 
   beforeEach(() => {
     jest.mocked(useParaTimes).mockReturnValue(mockUseParaTimesResult)

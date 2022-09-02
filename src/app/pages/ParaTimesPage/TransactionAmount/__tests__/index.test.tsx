@@ -29,7 +29,7 @@ describe('<TransactionAmount />', () => {
       amount: '',
       recipient: 'dummyAddress',
       paraTime: ParaTime.Cipher,
-      privateKey: 'privateKey',
+      ethPrivateKey: 'ethPrivateKey',
     },
     usesOasisAddress: true,
   } as ParaTimesHook
@@ -88,7 +88,7 @@ describe('<TransactionAmount />', () => {
     userEvent.click(screen.getByRole('button', { name: 'MAX' }))
     expect(setTransactionForm).toHaveBeenNthCalledWith(
       2,
-      expect.objectContaining({ amount: '2,493.300888889' }),
+      expect.objectContaining({ amount: '2493.300888889' }),
     )
   })
 
@@ -153,10 +153,7 @@ describe('<TransactionAmount />', () => {
     render(<TransactionAmount />)
 
     expect(mockDispatch).toHaveBeenCalledWith({
-      payload: {
-        address: 'dummyAddress',
-        paraTime: 'cipher',
-      },
+      payload: undefined,
       type: paraTimesActions.fetchBalanceUsingOasisAddress.type,
     })
   })
@@ -174,10 +171,7 @@ describe('<TransactionAmount />', () => {
     render(<TransactionAmount />)
 
     expect(mockDispatch).toHaveBeenCalledWith({
-      payload: {
-        paraTime: 'emerald',
-        privateKey: 'privateKey',
-      },
+      payload: undefined,
       type: paraTimesActions.fetchBalanceUsingEthPrivateKey.type,
     })
   })

@@ -4,7 +4,10 @@ import * as React from 'react'
 import { Provider } from 'react-redux'
 import { configureAppStore } from 'store/configureStore'
 import { Wallet } from 'app/state/wallet/types'
-import { useParaTimesNavigation } from '../../../pages/ParaTimesPage/useParaTimesNavigation'
+import {
+  useParaTimesNavigation,
+  ParaTimesNavigationHook,
+} from '../../../pages/ParaTimesPage/useParaTimesNavigation'
 import { Navigation } from '..'
 
 jest.mock('../../../pages/ParaTimesPage/useParaTimesNavigation')
@@ -25,7 +28,7 @@ describe('<Navigation />', () => {
     canAccessParaTimesRoute: false,
     getParaTimesRoutePath: (address: string) => address,
     paraTimesRouteLabel: 'MockParaTimesLabel',
-  } as ReturnType<typeof useParaTimesNavigation>
+  } as ParaTimesNavigationHook
 
   beforeEach(() => {
     jest.mocked(useParaTimesNavigation).mockReturnValue(mockUseParaTimesNavigationResult)

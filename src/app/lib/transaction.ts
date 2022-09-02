@@ -6,7 +6,7 @@ import { WalletError, WalletErrors } from 'types/errors'
 import { getEvmBech32Address } from 'app/lib/eth-helpers'
 import { isValidEthAddress } from 'app/lib/eth-helpers'
 import { ParaTimeTransaction, TransactionTypes } from 'app/state/paratimes/types'
-import { addressToPublicKey, shortPublicKey } from './helpers'
+import { addressToPublicKey, parseRoseStringToBigNumber, shortPublicKey } from './helpers'
 import { consensusDecimals } from '../../config'
 
 type OasisClient = oasis.client.NodeInternal
@@ -167,9 +167,7 @@ export class OasisTransaction {
     txWrapper
       .setBody({
         amount: [
-          oasis.quantity.fromBigInt(
-            BigInt(new BigNumber(amount.toString()).shiftedBy(runtimeDecimals).toFixed()),
-          ),
+          oasis.quantity.fromBigInt(BigInt(parseRoseStringToBigNumber(amount, runtimeDecimals).toFixed(0))),
           oasisRT.token.NATIVE_DENOMINATION,
         ],
         to: oasis.staking.addressFromBech32(

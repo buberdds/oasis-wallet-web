@@ -1,5 +1,4 @@
 import { call, put, select, takeLatest } from 'typed-redux-saga'
-import { PayloadAction } from '@reduxjs/toolkit'
 import * as oasis from '@oasisprotocol/client'
 import { accounts, token } from '@oasisprotocol/client-rt'
 import { getEvmBech32Address, privateToEthAddress } from 'app/lib/eth-helpers'
@@ -9,7 +8,7 @@ import { selectSelectedNetwork } from 'app/state/network/selectors'
 import { selectAddress } from 'app/state/wallet/selectors'
 import { WalletError, WalletErrors } from 'types/errors'
 import { paraTimesActions } from '.'
-import { EvmcBalancePayload, OasisAddressBalancePayload, Runtime } from './types'
+import { Runtime } from './types'
 import { selectParaTimes } from './selectors'
 import { paraTimesConfig, ParaTime } from '../../../config'
 
@@ -51,23 +50,21 @@ export function* fetchBalance(oasisAddress: string, paraTime: ParaTime) {
   }
 }
 
-export function* fetchBalanceUsingEthPrivateKey({
-  payload: { ethPrivateKey, paraTime },
-}: PayloadAction<EvmcBalancePayload>) {
+export function* fetchBalanceUsingEthPrivateKey() {
+  const { transactionForm } = yield* select(selectParaTimes)
   try {
-    const address = privateToEthAddress(ethPrivateKey)
+    const address = privateToEthAddress(transactionForm.ethPrivateKey)
     const oasisAddress = yield* call(getEvmBech32Address, address)
-    yield* call(fetchBalance, oasisAddress, paraTime)
+    yield* call(fetchBalance, oasisAddress, transactionForm.paraTime!)
   } catch (error: any) {
     throw new WalletError(WalletErrors.ParaTimesUnknownError, error)
   }
 }
 
-export function* fetchBalanceUsingOasisAddress({
-  payload: { paraTime },
-}: PayloadAction<OasisAddressBalancePayload>) {
+export function* fetchBalanceUsingOasisAddress() {
   const address = yield* select(selectAddress)
-  yield* call(fetchBalance, address, paraTime)
+  const { transactionForm } = yield* select(selectParaTimes)
+  yield* call(fetchBalance, address, transactionForm.paraTime!)
 }
 
 export function* submitTransaction() {

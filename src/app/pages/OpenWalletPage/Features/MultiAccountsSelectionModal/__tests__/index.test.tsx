@@ -1,14 +1,14 @@
 import { cleanup, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { ledgerActions } from 'app/state/ledger'
-import { LedgerStep } from 'app/state/ledger/types'
+import { multiAccountsActions } from 'app/state/multiaccounts'
+import { MultiAccountsStep } from 'app/state/multiaccounts/types'
 import { walletActions } from 'app/state/wallet'
 import * as React from 'react'
 import { Provider, useDispatch } from 'react-redux'
 import { configureAppStore } from 'store/configureStore'
 import { ThemeProvider } from 'styles/theme/ThemeProvider'
 
-import { FromLedgerModal } from '..'
+import { MultiAccountsSelectionModal } from '..'
 
 jest.mock('react-redux', () => ({
   ...jest.requireActual('react-redux'),
@@ -19,12 +19,12 @@ const renderComponent = (store: any, abortFunction = () => {}) =>
   render(
     <Provider store={store}>
       <ThemeProvider>
-        <FromLedgerModal abort={abortFunction} />
+        <MultiAccountsSelectionModal abort={abortFunction} type="ledger" />
       </ThemeProvider>
     </Provider>,
   )
 
-describe('<FromLedgerModal  />', () => {
+describe('<MultiAccountsSelectionModal  />', () => {
   let store: ReturnType<typeof configureAppStore>
 
   beforeEach(() => {
@@ -48,7 +48,7 @@ describe('<FromLedgerModal  />', () => {
   it('should list the accounts when done', () => {
     const component = renderComponent(store)
     store.dispatch(
-      ledgerActions.accountsListed([
+      multiAccountsActions.accountsListed([
         {
           address: 'oasis1qzyqaxestzlum26e2vdgvkerm6d9qgdp7gh2pxqe',
           balance: { available: '0', validator: { escrow: '0', escrow_debonding: '0' } },
@@ -59,7 +59,7 @@ describe('<FromLedgerModal  />', () => {
       ]),
     )
 
-    store.dispatch(ledgerActions.setStep(LedgerStep.Done))
+    store.dispatch(multiAccountsActions.setStep(MultiAccountsStep.Done))
     expect(component.getByText('oasis1qzyq...7gh2pxqe')).toBeInTheDocument()
   })
 
@@ -69,7 +69,7 @@ describe('<FromLedgerModal  />', () => {
 
     renderComponent(store)
     store.dispatch(
-      ledgerActions.accountsListed([
+      multiAccountsActions.accountsListed([
         {
           address: 'oasis1qzyqaxestzlum26e2vdgvkerm6d9qgdp7gh2pxqe',
           balance: { available: '0', validator: { escrow: '0', escrow_debonding: '0' } },
@@ -87,10 +87,10 @@ describe('<FromLedgerModal  />', () => {
       ]),
     )
 
-    store.dispatch(ledgerActions.setStep(LedgerStep.Done))
+    store.dispatch(multiAccountsActions.setStep(MultiAccountsStep.Done))
     userEvent.click(screen.getByText('oasis1qzyq...7gh2pxqe'))
-    expect(dispatchFn).toHaveBeenLastCalledWith({ payload: 0, type: ledgerActions.toggleAccount.type })
-    store.dispatch(ledgerActions.toggleAccount(0))
+    expect(dispatchFn).toHaveBeenLastCalledWith({ payload: 0, type: multiAccountsActions.toggleAccount.type })
+    store.dispatch(multiAccountsActions.toggleAccount(0))
 
     userEvent.click(screen.getByTestId('ledger-open-accounts'))
     expect(dispatchFn).toHaveBeenLastCalledWith(

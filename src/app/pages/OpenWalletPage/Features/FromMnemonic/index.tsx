@@ -1,15 +1,27 @@
-import { MnemonicValidation } from 'app/components/MnemonicValidation'
-import { walletActions } from 'app/state/wallet'
+import { useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { MnemonicValidation } from 'app/components/MnemonicValidation'
+import { multiAccountsActions } from 'app/state/multiaccounts'
+import { MultiAccountsSelectionModal } from 'app/pages/OpenWalletPage/Features/MultiAccountsSelectionModal'
 
-interface Props {}
-
-export function FromMnemonic(props: Props) {
+export function FromMnemonic() {
   const dispatch = useDispatch()
-
+  const [showMultiAccountsModal, setShowMultiAccountsModal] = useState(false)
+  const successHandler = (mnemonic: string) => {
+    dispatch(multiAccountsActions.enumerateAccountsFromMnemonic(mnemonic))
+    setShowMultiAccountsModal(true)
+  }
   return (
-    <MnemonicValidation
-      successHandler={mnemonic => dispatch(walletActions.openWalletFromMnemonic(mnemonic))}
-    ></MnemonicValidation>
+    <>
+      <MnemonicValidation successHandler={successHandler} />
+      {showMultiAccountsModal && (
+        <MultiAccountsSelectionModal
+          abort={() => {
+            setShowMultiAccountsModal(false)
+          }}
+          type="mnemonic"
+        />
+      )}
+    </>
   )
 }

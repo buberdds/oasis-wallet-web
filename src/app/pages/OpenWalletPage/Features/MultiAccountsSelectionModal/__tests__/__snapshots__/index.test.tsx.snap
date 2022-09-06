@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<FromLedgerModal  /> should match snapshot 1`] = `
+exports[`<MultiAccountsSelectionModal  /> should match snapshot 1`] = `
 .c5 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -372,7 +372,7 @@ exports[`<FromLedgerModal  /> should match snapshot 1`] = `
                 class="c6"
                 size="1"
               >
-                openWallet.ledger.selectWallets
+                openWallet.multiaccounts.selectWallets
               </h1>
               <div
                 class="c7"
@@ -382,7 +382,7 @@ exports[`<FromLedgerModal  /> should match snapshot 1`] = `
                   disabled=""
                   type="button"
                 >
-                  openWallet.ledger.cancel
+                  common.cancel
                 </button>
                 <div
                   class="c9"
@@ -393,7 +393,7 @@ exports[`<FromLedgerModal  /> should match snapshot 1`] = `
                   disabled=""
                   type="button"
                 >
-                  openWallet.ledger.openWallets
+                  openWallet.multiaccounts.openWallets
                 </button>
               </div>
             </div>

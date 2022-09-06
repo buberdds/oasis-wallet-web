@@ -3,6 +3,7 @@ import OasisApp, { successOrThrow } from '@oasisprotocol/ledger'
 import { Response } from '@oasisprotocol/ledger/dist/types'
 import { Wallet, WalletType } from 'app/state/wallet/types'
 import { WalletError, WalletErrors } from 'types/errors'
+import { accountsNumberLimit } from 'app/state/multiaccounts/saga'
 import { hex2uint } from './helpers'
 import type Transport from '@ledgerhq/hw-transport'
 
@@ -31,7 +32,7 @@ function successOrThrowWalletError<T>(response: Response<T>, message: string) {
 }
 
 export class Ledger {
-  public static async enumerateAccounts(transport: Transport, count = 5) {
+  public static async enumerateAccounts(transport: Transport, count = accountsNumberLimit) {
     const accounts: LedgerAccount[] = []
 
     const app = new OasisApp(transport)

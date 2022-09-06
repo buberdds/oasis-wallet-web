@@ -8,14 +8,14 @@ import { MnemonicGrid } from 'app/components/MnemonicGrid'
 import { MnemonicValidation } from 'app/components/MnemonicValidation'
 import { NoTranslate } from 'app/components/NoTranslate'
 import { ResponsiveLayer } from 'app/components/ResponsiveLayer'
-import { walletActions } from 'app/state/wallet'
+import { multiAccountsActions } from 'app/state/multiaccounts'
 import { Box, Button, CheckBox, Grid, Heading, Layer, ResponsiveContext, Text } from 'grommet'
 import { Refresh } from 'grommet-icons/icons'
 import * as React from 'react'
 import { useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-
+import { MultiAccountsSelectionModal } from 'app/pages/OpenWalletPage/Features/MultiAccountsSelectionModal'
 import { createWalletActions } from './slice'
 import { selectCheckbox, selectMnemonic } from './slice/selectors'
 
@@ -24,6 +24,7 @@ export interface CreateWalletProps {}
 export function CreateWalletPage(props: CreateWalletProps) {
   const { t } = useTranslation()
   const [showConfirmation, setConfirmation] = useState(false)
+  const [showMultiAccountsModal, setShowMultiAccountsModal] = useState(false)
   const [showMnemonicMismatch, setMnemonicMismatch] = useState(false)
   const size = React.useContext(ResponsiveContext)
 
@@ -40,7 +41,8 @@ export function CreateWalletPage(props: CreateWalletProps) {
     setConfirmation(false)
 
     if (doesMnemonicMatch) {
-      dispatch(walletActions.openWalletFromMnemonic(enteredMnemonic))
+      dispatch(multiAccountsActions.enumerateAccountsFromMnemonic(enteredMnemonic))
+      setShowMultiAccountsModal(true)
     }
   }
 
@@ -89,6 +91,14 @@ export function CreateWalletPage(props: CreateWalletProps) {
             ></MnemonicValidation>
           </ResponsiveLayer>
         </Layer>
+      )}
+      {showMultiAccountsModal && (
+        <MultiAccountsSelectionModal
+          abort={() => {
+            setShowMultiAccountsModal(false)
+          }}
+          type="mnemonic"
+        />
       )}
       <Grid gap="small" pad="small" columns={size === 'small' ? ['auto'] : ['2fr', '2fr']}>
         <Box background="background-front" style={blurMnemonicInFirefox}>

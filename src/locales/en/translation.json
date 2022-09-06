@@ -202,10 +202,7 @@
     },
     "header": "How do you want to open your wallet?",
     "ledger": {
-      "cancel": "Cancel",
-      "header": "Open from Ledger device",
-      "openWallets": "Open",
-      "selectWallets": "Select accounts to open"
+      "header": "Open from Ledger device"
     },
     "method": {
       "ledger": "Ledger",
@@ -218,6 +215,10 @@
       "header": "Enter your keyphrase",
       "import": "Import my wallet",
       "instruction": "Enter all your keyphrase words below separated by spaces. Most keyphrases are made of either 24 or 12 words."
+    },
+    "multiaccounts": {
+      "openWallets": "Open",
+      "selectWallets": "Select accounts to open"
     },
     "privateKey": {
       "enterPrivateKeyHere": "Enter your private key here",

@@ -80,6 +80,9 @@ function* prepareTransfer(signer: Signer, amount: bigint, to: string) {
   return yield* call(OasisTransaction.buildTransfer, nic, signer as Signer, to, amount)
 }
 
+/**
+ * Set allowance for ParaTime transaction
+ */
 function* prepareStakingAllowTransfer(signer: Signer, amount: bigint, to: string) {
   const nic = yield* call(getOasisNic)
 
@@ -228,7 +231,7 @@ export function* getAllowanceDifference(amount: string, runtimeAddress: string) 
   return BigInt(parseRoseStringToBaseUnitString(amount)) - BigInt(allowance)
 }
 
-function* setAllowance(
+export function* setAllowance(
   nic: client.NodeInternal,
   chainContext: string,
   amount: string,
@@ -255,7 +258,9 @@ export function* submitParaTimeTransaction(runtime: Runtime, transaction: ParaTi
     ? yield* call(signerFromEthPrivateKey, misc.fromHex(transaction.ethPrivateKey))
     : yield* getSigner()
 
-  yield* setAllowance(nic, chainContext, transaction.amount, runtime.address)
+  if (transaction.type === TransactionTypes.Deposit) {
+    yield* call(setAllowance, nic, chainContext, transaction.amount, runtime.address)
+  }
 
   const rtw = yield* call(
     prepareParatimeTransfer,

@@ -10,7 +10,7 @@ import { ParaTimeFormFooter } from '../ParaTimeFormFooter'
 import { useParaTimes } from '../useParaTimes'
 import { useParaTimesNavigation } from '../useParaTimesNavigation'
 
-type ConfirmationChekboxProps = {
+type ConfirmationCheckboxProps = {
   checked: boolean
   description: string
   label: string
@@ -18,13 +18,13 @@ type ConfirmationChekboxProps = {
   warning?: boolean
 }
 
-export const ConfirmationChekbox = ({
+export const ConfirmationCheckbox = ({
   checked,
   description,
   label,
   name,
   warning,
-}: ConfirmationChekboxProps) => {
+}: ConfirmationCheckboxProps) => {
   const isMobile = useContext(ResponsiveContext) === 'small'
 
   return (
@@ -92,7 +92,7 @@ export const TransactionConfirmation = () => {
         value={transactionForm}
       >
         {confirmTransferToValidator && (
-          <ConfirmationChekbox
+          <ConfirmationCheckbox
             checked={transactionForm.confirmTransferToValidator}
             description={t(
               'paraTimes.confirmation.confirmTransferToValidatorDescription',
@@ -107,7 +107,7 @@ export const TransactionConfirmation = () => {
         )}
 
         {confirmTransferToForeignAccount && (
-          <ConfirmationChekbox
+          <ConfirmationCheckbox
             checked={transactionForm.confirmTransferToForeignAccount}
             description={
               isDepositing
@@ -128,7 +128,7 @@ export const TransactionConfirmation = () => {
           />
         )}
 
-        <ConfirmationChekbox
+        <ConfirmationCheckbox
           checked={transactionForm.confirmTransfer}
           description={
             isDepositing

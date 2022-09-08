@@ -239,6 +239,7 @@
       "emptyWallet": "The wallet is empty. There is nothing to withdraw.",
       "feeAmountPlaceholder": "Fee Amount (nano {{ticker}})",
       "feeGasPlaceholder": "Fee Gas",
+      "max": "MAX",
       "receiving": "to the receiving",
       "withdrawing": "from the withdrawing"
     },

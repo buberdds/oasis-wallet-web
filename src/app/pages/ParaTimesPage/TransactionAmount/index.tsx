@@ -137,7 +137,7 @@ export const TransactionAmount = () => {
                     right: 0,
                   }}
                   plain
-                  label="MAX"
+                  label={t('paraTimes.amount.max', 'MAX')}
                   onClick={() =>
                     setTransactionForm({ ...transactionForm, amount: formatter(balance).replaceAll(',', '') })
                   }

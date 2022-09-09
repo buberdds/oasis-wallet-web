@@ -26,22 +26,31 @@ export const TransactionRecipient = () => {
   return (
     <ParaTimeContent
       description={
-        <Trans
-          i18nKey="paraTimes.recipient.description"
-          t={t}
-          values={{
-            actionType: isDepositing
-              ? t('paraTimes.recipient.receiving', 'receiving')
-              : t('paraTimes.recipient.withdrawing', 'withdrawing'),
-            paratimeType: isEvmcParaTime ? t('paraTimes.common.evmcType', '(EVMc)') : '',
-            paraTime: paraTimeName,
-          }}
-          defaults='Please enter the address of the {{actionType}} wallet on the <strong>{{paraTime}}</strong> {{paratimeType}} ParaTime and then click "Next"'
-        />
+        isDepositing ? (
+          <Trans
+            i18nKey="paraTimes.recipient.depositDescription"
+            t={t}
+            values={{
+              paratimeType: isEvmcParaTime ? t('paraTimes.common.evmcType', '(EVMc)') : '',
+              paraTime: paraTimeName,
+            }}
+            defaults='Please enter the address of the receiving wallet on the <strong>{{paraTime}}</strong> {{paratimeType}} ParaTime and then click "Next"'
+          />
+        ) : isEvmcParaTime ? (
+          t(
+            'paraTimes.recipient.evmcWithdrawDescription',
+            'Please enter the private key of the withdrawing wallet and the receiving address on Consensus, and then click "Next"',
+          )
+        ) : (
+          t(
+            'paraTimes.recipient.withdrawDescription',
+            'Please enter the receiving address on Consensus and then click "Next"',
+          )
+        )
       }
     >
       <Form
-        messages={{ required: t('paraTimes.validation.required') }}
+        messages={{ required: t('paraTimes.validation.required', 'Field is required') }}
         onChange={nextValue => setTransactionForm(nextValue)}
         onSubmit={navigateToAmount}
         value={transactionForm}

@@ -1,4 +1,8 @@
 import {
+  isAmountGreaterThan,
+  isEvmcAmountGreaterThan,
+  formatBaseUnitsAsRose,
+  formatWeiAsWrose,
   parseRoseStringToBaseUnitString,
   base64ToUint,
   shortPublicKey,
@@ -7,6 +11,34 @@ import {
   isValidAddress,
   parseRpcBalance,
 } from './helpers'
+
+describe('formatBaseUnitsAsRose', () => {
+  it('should format string as Rose', () => {
+    expect(formatBaseUnitsAsRose('9143650000000')).toEqual('9,143.65')
+    expect(formatBaseUnitsAsRose('5000000000')).toEqual('5')
+  })
+})
+
+describe('formatWeiAsWrose', () => {
+  it('should format string as Wrose', () => {
+    expect(formatWeiAsWrose('235146271266755215588')).toEqual('235.146271266755215588')
+    expect(formatWeiAsWrose('5000000000000000000')).toEqual('5')
+  })
+})
+
+describe('isAmountGreaterThan', () => {
+  it('should check whether or not a given amount is bigger than a given value', () => {
+    expect(isAmountGreaterThan('5.1', '5000000000')).toEqual(true)
+    expect(isAmountGreaterThan('4.9', '5000000000')).toEqual(false)
+  })
+})
+
+describe('isEvmcAmountGreaterThan', () => {
+  it('should check whether or not a given amount is bigger than a given value', () => {
+    expect(isEvmcAmountGreaterThan('5.1', '5000000000000000000')).toEqual(true)
+    expect(isEvmcAmountGreaterThan('4.9', '5000000000000000000')).toEqual(false)
+  })
+})
 
 describe('parseRoseStringToBaseUnitString', () => {
   it('should parse stringified number of ROSEs to stringified base units', () => {

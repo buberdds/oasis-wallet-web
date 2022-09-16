@@ -3,13 +3,11 @@
  * OpenWalletPage
  *
  */
-import { TransitionRoute } from 'app/components/TransitionRoute'
 import { Anchor, Box, Button, Heading } from 'grommet'
 import * as React from 'react'
 import { Trans, useTranslation } from 'react-i18next'
-import { Switch } from 'react-router'
+import { Route, Routes } from 'react-router'
 import { NavLink } from 'react-router-dom'
-import { TransitionGroup } from 'react-transition-group'
 import { FromLedger } from './Features/FromLedger'
 
 import { FromMnemonic } from './Features/FromMnemonic'
@@ -63,13 +61,11 @@ export function SelectOpenMethod() {
 interface Props {}
 export function OpenWalletPage(props: Props) {
   return (
-    <TransitionGroup>
-      <Switch>
-        <TransitionRoute exact path="/open-wallet" component={SelectOpenMethod} />
-        <TransitionRoute exact path="/open-wallet/mnemonic" component={FromMnemonic} />
-        <TransitionRoute exact path="/open-wallet/private-key" component={FromPrivateKey} />
-        <TransitionRoute exact path="/open-wallet/ledger" component={FromLedger} />
-      </Switch>
-    </TransitionGroup>
+    <Routes>
+      <Route path="/" element={<SelectOpenMethod />} />
+      <Route path="/mnemonic" element={<FromMnemonic />} />
+      <Route path="/private-key" element={<FromPrivateKey />} />
+      <Route path="/ledger" element={<FromLedger />} />
+    </Routes>
   )
 }

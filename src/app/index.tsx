@@ -10,20 +10,19 @@ import * as React from 'react'
 import { useContext } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
-import { Switch } from 'react-router-dom'
-import { TransitionGroup } from 'react-transition-group'
+import { Route, Routes } from 'react-router-dom'
 import styled from 'styled-components'
 import { FatalErrorHandler } from './components/FatalErrorHandler'
 import { Footer } from './components/Footer'
 import { Navigation } from './components/Sidebar'
 import { Toolbar } from './components/Toolbar'
-import { TransitionRoute } from './components/TransitionRoute'
 import { AccountPage } from './pages/AccountPage'
 import { CreateWalletPage } from './pages/CreateWalletPage'
 import { HomePage } from './pages/HomePage'
 import { OpenWalletPage } from './pages/OpenWalletPage'
 import { ModalProvider } from './components/Modal'
 import { useRouteRedirects } from './useRouteRedirects'
+import { AnimatedRouterOutlet } from './components/AnimatedRouterOutlet'
 
 const AppMain = styled(Main)`
   /* position: relative; */
@@ -49,15 +48,14 @@ export function App() {
           <AppMain>
             <FatalErrorHandler />
             <Toolbar />
-            <TransitionGroup>
-              <Switch>
-                <TransitionRoute exact path="/" component={HomePage} />
-                <TransitionRoute exact path="/create-wallet" component={CreateWalletPage} />
-                <TransitionRoute path="/open-wallet" component={OpenWalletPage} />
-                <TransitionRoute exact path="/account/:address/stake" component={AccountPage} />
-                <TransitionRoute path="/account/:address" component={AccountPage} />
-              </Switch>
-            </TransitionGroup>
+            <Routes>
+              <Route element={<AnimatedRouterOutlet />}>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/create-wallet" element={<CreateWalletPage />} />
+                <Route path="/open-wallet/*" element={<OpenWalletPage />} />
+                <Route path="/account/:address/*" element={<AccountPage />} />
+              </Route>
+            </Routes>
             <Footer />
           </AppMain>
         </Box>

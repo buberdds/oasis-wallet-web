@@ -4,11 +4,13 @@ import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NavLink } from 'react-router-dom'
 
+import { FadeIn } from 'app/components/Animations'
+
 export function HomePage() {
   const size = useContext(ResponsiveContext)
   const { t } = useTranslation()
   return (
-    <>
+    <FadeIn>
       <Grid gap="small" pad="small" columns={size === 'small' ? ['auto'] : ['2fr', '2fr']}>
         <Box
           round="5px"
@@ -54,6 +56,6 @@ export function HomePage() {
           </Box>
         </Box>
       </Grid>
-    </>
+    </FadeIn>
   )
 }

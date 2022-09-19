@@ -178,41 +178,45 @@ exports[`<FromLedger /> should render component 1`] = `
 
 <div>
   <div
-    class="c0"
+    class="mocked-framer-motion-div"
   >
-    <h1
-      class="c1"
-    >
-      openWallet.ledger.header
-    </h1>
-    <h3
-      class="c2"
-    >
-      ledger.instructionSteps.header
-    </h3>
-    <ol>
-      <li>
-        ledger.instructionSteps.connectLedger
-      </li>
-      <li>
-        ledger.instructionSteps.closeLedgerLive
-      </li>
-      <li>
-        ledger.instructionSteps.openOasisApp
-      </li>
-      <li>
-        ledger.instructionSteps.confirmPendingReview
-      </li>
-    </ol>
     <div
-      class="c3"
+      class="c0"
     >
-      <button
-        class="c4"
-        type="submit"
+      <h1
+        class="c1"
       >
-        openWallet.importAccounts.selectWallets
-      </button>
+        openWallet.ledger.header
+      </h1>
+      <h3
+        class="c2"
+      >
+        ledger.instructionSteps.header
+      </h3>
+      <ol>
+        <li>
+          ledger.instructionSteps.connectLedger
+        </li>
+        <li>
+          ledger.instructionSteps.closeLedgerLive
+        </li>
+        <li>
+          ledger.instructionSteps.openOasisApp
+        </li>
+        <li>
+          ledger.instructionSteps.confirmPendingReview
+        </li>
+      </ol>
+      <div
+        class="c3"
+      >
+        <button
+          class="c4"
+          type="submit"
+        >
+          openWallet.importAccounts.selectWallets
+        </button>
+      </div>
     </div>
   </div>
 </div>

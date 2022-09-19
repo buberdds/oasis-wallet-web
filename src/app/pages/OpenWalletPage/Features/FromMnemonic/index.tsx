@@ -4,6 +4,7 @@ import { MnemonicValidation } from 'app/components/MnemonicValidation'
 import { importAccountsActions } from 'app/state/importaccounts'
 import { ImportAccountsSelectionModal } from 'app/pages/OpenWalletPage/Features/ImportAccountsSelectionModal'
 import { selectShowAccountsSelectionModal } from 'app/state/importaccounts/selectors'
+import { FadeIn } from 'app/components/Animations'
 
 export function FromMnemonic() {
   const dispatch = useDispatch()
@@ -12,7 +13,7 @@ export function FromMnemonic() {
     dispatch(importAccountsActions.enumerateAccountsFromMnemonic(mnemonic))
   }
   return (
-    <>
+    <FadeIn>
       <MnemonicValidation successHandler={successHandler} />
       {showAccountsSelectionModal && (
         <ImportAccountsSelectionModal
@@ -22,6 +23,6 @@ export function FromMnemonic() {
           type="mnemonic"
         />
       )}
-    </>
+    </FadeIn>
   )
 }

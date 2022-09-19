@@ -29,6 +29,7 @@ import { isWebUri } from 'valid-url'
 import { ValidatorItem } from './ValidatorItem'
 import { formatCommissionPercent } from 'app/lib/helpers'
 import { intlDateTimeFormat } from 'app/components/DateFormatter'
+import { FadeIn } from 'app/components/Animations'
 
 interface Props {}
 
@@ -105,45 +106,47 @@ export const ValidatorList = memo((props: Props) => {
   ]
 
   return (
-    <Box pad="medium" background="background-front">
-      {t('common.validators', 'Validators')}
-      {updateValidatorsError && (
-        <p>
-          {t('account.validator.loadingError', "Couldn't load validators.")}{' '}
-          {validators.length > 0 &&
-            t('account.validator.showingStale', 'Showing validator list as of {{staleTimestamp}}.', {
-              staleTimestamp: intlDateTimeFormat(validatorsTimestamp!),
-            })}
-          <br />
-          {validators.length <= 0 && (
-            <ErrorFormatter code={updateValidatorsError.code} message={updateValidatorsError.message} />
-          )}
-        </p>
-      )}
-      <TypeSafeDataTable
-        noHeader={true}
-        columns={columns}
-        data={validators}
-        keyField="address"
-        style={{}}
-        customStyles={dataTableStyles}
-        expandableRowsHideExpander
-        expandableRows={true}
-        expandableRowsComponent={
-          <ValidatorItem
-            data={{} as any}
-            details={validatorDetails}
-            isAddressInWallet={isAddressInWallet}
-            key={selectedAddress}
-          />
-        }
-        expandableRowExpanded={row => row.address === selectedAddress}
-        sortIcon={<Down />}
-        theme="blank"
-        onRowClicked={rowClicked}
-        highlightOnHover
-        pointerOnHover
-      />
-    </Box>
+    <FadeIn>
+      <Box pad="medium" background="background-front">
+        {t('common.validators', 'Validators')}
+        {updateValidatorsError && (
+          <p>
+            {t('account.validator.loadingError', "Couldn't load validators.")}{' '}
+            {validators.length > 0 &&
+              t('account.validator.showingStale', 'Showing validator list as of {{staleTimestamp}}.', {
+                staleTimestamp: intlDateTimeFormat(validatorsTimestamp!),
+              })}
+            <br />
+            {validators.length <= 0 && (
+              <ErrorFormatter code={updateValidatorsError.code} message={updateValidatorsError.message} />
+            )}
+          </p>
+        )}
+        <TypeSafeDataTable
+          noHeader={true}
+          columns={columns}
+          data={validators}
+          keyField="address"
+          style={{}}
+          customStyles={dataTableStyles}
+          expandableRowsHideExpander
+          expandableRows={true}
+          expandableRowsComponent={
+            <ValidatorItem
+              data={{} as any}
+              details={validatorDetails}
+              isAddressInWallet={isAddressInWallet}
+              key={selectedAddress}
+            />
+          }
+          expandableRowExpanded={row => row.address === selectedAddress}
+          sortIcon={<Down />}
+          theme="blank"
+          onRowClicked={rowClicked}
+          highlightOnHover
+          pointerOnHover
+        />
+      </Box>
+    </FadeIn>
   )
 })

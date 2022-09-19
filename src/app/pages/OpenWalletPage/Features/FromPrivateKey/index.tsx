@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux'
 import { OasisKey } from 'app/lib/key'
 import { base64ToUint, uint2hex } from 'app/lib/helpers'
 import { useTranslation } from 'react-i18next'
+import { FadeIn } from 'app/components/Animations'
 
 interface Props {}
 
@@ -40,63 +41,65 @@ export function FromPrivateKey(props: Props) {
   }
 
   return (
-    <Box
-      background="background-front"
-      margin="small"
-      pad="medium"
-      round="5px"
-      border={{ color: 'background-front-border', size: '1px' }}
-    >
-      <Form>
-        <Heading margin="0">{t('openWallet.privateKey.header', 'Enter your private key')}</Heading>
-        <Paragraph>
-          <label htmlFor="privatekey">
-            {t('openWallet.privateKey.instruction', 'Enter your private key in Base64 format.')}
-          </label>
-        </Paragraph>
-        <FormField
-          htmlFor="privateKey"
-          error={privateKeyIsValid === false ? t('openWallet.privateKey.error', 'Invalid private key') : ''}
-          border
-          contentProps={{ border: privateKeyIsValid ? false : 'bottom' }}
-          round="small"
-          width="xlarge"
-        >
-          <Box direction="row" align="center">
-            <TextInput
-              id="privatekey"
-              data-testid="privatekey"
-              placeholder={t('openWallet.privateKey.enterPrivateKeyHere', 'Enter your private key here')}
-              value={privateKey}
-              onChange={onChange}
-              type={privateKeyIsVisible ? 'text' : 'password'}
-              plain
-            />
-            <Tip
-              content={
-                privateKeyIsVisible
-                  ? t('openWallet.privateKey.hidePrivateKey', 'Hide private key')
-                  : t('openWallet.privateKey.showPrivateKey', 'Show private key')
-              }
-            >
-              <Button
-                onClick={() => setPrivateKeyIsVisible(!privateKeyIsVisible)}
-                icon={privateKeyIsVisible ? <View /> : <Hide />}
+    <FadeIn>
+      <Box
+        background="background-front"
+        margin="small"
+        pad="medium"
+        round="5px"
+        border={{ color: 'background-front-border', size: '1px' }}
+      >
+        <Form>
+          <Heading margin="0">{t('openWallet.privateKey.header', 'Enter your private key')}</Heading>
+          <Paragraph>
+            <label htmlFor="privatekey">
+              {t('openWallet.privateKey.instruction', 'Enter your private key in Base64 format.')}
+            </label>
+          </Paragraph>
+          <FormField
+            htmlFor="privateKey"
+            error={privateKeyIsValid === false ? t('openWallet.privateKey.error', 'Invalid private key') : ''}
+            border
+            contentProps={{ border: privateKeyIsValid ? false : 'bottom' }}
+            round="small"
+            width="xlarge"
+          >
+            <Box direction="row" align="center">
+              <TextInput
+                id="privatekey"
+                data-testid="privatekey"
+                placeholder={t('openWallet.privateKey.enterPrivateKeyHere', 'Enter your private key here')}
+                value={privateKey}
+                onChange={onChange}
+                type={privateKeyIsVisible ? 'text' : 'password'}
+                plain
               />
-            </Tip>
+              <Tip
+                content={
+                  privateKeyIsVisible
+                    ? t('openWallet.privateKey.hidePrivateKey', 'Hide private key')
+                    : t('openWallet.privateKey.showPrivateKey', 'Show private key')
+                }
+              >
+                <Button
+                  onClick={() => setPrivateKeyIsVisible(!privateKeyIsVisible)}
+                  icon={privateKeyIsVisible ? <View /> : <Hide />}
+                />
+              </Tip>
+            </Box>
+          </FormField>
+          <Box pad={{ vertical: 'medium' }}>
+            <Box direction="row" justify="between" margin={{ top: 'medium' }}>
+              <Button
+                type="submit"
+                label={t('openWallet.mnemonic.import', 'Import my account')}
+                primary
+                onClick={onSubmit}
+              />
+            </Box>
           </Box>
-        </FormField>
-        <Box pad={{ vertical: 'medium' }}>
-          <Box direction="row" justify="between" margin={{ top: 'medium' }}>
-            <Button
-              type="submit"
-              label={t('openWallet.mnemonic.import', 'Import my account')}
-              primary
-              onClick={onSubmit}
-            />
-          </Box>
-        </Box>
-      </Form>
-    </Box>
+        </Form>
+      </Box>
+    </FadeIn>
   )
 }

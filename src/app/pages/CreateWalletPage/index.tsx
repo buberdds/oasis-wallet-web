@@ -19,6 +19,7 @@ import { ImportAccountsSelectionModal } from 'app/pages/OpenWalletPage/Features/
 import { selectShowAccountsSelectionModal } from 'app/state/importaccounts/selectors'
 import { createWalletActions } from './slice'
 import { selectCheckbox, selectMnemonic } from './slice/selectors'
+import { FadeIn } from 'app/components/Animations'
 
 export interface CreateWalletProps {}
 
@@ -61,7 +62,7 @@ export function CreateWalletPage(props: CreateWalletProps) {
   const blurMnemonicInFirefox = showConfirmation ? { filter: 'blur(5px)' } : {}
 
   return (
-    <>
+    <FadeIn>
       {showMnemonicMismatch && (
         <AlertBox color="status-error">
           {t('createWallet.mnemonicMismatch', 'Entered mnemonic does not match.')}
@@ -160,6 +161,6 @@ export function CreateWalletPage(props: CreateWalletProps) {
           </Box>
         </Box>
       </Grid>
-    </>
+    </FadeIn>
   )
 }

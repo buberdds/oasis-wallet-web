@@ -438,100 +438,104 @@ exports[`<FromMnemonic/> should match snapshot 1`] = `
   style="min-height: 100vh;"
 >
   <div
-    class="c1"
+    class="mocked-framer-motion-div"
   >
     <div
-      class="c2"
+      class="c1"
     >
       <div
-        class="c3"
+        class="c2"
       >
-        <form>
-          <h1
-            class="c4"
-          >
-            openWallet.mnemonic.header
-          </h1>
-          <p
-            class="c5"
-          >
-            openWallet.mnemonic.instruction
-          </p>
-          <div
-            class="c6"
-          >
+        <div
+          class="c3"
+        >
+          <form>
+            <h1
+              class="c4"
+            >
+              openWallet.mnemonic.header
+            </h1>
+            <p
+              class="c5"
+            >
+              openWallet.mnemonic.instruction
+            </p>
             <div
-              class="c7 "
+              class="c6"
             >
               <div
-                class="c8 FormField__FormFieldContentBox-sc-m9hood-1"
+                class="c7 "
               >
                 <div
-                  class="c6"
+                  class="c8 FormField__FormFieldContentBox-sc-m9hood-1"
                 >
-                  <textarea
-                    class="c9"
-                    data-testid="mnemonic"
-                    id="mnemonic"
-                    placeholder="openWallet.mnemonic.enterPhraseHere"
-                    rows="5"
-                  />
+                  <div
+                    class="c6"
+                  >
+                    <textarea
+                      class="c9"
+                      data-testid="mnemonic"
+                      id="mnemonic"
+                      placeholder="openWallet.mnemonic.enterPhraseHere"
+                      rows="5"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div
-            class="c10"
-          >
-            <button
-              class="c11"
-              type="submit"
+            <div
+              class="c10"
             >
-              openWallet.mnemonic.import
-            </button>
-          </div>
-        </form>
-      </div>
-      <div
-        class="c12"
-      >
-        <span
-          class="notranslate"
-          translate="no"
+              <button
+                class="c11"
+                type="submit"
+              >
+                openWallet.mnemonic.import
+              </button>
+            </div>
+          </form>
+        </div>
+        <div
+          class="c12"
         >
-          <div
-            class="c13"
-            data-testid="mnemonic-grid"
+          <span
+            class="notranslate"
+            translate="no"
           >
             <div
-              class="c14"
+              class="c13"
+              data-testid="mnemonic-grid"
             >
               <div
-                class="c15"
+                class="c14"
               >
-                <span
-                  class="c16"
-                  style="user-select: none;"
+                <div
+                  class="c15"
                 >
-                  1
-                  .
-                </span>
-              </div>
-              <div
-                class="c6"
-              >
-                <span
-                  class="notranslate"
-                  translate="no"
+                  <span
+                    class="c16"
+                    style="user-select: none;"
+                  >
+                    1
+                    .
+                  </span>
+                </div>
+                <div
+                  class="c6"
                 >
-                  <strong
-                    style="white-space: pre;"
-                  />
-                </span>
+                  <span
+                    class="notranslate"
+                    translate="no"
+                  >
+                    <strong
+                      style="white-space: pre;"
+                    />
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-        </span>
+          </span>
+        </div>
       </div>
     </div>
   </div>

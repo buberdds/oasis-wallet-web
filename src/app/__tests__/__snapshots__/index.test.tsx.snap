@@ -38,41 +38,31 @@ exports[`<App /> should render and match the snapshot 1`] = `
         }
       }
     >
-      <Styled(Main)>
+      <Main>
         <FatalErrorHandler />
         <Toolbar />
-        <TransitionGroup
-          childFactory={[Function]}
-          component="div"
-        >
-          <Switch>
-            <TransitionRoute
-              component={[Function]}
-              exact={true}
+        <AnimatePresence>
+          <Routes>
+            <Route
+              element={<HomePage />}
               path="/"
             />
-            <TransitionRoute
-              component={[Function]}
-              exact={true}
+            <Route
+              element={<CreateWalletPage />}
               path="/create-wallet"
             />
-            <TransitionRoute
-              component={[Function]}
-              path="/open-wallet"
+            <Route
+              element={<OpenWalletPage />}
+              path="/open-wallet/*"
             />
-            <TransitionRoute
-              component={[Function]}
-              exact={true}
-              path="/account/:address/stake"
+            <Route
+              element={<AccountPage />}
+              path="/account/:address/*"
             />
-            <TransitionRoute
-              component={[Function]}
-              path="/account/:address"
-            />
-          </Switch>
-        </TransitionGroup>
+          </Routes>
+        </AnimatePresence>
         <Memo />
-      </Styled(Main)>
+      </Main>
     </Box>
   </Box>
 </ModalProvider>

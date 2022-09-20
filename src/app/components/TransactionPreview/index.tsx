@@ -39,64 +39,11 @@ export const TransactionPreview = memo((props: Props) => {
 
   return (
     <>
-      {/* <Box>
-        <Card height="small" width="small" background="light-1">
-          <CardHeader pad="medium">Header</CardHeader>
-          <CardBody pad="medium">Body</CardBody>
-        </Card>
-      </Box> */}
-      <Box>
-        {/* <StyledDescriptionList data-testid="account-balance-summary">
-          <dt>{t('transaction.preview.type', 'Type')}</dt>
-          <dd data-testid="account-balance-total">
-            <TransactionTypeFormatter type={preview.transaction.type} />
-          </dd>
-
-          <dt>{t('transaction.preview.from', 'From')}</dt>
-          <dd>
-            <Text style={{ fontFamily: 'Roboto mono' }}>
-              <PrettyAddress address={walletAddress} />
-            </Text>
-          </dd>
-
-          <dt>{t('transaction.preview.to', 'To')}</dt>
-          <dd>
-            <Text style={{ fontFamily: 'Roboto mono' }}>
-              <PrettyAddress address={preview.transaction.to} />
-            </Text>
-          </dd>
-        </StyledDescriptionList> */}
-
-        <StyledDescriptionList data-testid="account-balance-summary">
-          <dt>
-            <Text size={isMobile ? 'medium' : 'large'}>{t('transaction.preview.amount', 'Amount')}</Text>
-          </dt>
-          <dd data-testid="account-balance-total">
-            <AmountFormatter amount={preview.transaction.amount} smallTicker={true} />
-          </dd>
-
-          <dt>{t('transaction.preview.fee', 'Fee')}</dt>
-          <dd>
-            <AmountFormatter amount={preview.fee!} smallTicker={true} />
-          </dd>
-
-          <dt>{t('transaction.preview.gas', 'Gas')}</dt>
-          <dd>
-            <AmountFormatter amount={preview.gas!} hideTicker />
-          </dd>
-        </StyledDescriptionList>
-      </Box>
-
-      {/* <Box>
-        <NameValueList>
-          <NameValuePair name="foo">Asd</NameValuePair>
-        </NameValueList>
-      </Box> */}
       <Grid columns={size !== 'small' ? ['auto', 'auto'] : ['auto']} gap={{ column: 'small', row: 'xsmall' }}>
-        <ResponsiveGridRow
+        {/* <ResponsiveGridRow
           label={t('transaction.preview.type', 'Type')}
           value={<TransactionTypeFormatter type={preview.transaction.type} />}
-        />
+        /> */}
         <ResponsiveGridRow
           label={t('transaction.preview.from', 'From')}
           value={
@@ -125,51 +72,12 @@ export const TransactionPreview = memo((props: Props) => {
             }
           />
         )}
-        <Box>
-          {/* <StyledDescriptionList data-testid="account-balance-summary">
-          <dt>{t('transaction.preview.type', 'Type')}</dt>
-          <dd data-testid="account-balance-total">
-            <TransactionTypeFormatter type={preview.transaction.type} />
-          </dd>
-
-          <dt>{t('transaction.preview.from', 'From')}</dt>
-          <dd>
-            <Text style={{ fontFamily: 'Roboto mono' }}>
-              <PrettyAddress address={walletAddress} />
-            </Text>
-          </dd>
-
-          <dt>{t('transaction.preview.to', 'To')}</dt>
-          <dd>
-            <Text style={{ fontFamily: 'Roboto mono' }}>
-              <PrettyAddress address={preview.transaction.to} />
-            </Text>
-          </dd>
-        </StyledDescriptionList> */}
-
-          <StyledDescriptionList data-testid="account-balance-summary">
-            <dt>
-              <Text size={isMobile ? 'medium' : 'large'}>{t('transaction.preview.amount', 'Amount')}</Text>
-            </dt>
-            <dd data-testid="account-balance-total">
-              <AmountFormatter amount={preview.transaction.amount} smallTicker={true} />
-            </dd>
-
-            <dt>{t('transaction.preview.fee', 'Fee')}</dt>
-            <dd>
-              <AmountFormatter amount={preview.fee!} smallTicker={true} />
-            </dd>
-
-            <dt>{t('transaction.preview.gas', 'Gas')}</dt>
-            <dd>
-              <AmountFormatter amount={preview.gas!} hideTicker />
-            </dd>
-          </StyledDescriptionList>
-        </Box>
-        {/* <ResponsiveGridRow
+        {/* <Box> */}
+        <ResponsiveGridRow
           label={t('transaction.preview.amount', 'Amount')}
           value={<AmountFormatter amount={preview.transaction.amount} smallTicker />}
         />
+        {/* </Box> */}
         {preview.transaction.type === 'reclaimEscrow' && (
           <ResponsiveGridRow
             label={t('transaction.preview.shares', 'Gigashares')}
@@ -183,7 +91,8 @@ export const TransactionPreview = memo((props: Props) => {
         <ResponsiveGridRow
           label={t('transaction.preview.gas', 'Gas')}
           value={<AmountFormatter amount={preview.gas!} hideTicker />}
-        /> */}
+          withSeparator
+        />
         <ResponsiveGridRow
           label={t('transaction.preview.genesisHash', 'Genesis hash')}
           value={
@@ -197,8 +106,8 @@ export const TransactionPreview = memo((props: Props) => {
                 color: 'background-contrast',
                 opacity: 0.04,
               }}
-              width="75%"
               pad="xsmall"
+              responsive={false}
             >
               {chainContext}
             </Box>
@@ -208,72 +117,3 @@ export const TransactionPreview = memo((props: Props) => {
     </>
   )
 })
-
-const StyledDescriptionList = styled.dl`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  border-top: solid
-    ${({ theme }) => `${theme.global?.edgeSize?.hair} ${normalizeColor('background-front-border', theme)}`};
-  margin: ${({ theme }) => theme.global?.edgeSize?.xsmall} 0 0;
-  padding: ${({ theme }) =>
-    `${theme.global?.edgeSize?.small} ${theme.global?.edgeSize?.small} ${theme.global?.edgeSize?.xsmall}`};
-
-  dt,
-  dd {
-    margin: 0;
-
-    :first-of-type {
-      font-weight: bold;
-    }
-  }
-
-  @media only screen and (min-width: ${({ theme }) => `${theme.global?.breakpoints?.small?.value}px`}) {
-    dt {
-      width: 40%;
-    }
-
-    dd {
-      width: 60%;
-    }
-
-    dt,
-    dd {
-      :not(:last-of-type) {
-        margin-bottom: ${({ theme }) => theme.global?.edgeSize?.xsmall};
-      }
-
-      :first-of-type {
-        font-size: ${({ theme }) => theme.text?.large?.size};
-        line-height: ${({ theme }) => theme.text?.large?.height};
-        margin-bottom: ${({ theme }) => theme.global?.edgeSize?.small};
-      }
-    }
-  }
-
-  @media only screen and (max-width: ${({ theme }) => `${theme.global?.breakpoints?.small?.value}px`}) {
-    dt {
-      width: 30%;
-    }
-
-    dd {
-      width: 70%;
-      text-align: right;
-    }
-
-    dt,
-    dd {
-      font-size: 16px;
-
-      :not(:last-of-type) {
-        margin-bottom: ${({ theme }) => theme.global?.edgeSize?.xxsmall};
-      }
-
-      :first-of-type {
-        font-size: ${({ theme }) => theme.text?.medium?.size};
-        line-height: ${({ theme }) => theme.text?.medium?.height};
-        margin-bottom: ${({ theme }) => theme.global?.edgeSize?.xsmall};
-      }
-    }
-  }
-`

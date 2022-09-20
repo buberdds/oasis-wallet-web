@@ -49,8 +49,9 @@ export function TransactionModal() {
     <ResponsiveLayer modal position="center" background="background-front">
       <Box pad="medium" gap="medium" width="800px">
         <Box>
-          <Heading level="2" margin="none">
-            {t('transaction.step.preview', 'Preview transaction')}
+          <Heading level="2" margin={{ top: 'none', bottom: 'medium' }}>
+            {/* {t('transaction.step.preview', 'Preview transaction')} */}
+            Confirm transaction
           </Heading>
           <Box margin={{ vertical: 'small' }}>
             <AlertBox color="status-warning">
@@ -64,7 +65,7 @@ export function TransactionModal() {
             <TransactionPreview chainContext={chainContext} preview={preview} walletAddress={walletAddress} />
           )}
           {step === TransactionStep.Preview && (
-            <Box direction="row" gap="small" alignSelf="end" pad={{ top: 'large' }}>
+            <Box direction="row" gap="small" pad={{ top: 'large' }} justify="between">
               <Button
                 secondary
                 label={t('transaction.abort', 'Abort')}
@@ -76,7 +77,6 @@ export function TransactionModal() {
                 label={t('transaction.confirm', 'Confirm')}
                 onClick={confirmTransaction}
                 icon={<Checkmark size="18px" />}
-                alignSelf="end"
               />
             </Box>
           )}

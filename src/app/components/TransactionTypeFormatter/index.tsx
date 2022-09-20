@@ -20,8 +20,8 @@ export const TransactionTypeFormatter = memo((props: Props) => {
   const typeMessage = typeMap[type]
   return (
     <Box>
-      <Text>{type}</Text>
-      <Text size="small">({typeMessage})</Text>
+      {/* <Text>{type}</Text> */}
+      <Text size="small">{typeMessage}</Text>
     </Box>
   )
 })

@@ -49,11 +49,12 @@ export function TransactionModal() {
     <ResponsiveLayer modal position="center" background="background-front">
       <Box pad="medium" gap="medium" width="800px">
         <Box>
-          <Heading level="2" margin={{ top: 'none', bottom: 'medium' }}>
+          <Heading level="2" margin={{ top: 'none', bottom: 'small' }}>
             {/* {t('transaction.step.preview', 'Preview transaction')} */}
-            Confirm transaction
+            Confirm transferring tokens from your account to another
           </Heading>
-          <Box margin={{ vertical: 'small' }}>
+          {/* <Box margin={{ vertical: 'small' }}> */}
+          <Box margin={{ top: 'small', bottom: 'medium' }}>
             <AlertBox color="status-warning">
               {t(
                 'transaction.preview.warning',

@@ -47,7 +47,7 @@ export const TransactionPreview = memo((props: Props) => {
         <ResponsiveGridRow
           label={t('transaction.preview.from', 'From')}
           value={
-            <Text style={{ fontFamily: 'Roboto mono' }}>
+            <Text style={{ fontFamily: 'Roboto mono' }} size={isMobile ? '16px' : 'medium'}>
               <PrettyAddress address={walletAddress} />
             </Text>
           }
@@ -56,20 +56,22 @@ export const TransactionPreview = memo((props: Props) => {
           <ResponsiveGridRow
             label={t('transaction.preview.to', 'To')}
             value={
-              <Text style={{ fontFamily: 'Roboto mono' }}>
+              <Text style={{ fontFamily: 'Roboto mono' }} size={isMobile ? '16px' : 'medium'}>
                 <PrettyAddress address={preview.transaction.to} />
               </Text>
             }
+            withSeparator
           />
         )}
         {(preview.transaction.type === 'addEscrow' || preview.transaction.type === 'reclaimEscrow') && (
           <ResponsiveGridRow
             label={t('transaction.preview.validator', 'Validator')}
             value={
-              <Text style={{ fontFamily: 'Roboto mono' }}>
+              <Text style={{ fontFamily: 'Roboto mono' }} size={isMobile ? '16px' : 'medium'}>
                 <PrettyAddress address={preview.transaction.validator} />
               </Text>
             }
+            withSeparator
           />
         )}
         {/* <Box> */}

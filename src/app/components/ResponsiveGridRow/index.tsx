@@ -1,4 +1,4 @@
-import { Box, Text } from 'grommet'
+import { Box, BoxProps, ResponsiveContext, Text } from 'grommet'
 import React, { memo } from 'react'
 import styled from 'styled-components'
 import { normalizeColor } from 'grommet/utils'
@@ -9,26 +9,43 @@ interface ResponsiveGridRowProps {
   value: React.ReactNode
 }
 
-const StyledResponsiveGridRowValue = styled(Box)`
-  margin-bottom: ${({ theme }) => theme.global?.edgeSize?.xsmall};
-  padding-bottom: ${({ theme }) => theme.global?.edgeSize?.small};
+interface StyledResponsiveGridRowValueProps extends BoxProps {
+  withSeparator?: boolean
+}
 
-  @media only screen and (min-width: ${({ theme }) => `${theme.global?.breakpoints?.small?.value}px`}) {
-  }
-
+const StyledResponsiveGridRowValue = styled(Box)<StyledResponsiveGridRowValueProps>`
   @media only screen and (max-width: ${({ theme }) => `${theme.global?.breakpoints?.small?.value}px`}) {
-    border-bottom: solid
-      ${({ theme }) => `${theme.global?.edgeSize?.hair} ${normalizeColor('background-front-border', theme)}`};
+    margin-bottom: ${({ theme }) => theme.global?.edgeSize?.xsmall};
+    padding-bottom: ${({ theme }) => theme.global?.edgeSize?.small};
+    ${({ theme }) =>
+      `
+      border-bottom: solid ${theme.global?.edgeSize?.hair} ${normalizeColor(
+        'background-front-border',
+        theme,
+      )};
+`};
   }
 `
 
-export const ResponsiveGridRow = memo(({ label, value }: ResponsiveGridRowProps) => {
+// border-bottom: solid  ${theme.global?.edgeSize?.hair} ${normalizeColor('background-front-border', theme )};
+
+export const ResponsiveGridRow = memo(({ label, value, withSeparator }: ResponsiveGridRowProps) => {
   return (
     <>
       <Box>
         <Text weight="bold">{label}</Text>
       </Box>
-      <StyledResponsiveGridRowValue direction="row">{value}</StyledResponsiveGridRowValue>
+      {withSeparator ? (
+        <StyledResponsiveGridRowValue
+        // responsive={false}
+        // margin={{ bottom: 'xsmall' }}
+        // pad={{ bottom: 'small' }}
+        >
+          {value}
+        </StyledResponsiveGridRowValue>
+      ) : (
+        <Box>{value}</Box>
+      )}
     </>
   )
 })

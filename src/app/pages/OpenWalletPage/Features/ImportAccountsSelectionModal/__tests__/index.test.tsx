@@ -45,7 +45,7 @@ describe('<ImportAccountsSelectionModal  />', () => {
     screen.getByTestId('ledger-open-accounts')
   })
 
-  it('should list the accounts when done', async () => {
+  it('should list the accounts when done', () => {
     const component = renderComponent(store)
     act(() => {
       store.dispatch(

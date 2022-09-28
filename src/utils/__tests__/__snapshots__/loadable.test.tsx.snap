@@ -1,11 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`loadable should render LazyComponent after waiting for it to load 1`] = `
-<div>
-  My lazy-loaded component
-</div>
-`;
-
 exports[`loadable should render fallback if given one 1`] = `
 <div>
   Loading

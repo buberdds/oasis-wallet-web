@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { render } from '@testing-library/react'
+import { act, render, screen } from '@testing-library/react'
 import { lazyLoad } from 'utils/loadable'
 
 const LoadingIndicator = () => <div>Loading</div>
@@ -42,10 +42,9 @@ describe('loadable', () => {
   })
 
   it('should render LazyComponent after waiting for it to load', async () => {
-    const {
-      container: { firstChild },
-    } = render(<LazyComponentWithExportedFunction />)
-    LazyComponentWithExportedFunction({})
-    expect(firstChild).toMatchSnapshot()
+    await act(async () => {
+      await render(<LazyComponentWithExportedFunction />)
+    })
+    expect(screen.getByText(/lazy-loaded/)).toBeInTheDocument()
   })
 })

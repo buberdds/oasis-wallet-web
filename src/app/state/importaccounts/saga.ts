@@ -12,6 +12,7 @@ import { selectChainContext } from '../network/selectors'
 import { getBalance } from '../wallet/saga'
 import { ImportAccountsListAccount, ImportAccountsStep } from './types'
 import type Transport from '@ledgerhq/hw-transport'
+import wallet from '../wallet'
 
 function* setStep(step: ImportAccountsStep) {
   yield* put(importAccountsActions.setStep(step))
@@ -71,33 +72,34 @@ function* enumerateAccountsFromMnemonic(action: PayloadAction<string>) {
   }
 }
 
-function* enumerateAccountsFromLedger() {
-  yield* setStep(ImportAccountsStep.OpeningUSB)
-  let transport: Transport | undefined
+function* enumerateAccountsFromLedger({ payload }: PayloadAction<any>) {
+  console.log('payload', payload)
+  const { transport, transportClose } = payload
+  console.log('transport saga', transport)
+  console.log('transport transportClose', transportClose)
+  // yield* setStep(ImportAccountsStep.OpeningUSB)
+  // let transport: Transport | undefined
   try {
-    transport = yield* getUSBTransport()
-
+    // transport = yield* getUSBTransport()
     yield* setStep(ImportAccountsStep.LoadingAccounts)
-    const accounts = yield* call(Ledger.enumerateAccounts, transport)
-
-    yield* setStep(ImportAccountsStep.LoadingBalances)
-    const balances = yield* all(accounts.map(a => call(getBalance, a.publicKey)))
-    const addresses = yield* all(accounts.map(a => call(publicKeyToAddress, a.publicKey)))
-
-    const wallets = accounts.map((a, index) => {
-      return {
-        publicKey: uint2hex(a.publicKey),
-        path: a.path,
-        address: addresses[index],
-        balance: balances[index],
-        // We select the first account by default
-        selected: index === 0,
-        type: WalletType.Ledger,
-      } as ImportAccountsListAccount
-    })
-
-    yield* setStep(ImportAccountsStep.Done)
-    yield* put(importAccountsActions.accountsListed(wallets))
+    // const accounts = yield* call(Ledger.enumerateAccounts, transport)
+    // yield* setStep(ImportAccountsStep.LoadingBalances)
+    // const balances = yield* all(accounts.map(a => call(getBalance, a.publicKey)))
+    // const addresses = yield* all(accounts.map(a => call(publicKeyToAddress, a.publicKey)))
+    // const wallets = accounts.map((a, index) => {
+    //   return {
+    //     publicKey: uint2hex(a.publicKey),
+    //     path: a.path,
+    //     address: addresses[index],
+    //     balance: balances[index],
+    //     // We select the first account by default
+    //     selected: index === 0,
+    //     type: WalletType.Ledger,
+    //   } as ImportAccountsListAccount
+    // })
+    // const wallets = []
+    // yield* setStep(ImportAccountsStep.Done)
+    // yield* put(importAccountsActions.accountsListed(wallets))
   } catch (e: any) {
     let payload: ErrorPayload
     if (e instanceof WalletError) {
@@ -108,8 +110,10 @@ function* enumerateAccountsFromLedger() {
 
     yield* put(importAccountsActions.operationFailed(payload))
   } finally {
+    console.log('finally transport', transport.close)
+    console.log('finally transport', transportClose)
     if (transport) {
-      yield* call([transport, transport.close])
+      yield* call([transport, transportClose])
     }
   }
 }

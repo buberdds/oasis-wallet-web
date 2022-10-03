@@ -4,7 +4,8 @@ import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NavLink } from 'react-router-dom'
 import { Header } from 'app/components/Header'
-
+import TransportWebUSB from '@ledgerhq/hw-transport-webusb'
+import { listen } from '@ledgerhq/logs'
 export function HomePage() {
   const size = useContext(ResponsiveContext)
   const { t } = useTranslation()
@@ -18,6 +19,42 @@ export function HomePage() {
           pad="large"
         >
           <Header>{t('home.existing.header', 'Access existing wallet')}</Header>
+
+          <button
+            onClick={() =>
+              chrome.windows.create({
+                url: location.href,
+                type: 'popup',
+                width: 500,
+                height: 600,
+              })
+            }
+          >
+            popup
+          </button>
+
+          <button
+            onClick={() =>
+              chrome.windows.create({
+                url: location.href,
+                type: 'normal',
+                // width: 500,
+                // height: 600,
+              })
+            }
+          >
+            normal
+          </button>
+
+          <button
+            onClick={async () => {
+              listen(log => console.log(log))
+              if (await TransportWebUSB.isSupported()) await TransportWebUSB.create()
+              console.log('added')
+            }}
+          >
+            webusb
+          </button>
           <Paragraph>
             {t(
               'home.existing.description',

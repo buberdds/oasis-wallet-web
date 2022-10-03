@@ -12,7 +12,11 @@ import { FromLedger } from './Features/FromLedger'
 import { FromMnemonic } from './Features/FromMnemonic'
 import { FromPrivateKey } from './Features/FromPrivateKey'
 
-export function SelectOpenMethod() {
+type SelectOpenMethodProps = {
+  openFromLedger?: () => void
+}
+
+export function SelectOpenMethod({ openFromLedger }: SelectOpenMethodProps) {
   const { t } = useTranslation()
 
   return (
@@ -32,6 +36,15 @@ export function SelectOpenMethod() {
         <NavLink to="private-key">
           <Button type="submit" label={t('openWallet.method.privateKey', 'Private key')} primary />
         </NavLink>
+
+        {openFromLedger ? (
+          <Button onClick={openFromLedger} label="Extension Ledger" primary />
+        ) : (
+          <NavLink to="ledger">
+            <Button type="submit" label={t('openWallet.method.ledger', 'Ledger')} primary />
+          </NavLink>
+        )}
+
         <NavLink to="ledger">
           <Button type="submit" label={t('openWallet.method.ledger', 'Ledger')} primary />
         </NavLink>

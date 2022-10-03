@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { ImportAccountsSelectionModal } from 'app/pages/OpenWalletPage/Features/ImportAccountsSelectionModal'
 import { selectShowAccountsSelectionModal } from 'app/state/importaccounts/selectors'
 import { Header } from 'app/components/Header'
+import TransportWebUSB from '@ledgerhq/hw-transport-webusb'
 
 export function FromLedger() {
   const { t } = useTranslation()
@@ -40,8 +41,22 @@ export function FromLedger() {
         <Button
           type="submit"
           label={t('openWallet.importAccounts.selectWallets', 'Select accounts to open')}
-          onClick={() => {
-            dispatch(importAccountsActions.enumerateAccountsFromLedger())
+          // onClick={() => {
+          //   dispatch(importAccountsActions.enumerateAccountsFromLedger())
+          // }}
+          onClick={async () => {
+            if (await TransportWebUSB.isSupported()) {
+              TransportWebUSB.create().then(transport => {
+                console.log('foo.close', transport.close)
+                dispatch(
+                  importAccountsActions.enumerateAccountsFromLedger({
+                    transport: transport,
+                    transportClose: transport.close,
+                  }),
+                )
+              })
+              // const foo = await TransportWebUSB.create()
+            }
           }}
           primary
         />

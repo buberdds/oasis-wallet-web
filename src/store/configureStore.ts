@@ -24,7 +24,12 @@ export function configureAppStore(state?: Partial<RootState>) {
 
   const store = configureStore({
     reducer: createReducer(),
-    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(middlewares),
+    middleware: getDefaultMiddleware =>
+      getDefaultMiddleware({
+        serializableCheck: {
+          ignoredActions: ['importAccounts/enumerateAccountsFromLedger'],
+        },
+      }).concat(middlewares),
     devTools:
       /* istanbul ignore next line */
       process.env.NODE_ENV !== 'production',

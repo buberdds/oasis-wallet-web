@@ -5,12 +5,14 @@
  */
 import { Anchor, Box, Button } from 'grommet'
 import * as React from 'react'
+import { useSelector } from 'react-redux'
 import { Trans, useTranslation } from 'react-i18next'
 import { NavLink, Route, Routes } from 'react-router-dom'
 import { Header } from 'app/components/Header'
 import { FromLedger } from './Features/FromLedger'
 import { FromMnemonic } from './Features/FromMnemonic'
 import { FromPrivateKey } from './Features/FromPrivateKey'
+import { selectDeviceRequested } from 'app/state/importaccounts/selectors'
 
 type SelectOpenMethodProps = {
   openFromLedger?: () => void
@@ -18,6 +20,7 @@ type SelectOpenMethodProps = {
 
 export function SelectOpenMethod({ openFromLedger }: SelectOpenMethodProps) {
   const { t } = useTranslation()
+  const deviceRequested = useSelector(selectDeviceRequested)
 
   return (
     <Box
@@ -37,17 +40,13 @@ export function SelectOpenMethod({ openFromLedger }: SelectOpenMethodProps) {
           <Button type="submit" label={t('openWallet.method.privateKey', 'Private key')} primary />
         </NavLink>
 
-        {openFromLedger ? (
-          <Button onClick={openFromLedger} label="Extension Ledger" primary />
+        {openFromLedger && !deviceRequested ? (
+          <Button onClick={openFromLedger} label="Connect Ledger device" primary />
         ) : (
           <NavLink to="ledger">
             <Button type="submit" label={t('openWallet.method.ledger', 'Ledger')} primary />
           </NavLink>
         )}
-
-        <NavLink to="ledger">
-          <Button type="submit" label={t('openWallet.method.ledger', 'Ledger')} primary />
-        </NavLink>
       </Box>
 
       <Box

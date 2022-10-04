@@ -21,6 +21,7 @@ export enum ImportAccountsStep {
 
 export interface ImportAccountsState {
   accounts: ImportAccountsListAccount[]
+  deviceRequested: boolean
   error?: ErrorPayload
   showAccountsSelectionModal: boolean
   step?: ImportAccountsStep

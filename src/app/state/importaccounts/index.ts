@@ -3,7 +3,11 @@ import { ErrorPayload } from 'types/errors'
 import { createSlice } from 'utils/@reduxjs/toolkit'
 import { ImportAccountsListAccount, ImportAccountsState, ImportAccountsStep } from './types'
 
-export const initialState: ImportAccountsState = { accounts: [], showAccountsSelectionModal: false }
+export const initialState: ImportAccountsState = {
+  accounts: [],
+  deviceRequested: false,
+  showAccountsSelectionModal: false,
+}
 
 const slice = createSlice({
   name: 'importAccounts',
@@ -14,6 +18,9 @@ const slice = createSlice({
       state.error = undefined
       state.step = undefined
       state.showAccountsSelectionModal = false
+    },
+    deviceRequested(state, action: PayloadAction<void>) {
+      state.deviceRequested = true
     },
     enumerateAccountsFromLedger(state, action: PayloadAction<void>) {
       state.step = undefined

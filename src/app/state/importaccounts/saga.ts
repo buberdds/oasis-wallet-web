@@ -144,7 +144,7 @@ function* enumerateAccountsFromLedger({ payload: accounts }) {
 
     yield* put(importAccountsActions.operationFailed(payload))
   } finally {
-    yield* call(foo)
+    // yield* call(foo)
     // if (transport) {
     //   yield* call([transport, transportClose])
     // }

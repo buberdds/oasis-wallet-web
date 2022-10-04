@@ -7,6 +7,7 @@ import { hex2uint } from './helpers'
 import type Transport from '@ledgerhq/hw-transport'
 // import Transport from '@ledgerhq/hw-transport-webusb'
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb'
+import { requestLedgerDevice, isSupported } from '@ledgerhq/hw-transport-webusb/lib-es/webusb'
 
 interface LedgerAccount {
   publicKey: Uint8Array
@@ -21,6 +22,14 @@ export async function createLedgerTransport() {
   } catch (error) {
     return null
   }
+}
+
+export async function isWebUSBSupported() {
+  await isSupported()
+}
+
+export async function requestDevice() {
+  return await requestLedgerDevice()
 }
 
 export function getLedgerTransport() {

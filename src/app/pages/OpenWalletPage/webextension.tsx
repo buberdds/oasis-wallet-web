@@ -13,6 +13,7 @@ import { FromLedger } from './Features/FromLedger'
 import { FromMnemonic } from './Features/FromMnemonic'
 import { FromPrivateKey } from './Features/FromPrivateKey'
 import { openTab } from 'utils/webextension'
+// import browser from 'webextension-polyfill'
 
 // export function SelectOpenMethod() {
 //   const { t } = useTranslation()

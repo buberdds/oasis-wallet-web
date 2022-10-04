@@ -7,6 +7,23 @@ import { ImportAccountsSelectionModal } from 'app/pages/OpenWalletPage/Features/
 import { selectShowAccountsSelectionModal } from 'app/state/importaccounts/selectors'
 import { Header } from 'app/components/Header'
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb'
+import {
+  Ledger,
+  ledgerTransport,
+  getLedgerTransport,
+  createLedgerTransport,
+  closeLedgerTransport,
+} from 'app/lib/ledger'
+import browser from 'webextension-polyfill'
+import { ImportAccountsListAccount, ImportAccountsStep } from 'app/state/importaccounts/types'
+
+browser.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  console.log(sender.tab ? 'from a content script:' + sender.tab.url : 'from the extension')
+
+  closeLedgerTransport()
+
+  if (request.greeting == 'hello') sendResponse({ farewell: 'goodbye' })
+})
 
 export function FromLedger() {
   const { t } = useTranslation()
@@ -45,18 +62,30 @@ export function FromLedger() {
           //   dispatch(importAccountsActions.enumerateAccountsFromLedger())
           // }}
           onClick={async () => {
-            if (await TransportWebUSB.isSupported()) {
-              TransportWebUSB.create().then(transport => {
-                console.log('foo.close', transport.close)
-                dispatch(
-                  importAccountsActions.enumerateAccountsFromLedger({
-                    transport: transport,
-                    transportClose: transport.close,
-                  }),
-                )
-              })
-              // const foo = await TransportWebUSB.create()
-            }
+            dispatch(importAccountsActions.setStep(ImportAccountsStep.LoadingAccounts))
+            await createLedgerTransport()
+            const ledgerTransport = getLedgerTransport()
+            console.log('ledgerTransport', ledgerTransport)
+            const accounts = await Ledger.enumerateAccounts(ledgerTransport)
+            // if (await TransportWebUSB.isSupported()) {
+            // TransportWebUSB.create().then(transport => {
+            // console.log('foo.close', transport.close)
+            dispatch(
+              importAccountsActions.enumerateAccountsFromLedger(
+                // {
+                // transport: transport,
+                // // transportClose: transport.close,
+                // foo: 'asddas',
+                // bar: () => {},
+                // }
+                // {
+                accounts,
+                // },
+              ),
+            )
+            // })
+            // const foo = await TransportWebUSB.create()
+            // }
           }}
           primary
         />

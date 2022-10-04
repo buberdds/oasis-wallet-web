@@ -5,10 +5,30 @@ import { Wallet, WalletType } from 'app/state/wallet/types'
 import { WalletError, WalletErrors } from 'types/errors'
 import { hex2uint } from './helpers'
 import type Transport from '@ledgerhq/hw-transport'
+// import Transport from '@ledgerhq/hw-transport-webusb'
+import TransportWebUSB from '@ledgerhq/hw-transport-webusb'
 
 interface LedgerAccount {
   publicKey: Uint8Array
   path: number[]
+}
+
+let ledgerTransport: Transport | null = null
+
+export async function createLedgerTransport() {
+  try {
+    ledgerTransport = await TransportWebUSB.create()
+  } catch (error) {
+    return null
+  }
+}
+
+export function getLedgerTransport() {
+  return ledgerTransport
+}
+
+export async function closeLedgerTransport() {
+  await ledgerTransport.close()
 }
 
 function successOrThrowWalletError<T>(response: Response<T>, message: string) {

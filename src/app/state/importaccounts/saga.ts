@@ -13,6 +13,7 @@ import { getBalance } from '../wallet/saga'
 import { ImportAccountsListAccount, ImportAccountsStep } from './types'
 import type Transport from '@ledgerhq/hw-transport'
 import wallet from '../wallet'
+import browser from 'webextension-polyfill'
 
 function* setStep(step: ImportAccountsStep) {
   yield* put(importAccountsActions.setStep(step))
@@ -72,34 +73,62 @@ function* enumerateAccountsFromMnemonic(action: PayloadAction<string>) {
   }
 }
 
-function* enumerateAccountsFromLedger({ payload }: PayloadAction<any>) {
-  console.log('payload', payload)
-  const { transport, transportClose } = payload
-  console.log('transport saga', transport)
-  console.log('transport transportClose', transportClose)
+function foo() {
+  browser.tabs.query({ active: true, currentWindow: true }).then(
+    tabs => {
+      console.log('tabs', tabs)
+      //   {
+      //     "active": true,
+      //     "audible": false,
+      //     "autoDiscardable": true,
+      //     "discarded": false,
+      //     "groupId": -1,
+      //     "height": 692,
+      //     "highlighted": true,
+      //     "id": 1685818669,
+      //     "incognito": false,
+      //     "index": 0,
+      //     "mutedInfo": {
+      //         "muted": false
+      //     },
+      //     "pinned": false,
+      //     "selected": true,
+      //     "status": "complete",
+      //     "width": 909,
+      //     "windowId": 1685818668
+      // }
+      browser.tabs.sendMessage(tabs[0].id, { greeting: 'hello' })
+    },
+    (error: any) => console.log(error),
+  )
+}
+
+function* enumerateAccountsFromLedger({ payload: accounts }) {
+  console.log('enumerateAccountsFromLedger', accounts)
+
   // yield* setStep(ImportAccountsStep.OpeningUSB)
   // let transport: Transport | undefined
   try {
     // transport = yield* getUSBTransport()
-    yield* setStep(ImportAccountsStep.LoadingAccounts)
+    // yield* setStep(ImportAccountsStep.LoadingAccounts)
     // const accounts = yield* call(Ledger.enumerateAccounts, transport)
-    // yield* setStep(ImportAccountsStep.LoadingBalances)
-    // const balances = yield* all(accounts.map(a => call(getBalance, a.publicKey)))
-    // const addresses = yield* all(accounts.map(a => call(publicKeyToAddress, a.publicKey)))
-    // const wallets = accounts.map((a, index) => {
-    //   return {
-    //     publicKey: uint2hex(a.publicKey),
-    //     path: a.path,
-    //     address: addresses[index],
-    //     balance: balances[index],
-    //     // We select the first account by default
-    //     selected: index === 0,
-    //     type: WalletType.Ledger,
-    //   } as ImportAccountsListAccount
-    // })
+    yield* setStep(ImportAccountsStep.LoadingBalances)
+    const balances = yield* all(accounts.map(a => call(getBalance, a.publicKey)))
+    const addresses = yield* all(accounts.map(a => call(publicKeyToAddress, a.publicKey)))
+    const wallets = accounts.map((a, index) => {
+      return {
+        publicKey: uint2hex(a.publicKey),
+        path: a.path,
+        address: addresses[index],
+        balance: balances[index],
+        // We select the first account by default
+        selected: index === 0,
+        type: WalletType.Ledger,
+      } as ImportAccountsListAccount
+    })
     // const wallets = []
-    // yield* setStep(ImportAccountsStep.Done)
-    // yield* put(importAccountsActions.accountsListed(wallets))
+    yield* setStep(ImportAccountsStep.Done)
+    yield* put(importAccountsActions.accountsListed(wallets))
   } catch (e: any) {
     let payload: ErrorPayload
     if (e instanceof WalletError) {
@@ -110,11 +139,10 @@ function* enumerateAccountsFromLedger({ payload }: PayloadAction<any>) {
 
     yield* put(importAccountsActions.operationFailed(payload))
   } finally {
-    console.log('finally transport', transport.close)
-    console.log('finally transport', transportClose)
-    if (transport) {
-      yield* call([transport, transportClose])
-    }
+    yield* call(foo)
+    // if (transport) {
+    //   yield* call([transport, transportClose])
+    // }
   }
 }
 

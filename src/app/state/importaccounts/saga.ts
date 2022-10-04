@@ -113,11 +113,16 @@ function* enumerateAccountsFromLedger({ payload: accounts }) {
     // yield* setStep(ImportAccountsStep.LoadingAccounts)
     // const accounts = yield* call(Ledger.enumerateAccounts, transport)
     yield* setStep(ImportAccountsStep.LoadingBalances)
-    const balances = yield* all(accounts.map(a => call(getBalance, a.publicKey)))
-    const addresses = yield* all(accounts.map(a => call(publicKeyToAddress, a.publicKey)))
+
+    const balances = yield* all(
+      accounts.map(a => call(getBalance, Uint8Array.from(Object.values(a.publicKey)))),
+    )
+    const addresses = yield* all(
+      accounts.map(a => call(publicKeyToAddress, Uint8Array.from(Object.values(a.publicKey)))),
+    )
     const wallets = accounts.map((a, index) => {
       return {
-        publicKey: uint2hex(a.publicKey),
+        publicKey: uint2hex(Uint8Array.from(Object.values(a.publicKey))),
         path: a.path,
         address: addresses[index],
         balance: balances[index],

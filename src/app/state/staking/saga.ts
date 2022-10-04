@@ -151,7 +151,7 @@ export function now() {
 }
 
 export async function getMainnetDumpValidators() {
-  return await import('vendors/oasisscan/dump_validators.json')
+  // return await import('vendors/oasisscan/dump_validators.json')
 }
 
 export function* getValidatorDetails({ payload: address }: PayloadAction<string>) {

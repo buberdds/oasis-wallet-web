@@ -15,10 +15,10 @@ import { FromPrivateKey } from './Features/FromPrivateKey'
 import { selectDeviceRequested } from 'app/state/importaccounts/selectors'
 
 type SelectOpenMethodProps = {
-  openFromLedger?: () => void
+  connectFromLedger?: () => void
 }
 
-export function SelectOpenMethod({ openFromLedger }: SelectOpenMethodProps) {
+export function SelectOpenMethod({ connectFromLedger }: SelectOpenMethodProps) {
   const { t } = useTranslation()
   const deviceRequested = useSelector(selectDeviceRequested)
 
@@ -40,8 +40,8 @@ export function SelectOpenMethod({ openFromLedger }: SelectOpenMethodProps) {
           <Button type="submit" label={t('openWallet.method.privateKey', 'Private key')} primary />
         </NavLink>
 
-        {openFromLedger && !deviceRequested ? (
-          <Button onClick={openFromLedger} label="Connect Ledger device" primary />
+        {connectFromLedger && !deviceRequested ? (
+          <Button onClick={connectFromLedger} label="Connect Ledger device" primary />
         ) : (
           <NavLink to="ledger">
             <Button type="submit" label={t('openWallet.method.ledger', 'Ledger')} primary />

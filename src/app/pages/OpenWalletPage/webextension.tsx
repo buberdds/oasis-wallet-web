@@ -21,7 +21,7 @@ export function OpenWalletPageWebExtension(props: Props) {
     <Routes>
       <Route
         path="/"
-        element={<SelectOpenMethod openFromLedger={() => openTab(`${location.href}/connect-ledger`)} />}
+        element={<SelectOpenMethod connectFromLedger={() => openTab(`${location.href}/connect-ledger`)} />}
       />
       <Route path="/mnemonic" element={<FromMnemonic />} />
       <Route path="/private-key" element={<FromPrivateKey />} />

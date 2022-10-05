@@ -18,6 +18,8 @@ export enum TransactionTypes {
 export interface TransactionForm {
   amount: string
   confirmation: boolean
+  feeAmount: string
+  feeGas: string
   paraTime?: ParaTime
   privateKey: string
   recipient: string

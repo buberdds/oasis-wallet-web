@@ -16,6 +16,8 @@ export const initialState: ParaTimesState = {
   transactionForm: {
     amount: '',
     confirmation: false,
+    feeAmount: '',
+    feeGas: '',
     paraTime: undefined,
     privateKey: '',
     recipient: '',

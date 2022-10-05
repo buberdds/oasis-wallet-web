@@ -8,6 +8,7 @@ import { selectAccountAvailableBalance, selectAccountIsLoading } from 'app/state
 import { selectAddress } from 'app/state/wallet/selectors'
 import { selectParaTimes } from 'app/state/paratimes/selectors'
 import { StringifiedBigInt } from 'types/StringifiedBigInt'
+import { ErrorPayload, ExhaustedTypeError } from 'types/errors'
 import { consensusDecimals, paraTimesConfig, RuntimeTypes, ParaTime } from '../../../config'
 
 type AvailableParaTimesForNetwork = {

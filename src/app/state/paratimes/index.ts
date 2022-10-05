@@ -34,6 +34,7 @@ const slice = createSlice({
       state.isLoading = true
     },
     resetTransactionForm(state, action: PayloadAction<void>) {
+      state.transactionError = undefined
       state.transactionForm = initialState.transactionForm
       state.transactionFormStep = TransactionFormSteps.TransferType
     },

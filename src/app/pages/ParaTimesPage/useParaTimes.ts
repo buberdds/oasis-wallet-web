@@ -8,6 +8,7 @@ import { selectAccountAvailableBalance, selectAccountIsLoading } from 'app/state
 import { selectAddress } from 'app/state/wallet/selectors'
 import { selectParaTimes } from 'app/state/paratimes/selectors'
 import { StringifiedBigInt } from 'types/StringifiedBigInt'
+import { ErrorPayload, ExhaustedTypeError } from 'types/errors'
 import { paraTimesConfig, RuntimeTypes, ParaTime } from '../../../config'
 
 type AvailableParaTimesForNetwork = {
@@ -33,6 +34,7 @@ export type ParaTimesHook = {
   resetTransactionForm: () => void
   setTransactionForm: (formValues: TransactionForm) => void
   ticker: string
+  transactionError: ErrorPayload | undefined
   transactionForm: TransactionForm
   usesOasisAddress: boolean
 }
@@ -45,7 +47,7 @@ export const useParaTimes = (): ParaTimesHook => {
   }, [dispatch])
   const setTransactionForm = (formValues: TransactionForm) =>
     dispatch(paraTimesActions.setTransactionForm(formValues))
-  const { balance, isLoading, transactionForm } = useSelector(selectParaTimes)
+  const { balance, isLoading, transactionError, transactionForm } = useSelector(selectParaTimes)
   const accountBalance = useSelector(selectAccountAvailableBalance)
   const accountIsLoading = useSelector(selectAccountIsLoading)
   const accountAddress = useSelector(selectAddress)
@@ -80,6 +82,7 @@ export const useParaTimes = (): ParaTimesHook => {
     resetTransactionForm,
     setTransactionForm,
     ticker,
+    transactionError,
     transactionForm,
     usesOasisAddress: !needsEthAddress,
   }

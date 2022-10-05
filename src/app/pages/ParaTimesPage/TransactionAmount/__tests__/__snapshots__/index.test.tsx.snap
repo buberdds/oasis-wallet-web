@@ -566,10 +566,12 @@ exports[`<TransactionAmount /> should render component 1`] = `
               >
                 Available:
                  
-                1.0
-                <span
-                  class="c14"
-                />
+                <span>
+                  1.0
+                  <span
+                    class="c14"
+                  />
+                </span>
               </span>
             </div>
           </div>

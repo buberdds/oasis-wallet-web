@@ -39,6 +39,22 @@ export type ParaTimesHook = {
   usesOasisAddress: boolean
 }
 
+const getParaTimeName = (t: TFunction, paraTime: ParaTime) => {
+  switch (paraTime) {
+    case ParaTime.Cipher:
+      return t('paraTimes.common.cipher', 'Cipher')
+    case ParaTime.Emerald:
+      return t('paraTimes.common.emerald', 'Emerald')
+    case ParaTime.Sapphire:
+      return t('paraTimes.common.sapphire', 'Sapphire')
+    default:
+      throw new ExhaustedTypeError(
+        t('paraTimes.validation.unsupportedParaTime', 'Unsupported ParaTime'),
+        paraTime,
+      )
+  }
+}
+
 export const useParaTimes = (): ParaTimesHook => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
@@ -57,7 +73,7 @@ export const useParaTimes = (): ParaTimesHook => {
   const isEvmcParaTime = evmcParaTimes.includes(transactionForm.paraTime!)
   const needsEthAddress = isDepositing && isEvmcParaTime
   const balanceInBaseUnit = isDepositing || (!isDepositing && !isEvmcParaTime)
-  const paraTimeName = transactionForm.paraTime ? t(`paraTimes.common.${transactionForm.paraTime}`) : ''
+  const paraTimeName = transactionForm.paraTime ? getParaTimeName(t, transactionForm.paraTime) : ''
   const availableParaTimesForSelectedNetwork: AvailableParaTimesForNetwork[] = (
     Object.keys(paraTimesConfig) as ParaTime[]
   )

@@ -8,8 +8,7 @@ import { selectAccountAvailableBalance, selectAccountIsLoading } from 'app/state
 import { selectAddress } from 'app/state/wallet/selectors'
 import { selectParaTimes } from 'app/state/paratimes/selectors'
 import { StringifiedBigInt } from 'types/StringifiedBigInt'
-import { ErrorPayload, ExhaustedTypeError } from 'types/errors'
-import { paraTimesConfig, RuntimeTypes, ParaTime } from '../../../config'
+import { consensusDecimals, paraTimesConfig, RuntimeTypes, ParaTime } from '../../../config'
 
 type AvailableParaTimesForNetwork = {
   isEvm: boolean
@@ -26,6 +25,7 @@ export type ParaTimesHook = {
   availableParaTimesForSelectedNetwork: AvailableParaTimesForNetwork[]
   balance: StringifiedBigInt | null
   balanceInBaseUnit: boolean
+  decimals: number
   isDepositing: boolean
   isEvmcParaTime: boolean
   isLoading: boolean
@@ -33,6 +33,7 @@ export type ParaTimesHook = {
   paraTimeName: string
   resetTransactionForm: () => void
   setTransactionForm: (formValues: TransactionForm) => void
+  submitTransaction: () => void
   ticker: string
   transactionError: ErrorPayload | undefined
   transactionForm: TransactionForm
@@ -61,6 +62,9 @@ export const useParaTimes = (): ParaTimesHook => {
   const resetTransactionForm = useCallback(() => {
     dispatch(paraTimesActions.resetTransactionForm())
   }, [dispatch])
+  const submitTransaction = useCallback(() => {
+    dispatch(paraTimesActions.submitTransaction())
+  }, [dispatch])
   const setTransactionForm = (formValues: TransactionForm) =>
     dispatch(paraTimesActions.setTransactionForm(formValues))
   const { balance, isLoading, transactionError, transactionForm } = useSelector(selectParaTimes)
@@ -73,14 +77,15 @@ export const useParaTimes = (): ParaTimesHook => {
   const isEvmcParaTime = evmcParaTimes.includes(transactionForm.paraTime!)
   const needsEthAddress = isDepositing && isEvmcParaTime
   const balanceInBaseUnit = isDepositing || (!isDepositing && !isEvmcParaTime)
-  const paraTimeName = transactionForm.paraTime ? getParaTimeName(t, transactionForm.paraTime) : ''
+  const paraTimeName = transactionForm.paraTime ? t(`paraTimes.common.${transactionForm.paraTime}`) : ''
+  const decimals = balanceInBaseUnit ? consensusDecimals : paraTimesConfig[transactionForm.paraTime!].decimals
   const availableParaTimesForSelectedNetwork: AvailableParaTimesForNetwork[] = (
     Object.keys(paraTimesConfig) as ParaTime[]
   )
-    .filter(paratimeKey => paraTimesConfig[paratimeKey][selectedNetwork].runtimeId)
-    .map(paratimeKey => ({
-      isEvm: paraTimesConfig[paratimeKey].type === RuntimeTypes.Evm,
-      value: paratimeKey,
+    .filter(paraTimeKey => paraTimesConfig[paraTimeKey][selectedNetwork].runtimeId)
+    .map(paraTimeKey => ({
+      isEvm: paraTimesConfig[paraTimeKey].type === RuntimeTypes.Evm,
+      value: paraTimeKey,
     }))
   const walletBalance = !isDepositing ? balance : accountBalance
 
@@ -90,6 +95,7 @@ export const useParaTimes = (): ParaTimesHook => {
     availableParaTimesForSelectedNetwork,
     balance: walletBalance,
     balanceInBaseUnit,
+    decimals,
     isDepositing,
     isEvmcParaTime,
     isLoading,
@@ -97,6 +103,7 @@ export const useParaTimes = (): ParaTimesHook => {
     paraTimeName,
     resetTransactionForm,
     setTransactionForm,
+    submitTransaction,
     ticker,
     transactionError,
     transactionForm,

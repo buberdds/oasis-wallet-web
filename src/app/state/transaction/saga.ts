@@ -1,3 +1,4 @@
+import { client, misc } from '@oasisprotocol/client'
 import { Signer } from '@oasisprotocol/client/dist/signature'
 import { PayloadAction } from '@reduxjs/toolkit'
 import { hex2uint, isValidAddress, uint2bigintString, parseRoseStringToBaseUnitString } from 'app/lib/helpers'

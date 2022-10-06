@@ -1,14 +1,7 @@
 import { PayloadAction } from '@reduxjs/toolkit'
 import { StringifiedBigInt } from 'types/StringifiedBigInt'
 import { createSlice } from 'utils/@reduxjs/toolkit'
-import {
-  EvmcBalancePayload,
-  OasisAddressBalancePayload,
-  ParaTimesState,
-  TransactionForm,
-  TransactionFormSteps,
-  TransactionTypes,
-} from './types'
+import { ParaTimesState, TransactionForm, TransactionFormSteps, TransactionTypes } from './types'
 
 export const initialState: ParaTimesState = {
   balance: '',
@@ -16,6 +9,8 @@ export const initialState: ParaTimesState = {
   transactionForm: {
     amount: '',
     confirmation: false,
+    feeAmount: '',
+    feeGas: '',
     paraTime: undefined,
     privateKey: '',
     recipient: '',
@@ -32,10 +27,10 @@ const slice = createSlice({
       state.balance = action.payload
       state.isLoading = false
     },
-    fetchBalanceUsingEthPrivateKey(state, action: PayloadAction<EvmcBalancePayload>) {
+    fetchBalanceUsingEthPrivateKey(state, action: PayloadAction<void>) {
       state.isLoading = true
     },
-    fetchBalanceUsingOasisAddress(state, action: PayloadAction<OasisAddressBalancePayload>) {
+    fetchBalanceUsingOasisAddress(state, action: PayloadAction<void>) {
       state.isLoading = true
     },
     resetTransactionForm(state, action: PayloadAction<void>) {
@@ -67,6 +62,13 @@ const slice = createSlice({
     },
     setTransactionForm(state, action: PayloadAction<TransactionForm>) {
       state.transactionForm = action.payload
+    },
+    submitTransaction(state, action: PayloadAction<void>) {
+      state.isLoading = true
+    },
+    transactionSubmitted(state, action: PayloadAction<void>) {
+      state.isLoading = false
+      state.transactionFormStep = TransactionFormSteps.TransactionSummary
     },
   },
 })

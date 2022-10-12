@@ -4,16 +4,28 @@
  *
  */
 import { Anchor, Box, Button } from 'grommet'
-import * as React from 'react'
+import React, { useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { Trans, useTranslation } from 'react-i18next'
-import { NavLink, Route, Routes } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { Header } from 'app/components/Header'
-import { FromLedger } from './Features/FromLedger'
-import { FromMnemonic } from './Features/FromMnemonic'
-import { FromPrivateKey } from './Features/FromPrivateKey'
+import { selectShowAccountsSelectionModal } from 'app/state/importaccounts/selectors'
 
-export function SelectOpenMethod() {
+export type SelectOpenMethodProps = {
+  webExtensionLedgerAccess?: () => void
+}
+
+export function SelectOpenMethod({ webExtensionLedgerAccess }: SelectOpenMethodProps) {
   const { t } = useTranslation()
+  const navigate = useNavigate()
+  const showAccountsSelectionModal = useSelector(selectShowAccountsSelectionModal)
+
+  useEffect(() => {
+    if (showAccountsSelectionModal) {
+      navigate('/open-wallet/ledger')
+    }
+  }, [navigate, showAccountsSelectionModal])
 
   return (
     <Box
@@ -32,9 +44,19 @@ export function SelectOpenMethod() {
         <NavLink to="private-key">
           <Button type="submit" label={t('openWallet.method.privateKey', 'Private key')} primary />
         </NavLink>
-        <NavLink to="ledger">
-          <Button type="submit" label={t('openWallet.method.ledger', 'Ledger')} primary />
-        </NavLink>
+
+        {webExtensionLedgerAccess ? (
+          <Button
+            style={{ width: 'fit-content' }}
+            onClick={webExtensionLedgerAccess}
+            label={t('ledger.extension.grantAccess', 'Grant access to your Ledger')}
+            primary
+          />
+        ) : (
+          <NavLink to="ledger">
+            <Button type="submit" label={t('openWallet.method.ledger', 'Ledger')} primary />
+          </NavLink>
+        )}
       </Box>
 
       <Box
@@ -57,14 +79,6 @@ export function SelectOpenMethod() {
   )
 }
 
-interface Props {}
-export function OpenWalletPage(props: Props) {
-  return (
-    <Routes>
-      <Route path="/" element={<SelectOpenMethod />} />
-      <Route path="/mnemonic" element={<FromMnemonic />} />
-      <Route path="/private-key" element={<FromPrivateKey />} />
-      <Route path="/ledger" element={<FromLedger />} />
-    </Routes>
-  )
+export function OpenWalletPage() {
+  return <SelectOpenMethod />
 }

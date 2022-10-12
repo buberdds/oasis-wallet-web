@@ -16,7 +16,7 @@ import * as React from 'react'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { NavLink, Route, Routes, useParams } from 'react-router-dom'
+import { NavLink, Outlet, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import { normalizeColor } from 'grommet/es6/utils'
 
@@ -29,11 +29,7 @@ import {
   selectWallets,
   selectWalletsPublicKeys,
 } from '../../state/wallet/selectors'
-import { ActiveDelegationList } from '../StakingPage/Features/DelegationList/ActiveDelegationList'
-import { DebondingDelegationList } from '../StakingPage/Features/DelegationList/DebondingDelegationList'
 import { mobileHeaderZIndex } from '../../components/Sidebar'
-import { ValidatorList } from '../StakingPage/Features/ValidatorList'
-import { AccountDetails } from './Features/AccountDetails'
 import { AccountSummary } from './Features/AccountSummary'
 import { isValidAddress } from '../../lib/helpers'
 
@@ -207,12 +203,7 @@ function AccountPageInternal(props: AccountPageProps) {
               route="debonding-delegations"
             />
           </Nav>
-          <Routes>
-            <Route path="/" element={<AccountDetails />} />
-            <Route path="/stake" element={<ValidatorList />} />
-            <Route path="/active-delegations" element={<ActiveDelegationList />} />
-            <Route path="/debonding-delegations" element={<DebondingDelegationList />} />
-          </Routes>
+          <Outlet />
         </>
       )}
     </Box>

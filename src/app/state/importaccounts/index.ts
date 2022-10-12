@@ -3,7 +3,10 @@ import { ErrorPayload } from 'types/errors'
 import { createSlice } from 'utils/@reduxjs/toolkit'
 import { ImportAccountsListAccount, ImportAccountsState, ImportAccountsStep } from './types'
 
-export const initialState: ImportAccountsState = { accounts: [], showAccountsSelectionModal: false }
+export const initialState: ImportAccountsState = {
+  accounts: [],
+  showAccountsSelectionModal: false,
+}
 
 const slice = createSlice({
   name: 'importAccounts',

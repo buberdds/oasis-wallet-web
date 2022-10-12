@@ -14,9 +14,10 @@ import { Provider } from 'react-redux'
 
 // Use consistent styling
 import 'sanitize.css/sanitize.css'
-import { BrowserRouter } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 import { App } from 'app'
+import { OpenWalletPage } from 'app/pages/OpenWalletPage'
 
 import { HelmetProvider } from 'react-helmet-async'
 
@@ -29,20 +30,32 @@ import './locales/i18n'
 
 // Fonts
 import './styles/main.css'
+import { commonRoutes } from './routes'
 
 const store = configureAppStore()
 const container = document.getElementById('root') as HTMLElement
 const root = createRoot(container!)
+const router = createBrowserRouter([
+  {
+    path: '/*',
+    element: <App />,
+    children: [
+      ...commonRoutes,
+      {
+        path: 'open-wallet/*',
+        element: <OpenWalletPage />,
+      },
+    ],
+  },
+])
 
 root.render(
   <Provider store={store}>
     <ThemeProvider>
       <HelmetProvider>
-        <BrowserRouter>
-          <React.StrictMode>
-            <App />
-          </React.StrictMode>
-        </BrowserRouter>
+        <React.StrictMode>
+          <RouterProvider router={router} />
+        </React.StrictMode>
       </HelmetProvider>
     </ThemeProvider>
   </Provider>,

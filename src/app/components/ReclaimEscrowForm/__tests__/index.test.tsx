@@ -7,6 +7,7 @@ import { Provider } from 'react-redux'
 import { configureAppStore } from 'store/configureStore'
 import { WalletErrors } from 'types/errors'
 import { ReclaimEscrowForm } from '..'
+import { fakeXhr, FakeXMLHttpRequestStatic } from 'nise'
 
 const renderComponent = (store: any, address: string, maxAmount: string, maxShares: string) =>
   render(
@@ -16,11 +17,17 @@ const renderComponent = (store: any, address: string, maxAmount: string, maxShar
   )
 
 describe('<ReclaimEscrowForm />', () => {
+  let xhr: FakeXMLHttpRequestStatic
   let store: ReturnType<typeof configureAppStore>
 
   beforeEach(() => {
+    xhr = fakeXhr.useFakeXMLHttpRequest()
     store = configureAppStore()
     jest.resetAllMocks()
+  })
+
+  afterEach(() => {
+    xhr.restore()
   })
 
   it('should match snapshot', () => {

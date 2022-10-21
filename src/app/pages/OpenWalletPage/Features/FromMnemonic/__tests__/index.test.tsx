@@ -7,6 +7,15 @@ import { Provider } from 'react-redux'
 import { ThemeProvider } from 'styles/theme/ThemeProvider'
 import { FromMnemonic } from '..'
 
+const xhrMock: Partial<XMLHttpRequest> = {
+  open: jest.fn(),
+  send: jest.fn(),
+  setRequestHeader: jest.fn(),
+  readyState: 4,
+  status: 200,
+  response: '',
+}
+
 const renderPage = (store: any) =>
   render(
     <Provider store={store}>
@@ -17,6 +26,7 @@ const renderPage = (store: any) =>
   )
 
 describe('<FromMnemonic/>', () => {
+  jest.spyOn(window, 'XMLHttpRequest').mockImplementation(() => xhrMock as XMLHttpRequest)
   let store: ReturnType<typeof configureAppStore>
 
   beforeEach(() => {

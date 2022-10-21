@@ -1,41 +1,41 @@
-import { render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import { networkActions } from 'app/state/network'
 import * as React from 'react'
-import { Provider } from 'react-redux'
-import { configureAppStore } from 'store/configureStore'
-
+import { render, screen } from '@testing-library/react'
+import { useSelector, useDispatch } from 'react-redux'
+import userEvent from '@testing-library/user-event'
+import { when } from 'jest-when'
+import { networkActions } from 'app/state/network'
+import { selectSelectedNetwork } from 'app/state/network/selectors'
 import { NetworkSelector } from '..'
 
-const renderComponent = (store: any) =>
-  render(
-    <Provider store={store}>
-      <NetworkSelector />
-    </Provider>,
-  )
+jest.mock('react-redux', () => ({
+  useSelector: jest.fn(),
+  useDispatch: jest.fn(),
+}))
 
 describe('<NetworkSelector  />', () => {
-  let store: ReturnType<typeof configureAppStore>
+  const mockDispatch = jest.fn()
 
   beforeEach(() => {
-    store = configureAppStore()
+    when(useSelector as any)
+      .calledWith(selectSelectedNetwork)
+      .mockReturnValue('local')
   })
 
   it('should match snapshot', () => {
-    const component = renderComponent(store)
+    const component = render(<NetworkSelector />)
     expect(component.container.firstChild).toMatchSnapshot()
   })
 
   it('should allow switching network', async () => {
-    const dispatchSpy = jest.spyOn(store, 'dispatch')
-    const component = renderComponent(store)
+    jest.mocked(useDispatch).mockImplementation(() => mockDispatch)
+    const component = render(<NetworkSelector />)
     expect(component.getByTestId('active-network')).toContainHTML('toolbar.networks.local')
     await userEvent.click(screen.getByTestId('network-selector'))
 
     expect(await screen.findByText('toolbar.networks.testnet')).toBeInTheDocument()
     await userEvent.click(screen.getByText('toolbar.networks.testnet'))
 
-    expect(dispatchSpy).toHaveBeenCalledWith({
+    expect(mockDispatch).toHaveBeenCalledWith({
       payload: 'testnet',
       type: 'network/selectNetwork',
     } as ReturnType<typeof networkActions.selectNetwork>)

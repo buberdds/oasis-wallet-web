@@ -6,6 +6,8 @@ on:
   pull_request:
     branches: [stable, master]
 
+permissions: {}
+
 jobs:
   yarn_cache:
     runs-on: ubuntu-latest

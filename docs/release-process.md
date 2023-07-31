@@ -3,11 +3,13 @@
 ## Web wallet
 
 Staging:
+
 - checkout `master` branch
 - `yarn install --frozen-lockfile && yarn build`
 - deploy to <https://wallet.stg.oasis.io/>
 
 Production:
+
 - ensure <https://wallet.stg.oasis.io/> works
   - especially features related to changes
   - look at CSP errors (expect one error: blocked `eval` in `inquire`)
@@ -18,9 +20,11 @@ Production:
 
 ### Deploy
 
-Manually deploy `./build/` folder by following <https://github.com/oasisprotocol/oasis-wallet-web/wiki/Deployment-on-AWS>.
+Manually deploy `./build/` folder by following
+<https://github.com/oasisprotocol/oasis-wallet-web/wiki/Deployment-on-AWS>.
 
-Verify deployed version by opening the page in incognito (no cache) - it is displayed in the footer.
+Verify deployed version by opening the page in
+incognito (no cache) - it is displayed in the footer.
 
 Update Content-Security-Policy header.
 
@@ -31,7 +35,6 @@ yarn print-csp
 curl --head https://wallet.stg.oasis.io/ -s | grep content-security-policy
 curl --head https://wallet.oasis.io/ -s | grep content-security-policy
 ```
-
 
 ## TODO: Extension wallet
 

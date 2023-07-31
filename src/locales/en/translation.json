@@ -101,7 +101,7 @@
   "banner": {
     "buildPreview": "Please note this is an experimental build of Oasis Wallet and your secrets are not safe. ONLY USE IT FOR TESTING.",
     "buildStaging": "Please note this is the staging deployment of Oasis Wallet. ONLY USE IT FOR TESTING.",
-    "domainMoved": "Oasis Wallet has a new home at <NewLink />."
+    "domainMoved": "Test Oasis Wallet has a new home at <NewLink />."
   },
   "common": {
     "amount": "Amount",

@@ -33,7 +33,7 @@ export const BuildBanner = () => {
                 <AnchorLink to="https://wallet.oasis.io/" label="https://wallet.oasis.io/" color="text" />
               ),
             }}
-            defaults="Oasis Wallet has a new home at <NewLink />."
+            defaults="Test Oasis Wallet has a new home at <NewLink />."
           />
         </AlertBox>
       </StickyBanner>

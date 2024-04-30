@@ -96,7 +96,7 @@
       "showingStale": "Showing validator list as of {{staleTimestamp}}."
     }
   },
-  "appTitle": "ROSE Wallet",
+  "appTitle": "ROSE Wallet test",
   "backends": {
     "oasismonitor": "Oasis Monitor API",
     "oasisscan": "Oasis Scan API"

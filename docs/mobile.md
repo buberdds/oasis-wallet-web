@@ -1,5 +1,33 @@
 # Mobile app development
 
+## Convert Android App Bundle (AAB) to Android Package (APK)
+
+Our GitHub workflows create signed AAB file.
+To test app on your device you have to convert AAB file to an APK.
+
+- Download [bundletool] from the official GitHub repository
+- Generate APK files
+
+<!-- markdownlint-disable MD013 -->
+
+```
+java -jar bundletool-all-<VERSION>.jar build-apks --bundle=app-release-signed.aab --output=app-release-signed.apks --mode=universal
+```
+
+<!-- markdownlint-enable MD013 -->
+
+- Extract the APK
+
+```
+  unzip app-release-signed.apks -d extracted-apks
+```
+
+- Install the APK on your device
+
+```
+adb -s <DEVICE_SERIAL_NUMBER> install extracted-apks/universal.apk
+```
+
 ## Capacitor assets
 
 - Create `assets` folder with source images
@@ -26,3 +54,4 @@ npx @capacitor/assets generate --ios
 - Additional information are available in [Capacitor Assets docs]
 
 [Capacitor Assets docs]: https://github.com/ionic-team/capacitor-assets#usage---custom-mode
+[bundletool]: https://github.com/google/bundletool/releases

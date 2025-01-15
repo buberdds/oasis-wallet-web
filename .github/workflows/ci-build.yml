@@ -43,6 +43,13 @@ jobs:
         id: vars
         run: |
           echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+          ls -la "$ANDROID_SDK_ROOT/build-tools" || echo "Directory not found"
+          BUILD_TOOLS_VERSION=$(ls "$ANDROID_SDK_ROOT/build-tools/" | sort -V | tail -n 1)
+          echo "BUILD_TOOLS_VERSION=$BUILD_TOOLS_VERSION" >> "$GITHUB_OUTPUT"
+          echo "build-tools version: $BUILD_TOOLS_VERSION"
+      - name: Debug version
+        run: |
+          echo "build-tools: ${{ steps.vars.outputs.SHORT_SHA }}"
       - name: Build web ROSE Wallet
         run: yarn build
       - name: Build extension ROSE Wallet
@@ -54,7 +61,7 @@ jobs:
       # Capacitor v6 sets a deployment target of Android 14 (SDK 34)
       - name: Install SDK components
         run: |
-          "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+          "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" "platform-tools" "platforms;android-34" "build-tools;31.0.0"
       - name: Build Android App Bundle (AAB)
         if: github.event_name == 'push'
         run: ./gradlew bundleRelease
